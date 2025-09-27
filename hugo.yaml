@@ -1,0 +1,247 @@
+baseURL: "https://koreshlab.netlify.app"
+languageCode: "fr"
+title: "DevOps | SRE | DevSecOps"
+theme: hugo-profile
+
+outputs:
+  home:
+    - "HTML"
+    - "RSS"
+    - "JSON"
+  page:
+    - "HTML"
+    - "RSS"
+
+enableRobotsTXT: true
+
+pagination:
+  pagerSize: 3
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+
+# Menus de pages (facultatif si tu n'utilises pas blog/galerie)
+Menus:
+  main:
+    # - identifier: blog
+    #   name: Blog
+    #   title: Blog posts
+    #   url: /blogs
+    #   weight: 1
+    # - identifier: gallery
+    #   name: Galerie
+    #   title: Galerie
+    #   url: /gallery
+    #   weight: 2
+
+params:
+  title: "Koresha — DevOps | SRE | DevSecOps"
+  description: "Portfolio de Koresha — Ingénieur DevOps / SRE / DevSecOps."
+  favicon: "/fav.png"
+
+  # IMPORTANT pour charger Bootstrap/FontAwesome via CDN (évite les soucis de style)
+  useBootstrapCDN: true
+
+  mathjax: false
+  animate: true
+
+  theme:
+    # disableThemeToggle: true
+    # defaultTheme: "light" # ou "dark"
+  
+  font:
+    fontSize: 1.05rem
+    fontWeight: 400
+    lineHeight: 1.6
+    textAlign: left
+
+  # Barre de navigation
+  navbar:
+    align: ms-auto
+    # brandLogo: "/logo.png"
+    # showBrandLogo: true
+    brandName: "Koresha"
+    disableSearch: true
+    stickyNavBar:
+      enable: true
+      showOnScrollUp: true
+    enableSeparator: false
+    menus:
+      disableAbout: false
+      disableExperience: false
+      disableEducation: false
+      disableProjects: true
+      disableAchievements: true
+      disableContact: false
+
+  # Section Hero (anonymisé)
+  hero:
+    enable: true
+    intro: "Bonjour, je suis"
+    title: "Koresha"
+    subtitle: "Site Reliability Engineer · DevSecOps"
+    content: "Toujours partant pour partager le savoir et collaborer !"
+    image: /images/logo.png          # évite .HEIC ; utilise .png/.jpg dans /static/images/
+    bottomImage:
+      enable: true
+    # roundImage: true
+    button:
+      enable: true
+      name: "Télécharger mon CV"
+      url: "/cv/"                    # page /cv avec explication + lien vers PDF chiffré
+      download: false
+      newPage: false
+    socialLinks:
+      fontAwesomeIcons:
+        - icon: fas fa-envelope
+          url: mailto:contact.koreshlab@gmail.com
+        - icon: fab fa-github
+          url: https://github.com/koresha
+      # customIcons:
+      #   - icon: /fav.png
+      #     url: "https://koreshlab.com"
+
+  # À propos (anonymisé)
+  about:
+    enable: true
+    title: "À propos"
+    image: "/images/logo.png"
+    content: |-
+      Ingénieur DevOps / SRE, spécialisé Kubernetes multi-clusters, CI/CD (GitLab/Jenkins/ArgoCD), IaC (Terraform/Ansible/OpenTofu), SSO (Keycloak), sécurité et observabilité. 
+      Expérience en environnements cloud (OVH, OutScale, Azure, AWS, OpenStack) et industrialisation d’outils (GitLab, Vault, Harbor).
+    skills:
+      enable: true
+      title: "Compétences récentes :"
+      items:
+        - "Kubernetes, Docker, Tanzu, VMware"
+        - "Terraform / OpenTofu, Ansible, GitLab CI/CD, Jenkins, ArgoCD"
+        - "Prometheus, Grafana, ELK, Instana, Centreon, Zabbix"
+        - "Sécurité : SIEM (ELK, Splunk, QRadar), audits, SAML/SSO"
+        - "Bases : MariaDB/MySQL, MongoDB, PostgreSQL"
+        - "Scripting : Bash, Python, PowerShell"
+
+  # Expérience (intitulés d’entreprises OK ; identité perso absente)
+  experience:
+    enable: true
+    items:
+      - job: "Site Reliability Engineer"
+        company: "unyc"
+        companyUrl: ""
+        date: "Sept. 2025 – Présent"
+        content: |
+          Cloud privé OpenStack, CI/CD Helm/Ansible, IaC avec OpenTofu, déploiement d’outils (GitLab, Symfony, ArgoCD, Prometheus/Grafana, stockage S3, clusters Kubernetes), DNS (Azure) / External-DNS.
+
+      - job: "DevOps Engineer"
+        company: "Interstis"
+        companyUrl: ""
+        date: "Mar. 2025 – Sept. 2025"
+        content: |
+          Multi-cluster K8s (OVH, OutScale, Scalingo), CI/CD Helm/Ansible, IaC Terraform/Vault, déploiements (GitLab, Vault, OnlyOffice, Jitsi, Harbor), SSO Keycloak (scaling, DNS, domaines).
+
+      - job: "DevSecOps Operations Engineer"
+        company: "Pixid"
+        companyUrl: ""
+        date: "Juin 2022 – Fév. 2025"
+        content: |
+          IaC (Ansible, Terraform, AWX), pipelines Jenkins, K8s Tanzu, GitOps (ArgoCD), observabilité (Prometheus, Grafana, Instana), sécurité (F5 BIG-IP, ELK SIEM), DBA (MariaDB/Mongo/Galera), PCA/PRA, backups (Veeam/Avamar/IDPA), support API/Kafka.
+
+      - job: "Admin Systèmes & Réseau"
+        company: "IOR System"
+        companyUrl: ""
+        date: "Fév. 2021 – Mai 2022"
+        content: |
+          Audits sécu, CI/CD (Azure DevOps), Windows Server, Veeam/Avamar, réseaux (HP, RADIUS), messagerie (Exchange/O365/Gmail), scripts PowerShell.
+
+      - job: "Admin Systèmes & DevOps (Apprentissage)"
+        company: "Epresspack"
+        companyUrl: ""
+        date: "Déc. 2018 – Jan. 2021"
+        content: |
+          Admin serveurs Linux & bases MySQL/MariaDB, supervision Centreon, automatisation Ansible, sécurité et procédures.
+
+      - job: "Technicien IT"
+        company: "Louis Vuitton Malletier"
+        companyUrl: ""
+        date: "Jan. 2018 – Juin 2018"
+        content: |
+          Support N1/N2 en environnement retail.
+
+  # Formation
+  education:
+    enable: true
+    index: false
+    items:
+      - title: "Master Cybersécurité & Cloud Computing"
+        school:
+          name: "IPSSI — Paris"
+          url: ""
+        date: "2018 – 2022"
+        content: |-
+          Mastère 1 & 2 en cybersécurité et cloud.
+
+  # Réalisations (désactivé pour l’instant)
+  achievements:
+    enable: false
+    items: []
+
+  # Projets (désactivé pour l’instant)
+  projects:
+    enable: false
+    items: []
+
+  # Contact (anonymisé)
+  contact:
+    enable: true
+    content: "Ma boîte mail est toujours ouverte. Une question, un projet, ou juste envie d’échanger ?"
+    btnName: "Envoyer un mail"
+    btnLink: "mailto:contact.koreshlab@gmail.com"
+    # formspree:
+    #   enable: true
+    #   formId: abcdefgh
+
+  footer:
+    recentPosts:
+      path: "blogs"
+      count: 3
+      title: "Articles récents"
+      enable: false
+      disableFeaturedImage: false
+    socialNetworks:
+      github: "https://github.com/koresha"
+      # linkedin: ""
+      # twitter: ""
+      # instagram: ""
+      # facebook: ""
+
+  # List pages (blogs)
+  listPages:
+    disableFeaturedImage: false
+
+  # Single pages (blog/post)
+  singlePages:
+    socialShare: true
+    readTime:
+      enable: true
+      content: "min de lecture"
+    scrollprogress:
+      enable: true
+    tags:
+      openInNewTab: true
+
+  # Traductions (libellés UI)
+  terms:
+    read: "Lire"
+    toc: "Sommaire"
+    copyright: "Tous droits réservés"
+    pageNotFound: "Page introuvable"
+    emailText: "Découvrez ce site"
+
+  datesFormat:
+    article: "2 Jan 2006"
+    articleList: "2 Jan 2006"
+    articleRecent: "2 Jan 2006"
+
+  # customScripts: -|
+  #   <script>/* … */</script>
