@@ -83,7 +83,7 @@ params:
     title: "Koresha"
     subtitle: "Site Reliability Engineer · DevSecOps"
     content: "Toujours partant pour partager le savoir et collaborer !"
-    image: /images/logo.png          # évite .HEIC ; utilise .png/.jpg dans /static/images/
+    image: /images/Guts.JPG          # évite .HEIC ; utilise .png/.jpg dans /static/images/
     bottomImage:
       enable: true
     # roundImage: true
