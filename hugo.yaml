@@ -1,16 +1,11 @@
 baseURL: "https://koreshlab.netlify.app"
-languageCode: "fr"
+languageCode: "en"
 title: "DevOps | SRE | DevSecOps"
 theme: hugo-profile
 
 outputs:
-  home:
-    - "HTML"
-    - "RSS"
-    - "JSON"
-  page:
-    - "HTML"
-    - "RSS"
+  home: ["HTML","RSS","JSON"]
+  page: ["HTML","RSS"]
 
 enableRobotsTXT: true
 
@@ -22,9 +17,9 @@ markup:
     renderer:
       unsafe: true
 
-# Menus de pages (facultatif si tu n'utilises pas blog/galerie)
 menu:
   main:
+    # Hide if you don't use them yet
     - identifier: blog
       name: Blog
       title: Blog posts
@@ -36,33 +31,26 @@ menu:
       url: /gallery
       weight: 2
 
-
 params:
   title: "Koresha — DevOps | SRE | DevSecOps"
-  description: "Portfolio de Koresha — Ingénieur DevOps / SRE / DevSecOps."
+  description: "Koresha's portfolio — Site Reliability & DevSecOps engineer."
   favicon: "/fav.png"
 
-  # IMPORTANT pour charger Bootstrap/FontAwesome via CDN (évite les soucis de style)
   useBootstrapCDN: true
-
   mathjax: false
   animate: true
 
   theme:
-    # disableThemeToggle: true
-    # defaultTheme: "light" # ou "dark"
-  
+    # defaultTheme: "light"   # or "dark"
+
   font:
     fontSize: 1.05rem
     fontWeight: 400
     lineHeight: 1.6
     textAlign: left
 
-  # Barre de navigation
   navbar:
     align: ms-auto
-    # brandLogo: "/logo.png"
-    # showBrandLogo: true
     brandName: "Koresha"
     disableSearch: true
     stickyNavBar:
@@ -77,21 +65,19 @@ params:
       disableAchievements: true
       disableContact: false
 
-  # Section Hero (anonymisé)
   hero:
     enable: true
-    intro: "Bonjour, je suis"
+    intro: "Hi, I’m"
     title: "Koresha"
     subtitle: "Site Reliability Engineer · DevSecOps"
-    content: "Toujours partant pour partager le savoir et collaborer !"
-    image: /images/Guts.JPG          # évite .HEIC ; utilise .png/.jpg dans /static/images/
+    content: "Always keen to share knowledge and build things together."
+    image: /images/logo.jpeg   # ensure this exists under static/images/
     bottomImage:
       enable: true
-    # roundImage: true
     button:
       enable: true
-      name: "Télécharger mon CV"
-      url: "/cv/"                    # page /cv avec explication + lien vers PDF chiffré
+      name: "Download my résumé"
+      url: "/cv/"              # your /cv page that links to the encrypted PDF
       download: false
       newPage: false
     socialLinks:
@@ -100,149 +86,284 @@ params:
           url: mailto:contact.koreshlab@gmail.com
         - icon: fab fa-github
           url: https://github.com/koresha
-      # customIcons:
-      #   - icon: /fav.png
-      #     url: "https://koreshlab.com"
 
-  # À propos (anonymisé)
   about:
     enable: true
-    title: "À propos"
+    title: "About"
     image: "/images/logo.png"
     content: |-
-      Ingénieur DevOps / SRE, spécialisé Kubernetes multi-clusters, CI/CD (GitLab/Jenkins/ArgoCD), IaC (Terraform/Ansible/OpenTofu), SSO (Keycloak), sécurité et observabilité. 
-      Expérience en environnements cloud (OVH, OutScale, Azure, AWS, OpenStack) et industrialisation d’outils (GitLab, Vault, Harbor).
-    skills:
-      enable: true
-      title: "Compétences récentes :"
-      items:
-        - "Kubernetes, Docker, Tanzu, VMware"
-        - "Terraform / OpenTofu, Ansible, GitLab CI/CD, Jenkins, ArgoCD"
-        - "Prometheus, Grafana, ELK, Instana, Centreon, Zabbix"
-        - "Sécurité : SIEM (ELK, Splunk, QRadar), audits, SAML/SSO"
-        - "Bases : MariaDB/MySQL, MongoDB, PostgreSQL"
-        - "Scripting : Bash, Python, PowerShell"
+      I’m a DevOps / SRE engineer focused on multi-cluster Kubernetes, CI/CD, IaC, SSO, security and observability across OVH, OutScale, Azure, AWS, OpenStack.
 
-  # Expérience (intitulés d’entreprises OK ; identité perso absente)
+      <div class="tech-cloud" aria-label="Technology cloud">
+        <span class="tech-chip" data-skill="Kubernetes">Kubernetes</span>
+        <span class="tech-chip" data-skill="Docker">Docker</span>
+        <span class="tech-chip" data-skill="Helm">Helm</span>
+        <span class="tech-chip" data-skill="ArgoCD">ArgoCD</span>
+        <span class="tech-chip" data-skill="Terraform / OpenTofu">Terraform / OpenTofu</span>
+        <span class="tech-chip" data-skill="Ansible">Ansible</span>
+        <span class="tech-chip" data-skill="GitLab CI/CD">GitLab CI/CD</span>
+        <span class="tech-chip" data-skill="Jenkins">Jenkins</span>
+        <span class="tech-chip" data-skill="Keycloak">Keycloak</span>
+        <span class="tech-chip" data-skill="Prometheus">Prometheus</span>
+        <span class="tech-chip" data-skill="Grafana">Grafana</span>
+        <span class="tech-chip" data-skill="ELK (SIEM)">ELK (SIEM)</span>
+        <span class="tech-chip" data-skill="PostgreSQL">PostgreSQL</span>
+        <span class="tech-chip" data-skill="MongoDB">MongoDB</span>
+        <span class="tech-chip" data-skill="Python">Python</span>
+        <span class="tech-chip" data-skill="Bash">Bash</span>
+        <!-- New ones -->
+        <span class="tech-chip" data-skill="Azure">Azure</span>
+        <span class="tech-chip" data-skill="AWS">AWS</span>
+        <span class="tech-chip" data-skill="OVHcloud">OVHcloud</span>
+        <span class="tech-chip" data-skill="OutScale">OutScale</span>
+        <span class="tech-chip" data-skill="OpenStack">OpenStack</span>
+        <span class="tech-chip" data-skill="Scalingo">Scalingo</span>
+        <span class="tech-chip" data-skill="VMware/Tanzu">VMware/Tanzu</span>
+        <span class="tech-chip" data-skill="Trivy">Trivy</span>
+        <span class="tech-chip" data-skill="Traefik">Traefik</span>
+        <span class="tech-chip" data-skill="Istio">Istio</span>
+        <span class="tech-chip" data-skill="Kafka">Kafka</span>
+        <span class="tech-chip" data-skill="RabbitMQ">RabbitMQ</span>
+        <span class="tech-chip" data-skill="Vault">Vault</span>
+        <span class="tech-chip" data-skill="Harbor">Harbor</span>
+        <span class="tech-chip" data-skill="Ceph">Ceph</span>
+        <span class="tech-chip" data-skill="MinIO/S3">MinIO/S3</span>
+        <span class="tech-chip" data-skill="Teleport">Teleport</span>
+        <span class="tech-chip" data-skill="Git">Git</span>
+        <span class="tech-chip" data-skill="PowerShell">PowerShell</span>
+        <span class="tech-chip" data-skill="Go (basics)">Go (basics)</span>
+      </div>
+
+
+      <!-- Skill card (modal) -->
+      <div class="skill-card" id="skillCard" aria-hidden="true">
+        <div class="card" role="dialog" aria-modal="true" aria-labelledby="skillTitle">
+          <div class="title" id="skillTitle">Skill</div>
+          <div class="meta" id="skillMeta">Proficiency</div>
+          <div class="bar"><span id="skillBar"></span></div>
+          <div class="actions">
+            <button class="btn" id="skillClose">Close</button>
+          </div>
+        </div>
+      </div>
+
+
+    skills:
+      enable: false   # we replace it with the tech cloud above
+
   experience:
     enable: true
     items:
       - job: "Site Reliability Engineer"
         company: "unyc"
-        companyUrl: ""
-        date: "Sept. 2025 – Présent"
+        companyUrl: "https://www.unyc.io"
+        date: "Sep 2025 – Present"
         content: |
-          Cloud privé OpenStack, CI/CD Helm/Ansible, IaC avec OpenTofu, déploiement d’outils (GitLab, Symfony, ArgoCD, Prometheus/Grafana, stockage S3, clusters Kubernetes), DNS (Azure) / External-DNS.
-
+          Private OpenStack cloud; CI/CD with Helm/Ansible; IaC with OpenTofu; platform tools (GitLab, Symfony, ArgoCD, Prometheus/Grafana, S3 storage, Kubernetes clusters); DNS (Azure) / External-DNS.
       - job: "DevOps Engineer"
         company: "Interstis"
-        companyUrl: ""
-        date: "Mar. 2025 – Sept. 2025"
+        companyUrl: "https://www.interstis.fr"
+        date: "Mar 2025 – Sep 2025"
         content: |
-          Multi-cluster K8s (OVH, OutScale, Scalingo), CI/CD Helm/Ansible, IaC Terraform/Vault, déploiements (GitLab, Vault, OnlyOffice, Jitsi, Harbor), SSO Keycloak (scaling, DNS, domaines).
-
+          Multi-cluster K8s (OVH, OutScale, Scalingo), CI/CD Helm/Ansible, Terraform/Vault, deployments (GitLab, Vault, OnlyOffice, Jitsi, Harbor), Keycloak SSO (scaling, DNS, domains).
       - job: "DevSecOps Operations Engineer"
         company: "Pixid"
-        companyUrl: ""
-        date: "Juin 2022 – Fév. 2025"
+        companyUrl: "https://www.pixid.fr"
+        date: "Jun 2022 – Feb 2025"
         content: |
-          IaC (Ansible, Terraform, AWX), pipelines Jenkins, K8s Tanzu, GitOps (ArgoCD), observabilité (Prometheus, Grafana, Instana), sécurité (F5 BIG-IP, ELK SIEM), DBA (MariaDB/Mongo/Galera), PCA/PRA, backups (Veeam/Avamar/IDPA), support API/Kafka.
-
-      - job: "Admin Systèmes & Réseau"
+          Ansible, Terraform, AWX; Jenkins pipelines; K8s Tanzu; GitOps (ArgoCD); Observability (Prometheus, Grafana, Instana); Security (F5 BIG-IP, ELK SIEM); DBA (MariaDB/Mongo/Galera); DR/BCP; backups (Veeam/Avamar/IDPA); API/Kafka support.
+      - job: "Systems & Network Admin"
         company: "IOR System"
-        companyUrl: ""
-        date: "Fév. 2021 – Mai 2022"
+        date: "Feb 2021 – May 2022"
         content: |
-          Audits sécu, CI/CD (Azure DevOps), Windows Server, Veeam/Avamar, réseaux (HP, RADIUS), messagerie (Exchange/O365/Gmail), scripts PowerShell.
-
-      - job: "Admin Systèmes & DevOps (Apprentissage)"
+          Security audits; Azure DevOps CI/CD; Windows Server; Veeam/Avamar; networks (HP, RADIUS); messaging (Exchange/O365/Gmail); PowerShell scripting.
+      - job: "Systems Admin & DevOps (Apprenticeship)"
         company: "Epresspack"
-        companyUrl: ""
-        date: "Déc. 2018 – Jan. 2021"
+        date: "Dec 2018 – Jan 2021"
         content: |
-          Admin serveurs Linux & bases MySQL/MariaDB, supervision Centreon, automatisation Ansible, sécurité et procédures.
-
-      - job: "Technicien IT"
+          Linux servers administration; MySQL/MariaDB; Centreon monitoring; Ansible automation; security & procedures.
+      - job: "IT Technician"
         company: "Louis Vuitton Malletier"
-        companyUrl: ""
-        date: "Jan. 2018 – Juin 2018"
+        date: "Jan 2018 – Jun 2018"
         content: |
-          Support N1/N2 en environnement retail.
+          L1/L2 support in retail environment.
 
-  # Formation
   education:
     enable: true
     index: false
     items:
-      - title: "Master Cybersécurité & Cloud Computing"
+      - title: "Master — Cybersecurity & Cloud Computing"
         school:
-          name: "IPSSI — Paris"
+          name: "IPSSI, Paris"
           url: ""
         date: "2018 – 2022"
-        content: |-
-          Mastère 1 & 2 en cybersécurité et cloud.
+        content: "2-year master’s degree in cybersecurity and cloud."
 
-  # Réalisations (désactivé pour l’instant)
   achievements:
     enable: false
     items: []
 
-  # Projets (désactivé pour l’instant)
   projects:
     enable: false
     items: []
 
-  # Contact (anonymisé)
   contact:
     enable: true
-    content: "Ma boîte mail est toujours ouverte. Une question, un projet, ou juste envie d’échanger ?"
-    btnName: "Envoyer un mail"
+    content: "My inbox is always open — questions, projects, or just to say hi."
+    btnName: "Email me"
     btnLink: "mailto:contact.koreshlab@gmail.com"
-    # formspree:
-    #   enable: true
-    #   formId: abcdefgh
 
   footer:
     recentPosts:
       path: "blogs"
       count: 3
-      title: "Articles récents"
+      title: "Recent posts"
       enable: false
       disableFeaturedImage: false
     socialNetworks:
       github: "https://github.com/koresha"
-      # linkedin: ""
-      # twitter: ""
-      # instagram: ""
-      # facebook: ""
 
-  # List pages (blogs)
   listPages:
     disableFeaturedImage: false
 
-  # Single pages (blog/post)
   singlePages:
     socialShare: true
     readTime:
       enable: true
-      content: "min de lecture"
+      content: "min read"
     scrollprogress:
       enable: true
     tags:
       openInNewTab: true
 
-  # Traductions (libellés UI)
   terms:
-    read: "Lire"
-    toc: "Sommaire"
-    copyright: "Tous droits réservés"
-    pageNotFound: "Page introuvable"
-    emailText: "Découvrez ce site"
+    read: "Read"
+    toc: "Table of Contents"
+    copyright: "All rights reserved"
+    pageNotFound: "Page not found"
+    emailText: "Check out this site"
 
   datesFormat:
-    article: "2 Jan 2006"
-    articleList: "2 Jan 2006"
-    articleRecent: "2 Jan 2006"
+    article: "Jan 2, 2006"
+    articleList: "Jan 2, 2006"
+    articleRecent: "Jan 2, 2006"
 
-  # customScripts: -|
-  #   <script>/* … */</script>
+  customCSS:
+    - "css/custom.css"
+
+  customScripts: |-
+    <!-- Styles inline (sûrs à charger) -->
+    <style>
+      /* ===== About centré ===== */
+      #about.section {
+        min-height: 100vh;             /* plein écran */
+        display: flex;
+        align-items: center;           /* centré verticalement */
+        justify-content: center;       /* centré horizontalement */
+        padding: 0;
+      }
+      #about .container {
+        max-width: 900px;
+        margin: 0 auto;
+        text-align: center;
+      }
+      #about .container > p {
+        font-size: 1.05rem;
+        line-height: 1.8;
+        margin-bottom: 1.5rem;
+      }
+
+      /* ===== Tech cloud ===== */
+      .tech-cloud { display:flex; flex-wrap:wrap; gap:.6rem; justify-content:center; margin-top:1rem; }
+      .tech-chip {
+        cursor:pointer; padding:.5rem .8rem; border-radius:999px;
+        background: rgba(125,125,125,.12);
+        font-weight:600; transition: box-shadow .15s ease, opacity .15s ease;
+        will-change: transform;
+        animation-name: tech-float; animation-iteration-count: infinite; animation-timing-function: ease-in-out;
+      }
+      .tech-chip:hover { box-shadow: 0 6px 18px rgba(0,0,0,.2); }
+
+      /* Flottement doux */
+      @keyframes tech-float {
+        0%   { transform: translate(0,0); }
+        50%  { transform: translate(var(--dx, 6px), var(--dy, -6px)); }
+        100% { transform: translate(0,0); }
+      }
+
+      /* ===== Skill card (modal) ===== */
+      .skill-card { position: fixed; inset: 0; display: none; place-items: center; z-index: 9999;
+                    background: rgba(0,0,0,.45); }
+      .skill-card.open { display: grid; }
+      .skill-card .card {
+        background:#1f242b; color:#eaecef; border-radius:14px; padding:20px 22px;
+        width:min(420px,92vw); box-shadow:0 12px 40px rgba(0,0,0,.35);
+      }
+      .skill-card .title { font-size:1.05rem; font-weight:700; margin:0 0 .75rem; }
+      .skill-card .meta { font-size:.9rem; opacity:.85; margin:.6rem 0 .8rem; }
+      .skill-card .bar { height:10px; border-radius:999px; background:rgba(255,255,255,.12); overflow:hidden; margin-bottom:20px; }
+      .skill-card .bar > span { display:block; height:100%; width:0%;
+        background: linear-gradient(90deg,#ff5252,#ff1744); /* Rouge */
+        transition: width .5s ease; }
+      .skill-card .actions { display:flex; justify-content:flex-end; margin-top:12px; } /* bouton un peu plus bas */
+      .skill-card .btn { padding:.45rem .7rem; border-radius:8px; border:1px solid rgba(255,255,255,.15);
+                         background:transparent; color:#eaecef; cursor:pointer; }
+      .skill-card .btn:hover { background:rgba(255,255,255,.06); }
+    </style>
+
+    <!-- Bootstrap bundle (pour les onglets Experience) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+
+    <!-- Script: nuage + jauge -->
+    <script>
+      // Niveaux (0-100)
+      const SKILLS = {
+        "Kubernetes": 90, "Docker": 90, "Helm": 80, "ArgoCD": 80,
+        "Terraform / OpenTofu": 85, "Ansible": 85, "GitLab CI/CD": 85, "Jenkins": 75,
+        "Keycloak": 70, "Prometheus": 80, "Grafana": 80, "ELK (SIEM)": 70,
+        "PostgreSQL": 65, "MongoDB": 60, "Python": 65, "Bash": 80,
+        "Azure": 70, "AWS": 40, "OVHcloud": 80, "OutScale": 60, "OpenStack": 70, "Scalingo": 80,
+        "VMware/Tanzu": 65, "Trivy": 75, "Traefik": 70, "Istio": 55,
+        "Kafka": 60, "RabbitMQ": 60, "Vault": 70, "Harbor": 70,
+        "Ceph": 55, "MinIO/S3": 65, "Teleport": 85, "Git": 85, "PowerShell": 60, "Go (basics)": 40
+      };
+
+      // Anime chaque chip avec des paramètres aléatoires
+      function initTechChips() {
+        document.querySelectorAll('.tech-chip').forEach(chip => {
+          const dur = (8 + Math.random()*8).toFixed(2) + 's';
+          const del = (-Math.random()*8).toFixed(2) + 's';
+          const dx  = (Math.random() < .5 ? -1 : 1) * (4 + Math.random()*8);
+          const dy  = (Math.random() < .5 ? -1 : 1) * (4 + Math.random()*8);
+          chip.style.setProperty('animation-duration', dur);
+          chip.style.setProperty('animation-delay', del);
+          chip.style.setProperty('--dx', dx + 'px');
+          chip.style.setProperty('--dy', dy + 'px');
+        });
+      }
+
+      const card = document.getElementById('skillCard');
+      const title = document.getElementById('skillTitle');
+      const meta  = document.getElementById('skillMeta');
+      const bar   = document.getElementById('skillBar');
+      const closeBtn = document.getElementById('skillClose');
+
+      function openSkill(name) {
+        const lvl = SKILLS[name] ?? 50;
+        title.textContent = name;
+        meta.textContent  = `Proficiency: ${lvl}%`;
+        bar.style.width = '0%';
+        card.classList.add('open');
+        requestAnimationFrame(() => { bar.style.width = lvl + '%'; });
+      }
+      function closeSkill() { card.classList.remove('open'); }
+
+      document.addEventListener('click', (e) => {
+        const chip = e.target.closest('.tech-chip');
+        if (chip) { e.preventDefault(); openSkill(chip.dataset.skill); }
+        if (e.target === card) closeSkill();
+      });
+      closeBtn?.addEventListener('click', closeSkill);
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSkill(); });
+      document.addEventListener('DOMContentLoaded', initTechChips);
+    </script>
