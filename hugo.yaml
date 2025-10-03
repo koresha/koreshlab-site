@@ -53,6 +53,8 @@ params:
     align: ms-auto
     brandName: "Koresha"
     disableSearch: true
+    brandLogo: "/fav.png"   # ou un logo horizontal /logo-k-red.svg
+    showBrandLogo: true
     stickyNavBar:
       enable: true
       showOnScrollUp: true
@@ -255,23 +257,21 @@ params:
     <!-- Styles inline (sûrs à charger) -->
     <style>
       /* ===== About centré ===== */
-      #about.section {
-        min-height: 100vh;             /* plein écran */
-        display: flex;
-        align-items: center;           /* centré verticalement */
-        justify-content: center;       /* centré horizontalement */
-        padding: 0;
+      /* ===== About vraiment centré (titre + texte + nuage) ===== */
+      #about.section{
+        min-height:100vh;
+        display:flex;align-items:center;justify-content:center;
+        padding:0;
       }
-      #about .container {
-        max-width: 900px;
-        margin: 0 auto;
-        text-align: center;
-      }
-      #about .container > p {
-        font-size: 1.05rem;
-        line-height: 1.8;
-        margin-bottom: 1.5rem;
-      }
+      #about .container{max-width:900px;margin:0 auto;text-align:center;}
+      /* Centre toute la grille bootstrap interne (row/col) */
+      #about .row{margin:0 auto;justify-content:center;width:100%;}
+      #about [class*="col-"]{margin-left:auto;margin-right:auto;float:none;}
+      /* Même largeur et centrage pour les paragraphes */
+      #about p{max-width:780px;margin:0 auto 1.5rem;line-height:1.8;}
+      /* Le nuage reste bien centré */
+      #about .tech-cloud{justify-content:center;}
+
 
       /* ===== Tech cloud ===== */
       .tech-cloud { display:flex; flex-wrap:wrap; gap:.6rem; justify-content:center; margin-top:1rem; }
