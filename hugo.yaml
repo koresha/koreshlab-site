@@ -19,7 +19,6 @@ markup:
 
 menu:
   main:
-    # Hide if you don't use them yet
     - identifier: blog
       name: Blog
       title: Blog posts
@@ -34,17 +33,17 @@ menu:
 params:
   title: "Koresha — DevOps | SRE | DevSecOps"
   description: "Koresha's portfolio — Site Reliability & DevSecOps engineer."
-  favicon: "/fav.png"
+  favicon: "/fav.svg"
 
   useBootstrapCDN: true
   mathjax: false
   animate: true
 
   theme:
-    # defaultTheme: "light"   # or "dark"
+    # defaultTheme: "light"
 
   font:
-    fontSize: 1.05rem
+    fontSize: "1.05rem"
     fontWeight: 400
     lineHeight: 1.6
     textAlign: left
@@ -53,7 +52,7 @@ params:
     align: ms-auto
     brandName: "Koresha"
     disableSearch: true
-    brandLogo: "/fav.png"   # ou un logo horizontal /logo-k-red.svg
+    brandLogo: "/fav.svg"
     showBrandLogo: true
     stickyNavBar:
       enable: true
@@ -73,13 +72,13 @@ params:
     title: "Koresha"
     subtitle: "Site Reliability Engineer · DevSecOps"
     content: "Always keen to share knowledge and build things together."
-    image: /images/logo.jpeg   # ensure this exists under static/images/
+    image: "/images/logo.jpeg"
     bottomImage:
       enable: true
     button:
       enable: true
       name: "Download my résumé"
-      url: "/cv/"              # your /cv page that links to the encrypted PDF
+      url: "/cv/"
       download: false
       newPage: false
     socialLinks:
@@ -113,7 +112,6 @@ params:
         <span class="tech-chip" data-skill="MongoDB">MongoDB</span>
         <span class="tech-chip" data-skill="Python">Python</span>
         <span class="tech-chip" data-skill="Bash">Bash</span>
-        <!-- New ones -->
         <span class="tech-chip" data-skill="Azure">Azure</span>
         <span class="tech-chip" data-skill="AWS">AWS</span>
         <span class="tech-chip" data-skill="OVHcloud">OVHcloud</span>
@@ -136,22 +134,8 @@ params:
         <span class="tech-chip" data-skill="Go (basics)">Go (basics)</span>
       </div>
 
-
-      <!-- Skill card (modal) -->
-      <div class="skill-card" id="skillCard" aria-hidden="true">
-        <div class="card" role="dialog" aria-modal="true" aria-labelledby="skillTitle">
-          <div class="title" id="skillTitle">Skill</div>
-          <div class="meta" id="skillMeta">Proficiency</div>
-          <div class="bar"><span id="skillBar"></span></div>
-          <div class="actions">
-            <button class="btn" id="skillClose">Close</button>
-          </div>
-        </div>
-      </div>
-
-
     skills:
-      enable: false   # we replace it with the tech cloud above
+      enable: false
 
   experience:
     enable: true
@@ -253,117 +237,6 @@ params:
   customCSS:
     - "css/custom.css"
 
-  customScripts: |-
-    <!-- Styles inline (sûrs à charger) -->
-    <style>
-      /* ===== About centré ===== */
-      /* ===== About vraiment centré (titre + texte + nuage) ===== */
-      #about.section{
-        min-height:100vh;
-        display:flex;align-items:center;justify-content:center;
-        padding:0;
-      }
-      #about .container{max-width:900px;margin:0 auto;text-align:center;}
-      /* Centre toute la grille bootstrap interne (row/col) */
-      #about .row{margin:0 auto;justify-content:center;width:100%;}
-      #about [class*="col-"]{margin-left:auto;margin-right:auto;float:none;}
-      /* Même largeur et centrage pour les paragraphes */
-      #about p{max-width:780px;margin:0 auto 1.5rem;line-height:1.8;}
-      /* Le nuage reste bien centré */
-      #about .tech-cloud{justify-content:center;}
+  customJS:
+    - "js/custom-about.js"
 
-
-      /* ===== Tech cloud ===== */
-      .tech-cloud { display:flex; flex-wrap:wrap; gap:.6rem; justify-content:center; margin-top:1rem; }
-      .tech-chip {
-        cursor:pointer; padding:.5rem .8rem; border-radius:999px;
-        background: rgba(125,125,125,.12);
-        font-weight:600; transition: box-shadow .15s ease, opacity .15s ease;
-        will-change: transform;
-        animation-name: tech-float; animation-iteration-count: infinite; animation-timing-function: ease-in-out;
-      }
-      .tech-chip:hover { box-shadow: 0 6px 18px rgba(0,0,0,.2); }
-
-      /* Flottement doux */
-      @keyframes tech-float {
-        0%   { transform: translate(0,0); }
-        50%  { transform: translate(var(--dx, 6px), var(--dy, -6px)); }
-        100% { transform: translate(0,0); }
-      }
-
-      /* ===== Skill card (modal) ===== */
-      .skill-card { position: fixed; inset: 0; display: none; place-items: center; z-index: 9999;
-                    background: rgba(0,0,0,.45); }
-      .skill-card.open { display: grid; }
-      .skill-card .card {
-        background:#1f242b; color:#eaecef; border-radius:14px; padding:20px 22px;
-        width:min(420px,92vw); box-shadow:0 12px 40px rgba(0,0,0,.35);
-      }
-      .skill-card .title { font-size:1.05rem; font-weight:700; margin:0 0 .75rem; }
-      .skill-card .meta { font-size:.9rem; opacity:.85; margin:.6rem 0 .8rem; }
-      .skill-card .bar { height:10px; border-radius:999px; background:rgba(255,255,255,.12); overflow:hidden; margin-bottom:20px; }
-      .skill-card .bar > span { display:block; height:100%; width:0%;
-        background: linear-gradient(90deg,#ff5252,#ff1744); /* Rouge */
-        transition: width .5s ease; }
-      .skill-card .actions { display:flex; justify-content:flex-end; margin-top:12px; } /* bouton un peu plus bas */
-      .skill-card .btn { padding:.45rem .7rem; border-radius:8px; border:1px solid rgba(255,255,255,.15);
-                         background:transparent; color:#eaecef; cursor:pointer; }
-      .skill-card .btn:hover { background:rgba(255,255,255,.06); }
-    </style>
-
-    <!-- Bootstrap bundle (pour les onglets Experience) -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
-
-    <!-- Script: nuage + jauge -->
-    <script>
-      // Niveaux (0-100)
-      const SKILLS = {
-        "Kubernetes": 90, "Docker": 90, "Helm": 80, "ArgoCD": 80,
-        "Terraform / OpenTofu": 85, "Ansible": 85, "GitLab CI/CD": 85, "Jenkins": 75,
-        "Keycloak": 70, "Prometheus": 80, "Grafana": 80, "ELK (SIEM)": 70,
-        "PostgreSQL": 65, "MongoDB": 60, "Python": 65, "Bash": 80,
-        "Azure": 70, "AWS": 40, "OVHcloud": 80, "OutScale": 60, "OpenStack": 70, "Scalingo": 80,
-        "VMware/Tanzu": 65, "Trivy": 75, "Traefik": 70, "Istio": 55,
-        "Kafka": 60, "RabbitMQ": 60, "Vault": 70, "Harbor": 70,
-        "Ceph": 55, "MinIO/S3": 65, "Teleport": 85, "Git": 85, "PowerShell": 60, "Go (basics)": 40
-      };
-
-      // Anime chaque chip avec des paramètres aléatoires
-      function initTechChips() {
-        document.querySelectorAll('.tech-chip').forEach(chip => {
-          const dur = (8 + Math.random()*8).toFixed(2) + 's';
-          const del = (-Math.random()*8).toFixed(2) + 's';
-          const dx  = (Math.random() < .5 ? -1 : 1) * (4 + Math.random()*8);
-          const dy  = (Math.random() < .5 ? -1 : 1) * (4 + Math.random()*8);
-          chip.style.setProperty('animation-duration', dur);
-          chip.style.setProperty('animation-delay', del);
-          chip.style.setProperty('--dx', dx + 'px');
-          chip.style.setProperty('--dy', dy + 'px');
-        });
-      }
-
-      const card = document.getElementById('skillCard');
-      const title = document.getElementById('skillTitle');
-      const meta  = document.getElementById('skillMeta');
-      const bar   = document.getElementById('skillBar');
-      const closeBtn = document.getElementById('skillClose');
-
-      function openSkill(name) {
-        const lvl = SKILLS[name] ?? 50;
-        title.textContent = name;
-        meta.textContent  = `Proficiency: ${lvl}%`;
-        bar.style.width = '0%';
-        card.classList.add('open');
-        requestAnimationFrame(() => { bar.style.width = lvl + '%'; });
-      }
-      function closeSkill() { card.classList.remove('open'); }
-
-      document.addEventListener('click', (e) => {
-        const chip = e.target.closest('.tech-chip');
-        if (chip) { e.preventDefault(); openSkill(chip.dataset.skill); }
-        if (e.target === card) closeSkill();
-      });
-      closeBtn?.addEventListener('click', closeSkill);
-      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSkill(); });
-      document.addEventListener('DOMContentLoaded', initTechChips);
-    </script>
