@@ -92,48 +92,44 @@ params:
     enable: true
     title: "About"
     image: "/images/logo.png"
-    content: |-
-      I’m a DevOps / SRE engineer focused on multi-cluster Kubernetes, CI/CD, IaC, SSO, security and observability across OVH, OutScale, Azure, AWS, OpenStack.
-
-      <div class="tech-cloud" aria-label="Technology cloud">
-        <span class="tech-chip" data-skill="Kubernetes">Kubernetes</span>
-        <span class="tech-chip" data-skill="Docker">Docker</span>
-        <span class="tech-chip" data-skill="Helm">Helm</span>
-        <span class="tech-chip" data-skill="ArgoCD">ArgoCD</span>
-        <span class="tech-chip" data-skill="Terraform / OpenTofu">Terraform / OpenTofu</span>
-        <span class="tech-chip" data-skill="Ansible">Ansible</span>
-        <span class="tech-chip" data-skill="GitLab CI/CD">GitLab CI/CD</span>
-        <span class="tech-chip" data-skill="Jenkins">Jenkins</span>
-        <span class="tech-chip" data-skill="Keycloak">Keycloak</span>
-        <span class="tech-chip" data-skill="Prometheus">Prometheus</span>
-        <span class="tech-chip" data-skill="Grafana">Grafana</span>
-        <span class="tech-chip" data-skill="ELK (SIEM)">ELK (SIEM)</span>
-        <span class="tech-chip" data-skill="PostgreSQL">PostgreSQL</span>
-        <span class="tech-chip" data-skill="MongoDB">MongoDB</span>
-        <span class="tech-chip" data-skill="Python">Python</span>
-        <span class="tech-chip" data-skill="Bash">Bash</span>
-        <span class="tech-chip" data-skill="Azure">Azure</span>
-        <span class="tech-chip" data-skill="AWS">AWS</span>
-        <span class="tech-chip" data-skill="OVHcloud">OVHcloud</span>
-        <span class="tech-chip" data-skill="OutScale">OutScale</span>
-        <span class="tech-chip" data-skill="OpenStack">OpenStack</span>
-        <span class="tech-chip" data-skill="Scalingo">Scalingo</span>
-        <span class="tech-chip" data-skill="VMware/Tanzu">VMware/Tanzu</span>
-        <span class="tech-chip" data-skill="Trivy">Trivy</span>
-        <span class="tech-chip" data-skill="Traefik">Traefik</span>
-        <span class="tech-chip" data-skill="Istio">Istio</span>
-        <span class="tech-chip" data-skill="Kafka">Kafka</span>
-        <span class="tech-chip" data-skill="RabbitMQ">RabbitMQ</span>
-        <span class="tech-chip" data-skill="Vault">Vault</span>
-        <span class="tech-chip" data-skill="Harbor">Harbor</span>
-        <span class="tech-chip" data-skill="Ceph">Ceph</span>
-        <span class="tech-chip" data-skill="MinIO/S3">MinIO/S3</span>
-        <span class="tech-chip" data-skill="Teleport">Teleport</span>
-        <span class="tech-chip" data-skill="Git">Git</span>
-        <span class="tech-chip" data-skill="PowerShell">PowerShell</span>
-        <span class="tech-chip" data-skill="Go (basics)">Go (basics)</span>
-      </div>
-
+    content: "I'm a DevOps / SRE engineer focused on multi-cluster Kubernetes, CI/CD, IaC, SSO, security and observability across OVH, OutScale, Azure, AWS, OpenStack."
+    technologies:
+      - "Kubernetes"
+      - "Docker"
+      - "Helm"
+      - "ArgoCD"
+      - "Terraform / OpenTofu"
+      - "Ansible"
+      - "GitLab CI/CD"
+      - "Jenkins"
+      - "Keycloak"
+      - "Prometheus"
+      - "Grafana"
+      - "ELK (SIEM)"
+      - "PostgreSQL"
+      - "MongoDB"
+      - "Python"
+      - "Bash"
+      - "Azure"
+      - "AWS"
+      - "OVHcloud"
+      - "OutScale"
+      - "OpenStack"
+      - "Scalingo"
+      - "VMware/Tanzu"
+      - "Trivy"
+      - "Traefik"
+      - "Istio"
+      - "Kafka"
+      - "RabbitMQ"
+      - "Vault"
+      - "Harbor"
+      - "Ceph"
+      - "MinIO/S3"
+      - "Teleport"
+      - "Git"
+      - "PowerShell"
+      - "Go (basics)"
     skills:
       enable: false
 
