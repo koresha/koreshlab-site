@@ -1,0 +1,209 @@
+/* Hero section styles */
+#hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    background-color: var(--background-color);
+    margin-top: -80px; /* Compensate for header height */
+    padding: 0 1rem;
+}
+
+#hero::before {
+    content: '';
+    display: block;
+    height: 80px; /* Header height */
+}
+
+/* Ensure other sections are visible */
+#about, #experience, #education, #contact {
+    position: relative;
+    z-index: 1;
+    padding: 6rem 0;
+    background-color: var(--background-color);
+}
+
+#hero .hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0;
+}
+
+/* Style each text element individually */
+#hero .intro {
+    font-size: 1.8rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+}
+
+#hero h1 {
+    font-size: 4.5rem;
+    font-weight: 700;
+    color: white;
+    margin: 0;
+    line-height: 1.2;
+}
+
+#hero .subtitle {
+    font-size: 2.5rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+    line-height: 1.4;
+}
+
+#hero .content {
+    font-size: 1.4rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+    max-width: 600px;
+}es */
+#hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    text-align: center;
+    padding: 0 1rem;
+    background-color: var(--background-color);
+}
+
+#hero .hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 800px;
+    margin: 0 auto;
+    padding-top: 4rem; /* Pour compenser le header fixe */
+}
+
+#hero .intro {
+    font-size: 2rem;
+    color: var(--text-color);
+    opacity: 0.9;
+    margin: 0;
+    font-weight: 400;
+    line-height: 1.4;
+}
+
+#hero h1 {
+    font-size: 5rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text-color);
+    line-height: 1.2;
+    letter-spacing: -2px;
+}
+
+#hero .subtitle {
+    font-size: 2.5rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+    margin: 0;
+    line-height: 1.4;
+}
+
+#hero .content {
+    font-size: 1.5rem;
+    line-height: 1.6;
+    opacity: 0.8;
+    max-width: 600px;
+    margin: 0;
+    color: var(--text-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #hero h1 {
+        font-size: 3.5rem;
+    }
+    #hero .intro {
+        font-size: 1.5rem;
+    }
+    #hero .subtitle {
+        font-size: 1.8rem;
+    }
+    #hero .content {
+        font-size: 1.2rem;
+    }
+}
+
+/* Animation for text appearance */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#hero .intro { animation: fadeInUp 0.6s ease-out 0.2s both; }
+#hero h1 { animation: fadeInUp 0.6s ease-out 0.4s both; }
+#hero .subtitle { animation: fadeInUp 0.6s ease-out 0.6s both; }
+#hero .content { animation: fadeInUp 0.6s ease-out 0.8s both; }
+.button-container { animation: fadeInUp 0.6s ease-out 1s both; }
+
+/* Remove any image-related styles */
+#hero .hero-image,
+#hero img {
+    display: none !important;
+}
+
+/* Adjust spacing for the buttons */
+#hero .button-container {
+    margin-top: 2.5rem;
+}
+
+/* Make sure no extra decorations are visible */
+#hero .hero-bottom-svg,
+#hero .decorations {
+    display: none !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #hero h1 {
+        font-size: 3rem;
+    }
+    
+    #hero .subtitle {
+        font-size: 1.5rem;
+    }
+    
+    #hero .content {
+        font-size: 1.1rem;
+    }
+}
+
+/* Animation for text appearance */
+#hero .hero-content > * {
+    animation: fadeInUp 0.6s ease-out forwards;
+    opacity: 0;
+}
+
+#hero .intro { animation-delay: 0.2s; }
+#hero h1 { animation-delay: 0.4s; }
+#hero .subtitle { animation-delay: 0.6s; }
+#hero .content { animation-delay: 0.8s; }
+#hero .button-container { animation-delay: 1s; }
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

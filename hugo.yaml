@@ -1,16 +1,13 @@
 baseURL: "https://koreshlab.netlify.app"
 languageCode: "en"
 title: "DevOps | SRE | DevSecOps"
-theme: hugo-profile
+theme: "hugo-profile"
 
 outputs:
-  home: ["HTML","RSS","JSON"]
-  page: ["HTML","RSS"]
+  home: ["HTML", "RSS", "JSON"]
+  page: ["HTML", "RSS"]
 
 enableRobotsTXT: true
-
-pagination:
-  pagerSize: 3
 
 markup:
   goldmark:
@@ -40,7 +37,7 @@ params:
   animate: true
 
   theme:
-    # defaultTheme: "light"
+    defaultTheme: "dark"
 
   font:
     fontSize: "1.05rem"
@@ -50,13 +47,13 @@ params:
 
   navbar:
     align: ms-auto
-    brandName: "Koresha"
+    brandName: "oresha"
     disableSearch: true
     brandLogo: "/fav.svg"
     showBrandLogo: true
     stickyNavBar:
       enable: true
-      showOnScrollUp: true
+      showOnScrollUp: false
     enableSeparator: false
     menus:
       disableAbout: false
@@ -68,13 +65,13 @@ params:
 
   hero:
     enable: true
-    intro: "Hi, I’m"
+    intro: "Hey, welcome to my world!"
     title: "Koresha"
-    subtitle: "Site Reliability Engineer · DevSecOps"
-    content: "Always keen to share knowledge and build things together."
-    image: "/images/logo.jpeg"
+    subtitle: "Site Reliability Engineer"
+    content: "DevSecOps"
+    image: ""
     bottomImage:
-      enable: true
+      enable: false
     button:
       enable: true
       name: "Download my résumé"
@@ -91,7 +88,7 @@ params:
   about:
     enable: true
     title: "About"
-    image: "/images/logo.png"
+    image: ""
     content: "I'm a DevOps / SRE engineer focused on multi-cluster Kubernetes, CI/CD, IaC, SSO, security and observability across OVH, OutScale, Azure, AWS, OpenStack."
     technologies:
       - "Kubernetes"
@@ -154,21 +151,6 @@ params:
         date: "Jun 2022 – Feb 2025"
         content: |
           Ansible, Terraform, AWX; Jenkins pipelines; K8s Tanzu; GitOps (ArgoCD); Observability (Prometheus, Grafana, Instana); Security (F5 BIG-IP, ELK SIEM); DBA (MariaDB/Mongo/Galera); DR/BCP; backups (Veeam/Avamar/IDPA); API/Kafka support.
-      - job: "Systems & Network Admin"
-        company: "IOR System"
-        date: "Feb 2021 – May 2022"
-        content: |
-          Security audits; Azure DevOps CI/CD; Windows Server; Veeam/Avamar; networks (HP, RADIUS); messaging (Exchange/O365/Gmail); PowerShell scripting.
-      - job: "Systems Admin & DevOps (Apprenticeship)"
-        company: "Epresspack"
-        date: "Dec 2018 – Jan 2021"
-        content: |
-          Linux servers administration; MySQL/MariaDB; Centreon monitoring; Ansible automation; security & procedures.
-      - job: "IT Technician"
-        company: "Louis Vuitton Malletier"
-        date: "Jan 2018 – Jun 2018"
-        content: |
-          L1/L2 support in retail environment.
 
   education:
     enable: true
@@ -179,15 +161,7 @@ params:
           name: "IPSSI, Paris"
           url: ""
         date: "2018 – 2022"
-        content: "2-year master’s degree in cybersecurity and cloud."
-
-  achievements:
-    enable: false
-    items: []
-
-  projects:
-    enable: false
-    items: []
+        content: "2-year master's degree in cybersecurity and cloud."
 
   contact:
     enable: true
@@ -197,42 +171,15 @@ params:
 
   footer:
     recentPosts:
-      path: "blogs"
-      count: 3
-      title: "Recent posts"
       enable: false
-      disableFeaturedImage: false
     socialNetworks:
       github: "https://github.com/koresha"
 
-  listPages:
-    disableFeaturedImage: false
-
-  singlePages:
-    socialShare: true
-    readTime:
-      enable: true
-      content: "min read"
-    scrollprogress:
-      enable: true
-    tags:
-      openInNewTab: true
-
-  terms:
-    read: "Read"
-    toc: "Table of Contents"
-    copyright: "All rights reserved"
-    pageNotFound: "Page not found"
-    emailText: "Check out this site"
-
-  datesFormat:
-    article: "Jan 2, 2006"
-    articleList: "Jan 2, 2006"
-    articleRecent: "Jan 2, 2006"
-
   customCSS:
     - "css/custom.css"
+    - "css/hero.css"
+    - "css/footer.css"
 
   customJS:
     - "js/custom-about.js"
-
+    - "js/header.js"

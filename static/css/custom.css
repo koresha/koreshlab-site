@@ -1,5 +1,46 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap');
+
+/* Global styles */
+body {
+    font-family: 'Playfair Display', serif !important;
+    color: #cc0000 !important;
+    background-color: #f8f9fa;
+}
+
+/* Smooth header integration */
+header {
+    background: transparent !important;
+    transition: all 0.3s ease;
+}
+
+header.navbar-sticky {
+    backdrop-filter: blur(10px);
+    background: rgba(248, 249, 250, 0.8) !important;
+}
+
+/* Style spécial pour le nom Koresha */
+.navbar .navbar-brand,
+.navbar-brand span,
+#hero .navbar-brand {
+    color: #b5a184 !important; /* Beige plus sombre et sophistiqué */
+    font-weight: 700 !important;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Effet de transition au survol */
+.navbar-brand:hover,
+h1:hover {
+    color: #e8e8d0 !important; /* Beige légèrement plus foncé au survol */
+    transition: color 0.3s ease;
+}
+
 /* ===== About vraiment centré (corrige le padding du thème) ===== */
-:root { --header-height: 84px; }
+:root { 
+    --header-height: 84px;
+    --primary-color: #cc0000;
+}
 
 #about {
   min-height: calc(100vh - var(--header-height));
@@ -9,6 +50,15 @@
   padding: 2rem 0;
   box-sizing: border-box;
   scroll-margin-top: calc(var(--header-height) + 8px);
+  position: relative;
+  background: var(--background-color);
+}
+
+/* Force hide hero decorative elements */
+.hero-bottom-svg {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
 }
 
 #about .container {
@@ -64,15 +114,23 @@
   align-items: center;
   padding: 6px 12px;
   border-radius: 999px;
-  background: rgba(125,125,125,.12);
-  color: inherit;
+  background: rgba(181, 161, 132, 0.2);
+  color: #b5a184 !important;
   font-size: 0.95rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   user-select: none;
   position: relative;
   z-index: 2;
+  font-family: 'Playfair Display', serif;
+  border: 1px solid rgba(212, 197, 170, 0.3);
+}
+
+#about .tech-chip:hover {
+  background: rgba(212, 197, 170, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 #about .tech-chip:hover {
@@ -269,7 +327,7 @@
 .skill-card .meta { font-size:.9rem; opacity:.85; margin:.6rem 0 .8rem; }
 .skill-card .bar { height:10px; border-radius:999px; background:rgba(255,255,255,.12); overflow:hidden; margin-bottom:20px; }
 .skill-card .bar > span { display:block; height:100%; width:0%;
-  background: linear-gradient(90deg,#ff5252,#ff1744); /* Rouge */
+  background: linear-gradient(90deg,#cc0000,#ff0000); /* Rouge plus foncé */
   transition: width .5s ease; }
 .skill-card .actions { display:flex; justify-content:flex-end; margin-top:12px; }
 .skill-card .btn { padding:.45rem .7rem; border-radius:8px; border:1px solid rgba(255,255,255,.15);
