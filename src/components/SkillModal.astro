@@ -1,0 +1,25 @@
+---
+const { name='Skill', level=50 } = Astro.props;
+---
+<div class="fixed inset-0 hidden z-50 flex items-center justify-center p-4" id="skillModal">
+  <div class="absolute inset-0 bg-black/50" data-close></div>
+  <div class="glass rounded-2xl p-6 w-full max-w-md relative z-10">
+    <h3 class="text-lg font-bold mb-2" id="skillTitle">{name}</h3>
+    <p class="text-sm text-gray-500 dark:text-gray-400 mb-3" id="skillMeta">Proficiency: <span id="skillPct">{level}</span>%</p>
+    <div class="h-2 w-full bg-white/20 rounded-full overflow-hidden mb-4">
+      <div id="skillBar" class="h-full bg-[linear-gradient(90deg,#ff5252,#ff1744)] w-0 transition-all duration-1000 ease-out"></div>
+    </div>
+    <div class="flex justify-end">
+      <button class="tag" data-close>Close</button>
+    </div>
+  </div>
+</div>
+<script>
+  const modal = document.getElementById('skillModal');
+  const bar = document.getElementById('skillBar');
+  const pct = document.getElementById('skillPct');
+  const title = document.getElementById('skillTitle');
+  function openSkill(n,l){ title.textContent=n; pct.textContent=l; bar.style.width='0%'; modal.classList.remove('hidden'); requestAnimationFrame(()=>bar.style.width=l+'%');}
+  modal?.addEventListener('click',e=>{ if(e.target.dataset.close!==undefined || e.target===modal) modal.classList.add('hidden');});
+  window.openSkill=openSkill;
+</script>

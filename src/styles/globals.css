@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #ffffff;
+  --fg: #0e141b;
+  --muted: #6b7280;
+  --card: rgba(255,255,255,.7);
+}
+:root[data-theme="dark"] {
+  --bg: #0e141b;
+  --fg: #e5e7eb;
+  --muted: #9ca3af;
+  --card: rgba(14,20,27,.6);
+}
+html,body { 
+  background: var(--bg); 
+  color: var(--fg); 
+  transition: background-color 0.3s ease, color 0.3s ease;
+  scroll-behavior: smooth;
+}
+.glass { backdrop-filter: blur(10px); background: var(--card); }
+.container { @apply mx-auto px-6 max-w-6xl; }
+.section { @apply py-24 md:py-32; }
+.h1 { @apply text-4xl md:text-6xl font-extrabold; letter-spacing:-.02em; }
+.h2 { @apply text-3xl md:text-4xl font-bold; letter-spacing:-.01em; }
+.p  { @apply text-base md:text-lg text-gray-500 dark:text-gray-400; }
+.btn{ @apply inline-flex items-center gap-2 rounded-xl px-5 py-3 font-semibold transition;
+      background:linear-gradient(135deg,#ff1744,#ff5252); color:white; }
+.btn:hover{ filter:brightness(1.05); transform:translateY(-1px); }
+.btn iconify-icon { @apply flex-shrink-0; }
+.tag{ 
+  @apply px-3 py-1 rounded-full text-sm font-semibold bg-gray-200/60 dark:bg-white/10 cursor-pointer hover:bg-gray-300/60 dark:hover:bg-white/20 transition;
+  @apply inline-flex items-center justify-center gap-2;
+}
+.tag iconify-icon { @apply flex-shrink-0; }
+@keyframes float { 0%{transform:translate(0,0)} 50%{transform:translate(var(--dx),var(--dy))} 100%{transform:translate(0,0)} }
+
+/* Utility classes */
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

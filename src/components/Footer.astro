@@ -1,0 +1,57 @@
+---
+import { site } from '../content/data/site';
+---
+<footer class="py-16 border-t border-white/10">
+  <div class="container">
+    <div class="grid md:grid-cols-3 gap-8 mb-8">
+      <!-- Brand -->
+      <div class="space-y-4">
+        <div class="flex items-center gap-2">
+          <img src="/fav.svg" alt="K" class="w-6 h-6 rounded-lg" />
+          <span class="font-bold text-lg">{site.name}</span>
+        </div>
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          {site.role}
+        </p>
+      </div>
+      
+      <!-- Quick Links -->
+      <div class="space-y-4">
+        <h4 class="font-semibold">Quick Links</h4>
+        <nav class="space-y-2">
+          <a href="#about" class="block text-sm text-gray-500 hover:text-brand-red transition">About</a>
+          <a href="#experience" class="block text-sm text-gray-500 hover:text-brand-red transition">Experience</a>
+          <a href="#projects" class="block text-sm text-gray-500 hover:text-brand-red transition">Projects</a>
+          <a href="#contact" class="block text-sm text-gray-500 hover:text-brand-red transition">Contact</a>
+        </nav>
+      </div>
+      
+      <!-- Contact -->
+      <div class="space-y-4">
+        <h4 class="font-semibold">Get in Touch</h4>
+        <div class="space-y-2">
+          <a 
+            href={`mailto:${site.email}`} 
+            class="flex items-center gap-2 text-sm text-gray-500 hover:text-brand-red transition"
+          >
+            <iconify-icon icon="solar:letter-outline" class="w-4 h-4"></iconify-icon>
+            {site.email}
+          </a>
+          <a 
+            href={site.github} 
+            target="_blank" 
+            rel="noopener"
+            class="flex items-center gap-2 text-sm text-gray-500 hover:text-brand-red transition"
+          >
+            <iconify-icon icon="mdi:github" class="w-4 h-4"></iconify-icon>
+            GitHub
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="pt-8 border-t border-white/10 text-center text-sm text-gray-500">
+      <p>© {new Date().getFullYear()} {site.name} — Built with Astro · Deployed on Netlify</p>
+    </div>
+  </div>
+</footer>

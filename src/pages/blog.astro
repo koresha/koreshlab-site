@@ -1,0 +1,92 @@
+---
+import '../styles/globals.css';
+import Header from '../components/Header.astro';
+import Section from '../components/Section.astro';
+import BlogCard from '../components/BlogCard.astro';
+import Footer from '../components/Footer.astro';
+import { blogPosts } from '../content/data/blog';
+
+// Sort posts by date (newest first)
+const sortedPosts = blogPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+const featuredPosts = sortedPosts.filter(post => post.featured);
+const regularPosts = sortedPosts.filter(post => !post.featured);
+---
+
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/fav.png" />
+    <link rel="icon" href="/fav.svg" type="image/svg+xml" />
+    
+    <title>Blog — Koresha</title>
+    <meta name="description" content="Technical articles about DevOps, SRE, DevSecOps, Kubernetes and modern infrastructure." />
+    
+    <!-- Iconify -->
+    <script type="module" src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+  </head>
+  
+  <body class="antialiased">
+    <Header />
+    
+    <main class="pt-20">
+      <!-- Hero Section -->
+      <section class="section pt-28 md:pt-40">
+        <div class="container text-center">
+          <h1 class="h1 mb-6">Blog</h1>
+          <p class="p max-w-2xl mx-auto text-xl">
+            Knowledge sharing on DevOps, SRE, security and modern infrastructure. 
+            Practical guides, experience feedback and best practices.
+          </p>
+        </div>
+      </section>
+
+      <!-- Featured Articles -->
+      {featuredPosts.length > 0 && (
+        <Section id="featured" title="Featured Articles">
+          <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {featuredPosts.map(post => <BlogCard post={post} />)}
+          </div>
+        </Section>
+      )}
+
+      <!-- All Articles -->
+      <Section id="all-articles" title="All Articles">
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {regularPosts.map(post => <BlogCard post={post} />)}
+        </div>
+        
+        <!-- Coming Soon Message -->
+        <div class="mt-12 text-center">
+          <div class="glass rounded-2xl p-8 max-w-md mx-auto">
+            <iconify-icon icon="solar:document-add-outline" class="w-12 h-12 text-brand-red mx-auto mb-4"></iconify-icon>
+            <h3 class="text-lg font-semibold mb-2">More articles coming soon</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+              New technical articles are being written. 
+              Stay tuned for more content!
+            </p>
+          </div>
+        </div>
+      </Section>
+
+      <!-- Newsletter/Contact CTA -->
+      <Section id="newsletter" title="Stay in touch">
+        <div class="max-w-2xl mx-auto text-center">
+          <p class="p mb-6">
+            Interested in my articles? Feel free to contact me to discuss technical topics 
+            or for specific questions.
+          </p>
+          <a href="mailto:contact.koreshlab@gmail.com" class="btn">
+            <iconify-icon icon="solar:letter-outline" class="w-5 h-5"></iconify-icon>
+            Contact me
+          </a>
+        </div>
+      </Section>
+    </main>
+
+    <Footer />
+    
+    <!-- Theme Toggle Script -->
+    <script src="/themeToggle.js" defer></script>
+  </body>
+</html>

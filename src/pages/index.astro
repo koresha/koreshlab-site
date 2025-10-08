@@ -1,0 +1,161 @@
+---
+import '../styles/globals.css';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Section from '../components/Section.astro';
+import SkillModal from '../components/SkillModal.astro';
+import ExperienceTabs from '../components/ExperienceTabs.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import BlogCard from '../components/BlogCard.astro';
+import Footer from '../components/Footer.astro';
+import { skills } from '../content/data/skills';
+import { projects } from '../content/data/projects';
+import { blogPosts } from '../content/data/blog';
+import { site } from '../content/data/site';
+import { chip } from '../components/TechChip';
+---
+
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/fav.png" />
+    <link rel="icon" href="/fav.svg" type="image/svg+xml" />
+    
+    <!-- SEO Meta Tags -->
+    <title>Koresha — SRE | DevSecOps</title>
+    <meta name="description" content="SRE and DevSecOps engineer specialized in Kubernetes, cloud infrastructure, automation and security. Always keen to share knowledge and build things together." />
+    <meta name="keywords" content="SRE, DevSecOps, Kubernetes, Docker, Terraform, Ansible, Cloud, Infrastructure" />
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://koreshalab.com" />
+    <meta property="og:title" content="Koresha — SRE | DevSecOps" />
+    <meta property="og:description" content="SRE and DevSecOps engineer specialized in Kubernetes, cloud infrastructure, automation and security." />
+    <meta property="og:image" content="/og-cover.png" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://koreshalab.com" />
+    <meta property="twitter:title" content="Koresha — SRE | DevSecOps" />
+    <meta property="twitter:description" content="SRE and DevSecOps engineer specialized in Kubernetes, cloud infrastructure, automation and security." />
+    <meta property="twitter:image" content="/og-cover.png" />
+    
+    <!-- Preload important resources -->
+    <link rel="preload" href="/themeToggle.js" as="script" />
+    
+    <!-- Iconify -->
+    <script type="module" src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+  </head>
+  
+  <body class="antialiased">
+    <Header />
+    <main>
+      <Hero />
+      
+      <Section id="about" title="About Me">
+        <div class="max-w-4xl mx-auto text-center space-y-8">
+          <p class="p text-xl leading-relaxed">
+            I'm a SRE / DevSecOps engineer focused on multi-cluster Kubernetes, CI/CD, Infrastructure as Code, 
+            SSO implementation, security hardening and comprehensive observability. I enjoy automating complex 
+            workflows and building resilient, scalable systems.
+          </p>
+          
+          <div class="grid md:grid-cols-3 gap-6 text-center">
+            <div class="glass rounded-xl p-6">
+              <iconify-icon icon="solar:server-outline" class="w-8 h-8 text-brand-red mx-auto mb-3"></iconify-icon>
+              <h3 class="font-semibold mb-2">Infrastructure</h3>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Kubernetes, OpenStack, Cloud platforms</p>
+            </div>
+            <div class="glass rounded-xl p-6">
+              <iconify-icon icon="solar:shield-check-outline" class="w-8 h-8 text-brand-red mx-auto mb-3"></iconify-icon>
+              <h3 class="font-semibold mb-2">Security</h3>
+              <p class="text-sm text-gray-500 dark:text-gray-400">DevSecOps, SIEM, SSO, Compliance</p>
+            </div>
+            <div class="glass rounded-xl p-6">
+              <iconify-icon icon="solar:chart-outline" class="w-8 h-8 text-brand-red mx-auto mb-3"></iconify-icon>
+              <h3 class="font-semibold mb-2">Monitoring</h3>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Prometheus, Grafana, Observability</p>
+            </div>
+          </div>
+          
+          <div class="mt-8">
+            <h3 class="h2 text-2xl mb-6">Skills & Technologies</h3>
+            <div class="flex flex-wrap gap-3 justify-center" set:html={skills.map(s => chip(s.name, s.level)).join('')} />
+          </div>
+        </div>
+        <SkillModal />
+      </Section>
+
+      <Section id="experience" title="Professional Experience">
+        <ExperienceTabs />
+      </Section>
+
+      <Section id="projects" title="Featured Projects">
+        <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          {projects.map(p => <ProjectCard p={p} />)}
+        </div>
+      </Section>
+
+      <Section id="blog" title="Latest Articles">
+        <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-8">
+          {blogPosts.slice(0, 4).map(post => <BlogCard post={post} />)}
+        </div>
+        <div class="text-center">
+          <a href="/blog" class="btn bg-gray-800 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600">
+            <iconify-icon icon="solar:document-text-outline" class="w-5 h-5"></iconify-icon>
+            View All Articles
+          </a>
+        </div>
+      </Section>
+
+      <Section id="contact" title="Let's Work Together">
+        <div class="max-w-2xl mx-auto text-center space-y-8">
+          <p class="p text-lg">
+            I'm always interested in discussing new opportunities, sharing knowledge, 
+            or collaborating on interesting projects. Feel free to reach out!
+          </p>
+          
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href={`mailto:${site.email}`} class="btn">
+              <iconify-icon icon="solar:letter-outline" class="w-5 h-5"></iconify-icon>
+              Send me an email
+            </a>
+            <a 
+              href={site.github} 
+              target="_blank" 
+              rel="noopener"
+              class="btn bg-gray-800 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600"
+            >
+              <iconify-icon icon="mdi:github" class="w-5 h-5"></iconify-icon>
+              View on GitHub
+            </a>
+          </div>
+          
+          <div class="glass rounded-2xl p-6 text-left max-w-md mx-auto">
+            <h4 class="font-semibold mb-3 flex items-center gap-2">
+              <iconify-icon icon="solar:user-outline" class="w-5 h-5 text-brand-red"></iconify-icon>
+              Quick Info
+            </h4>
+            <div class="space-y-2 text-sm">
+              <div class="flex items-center gap-2">
+                <iconify-icon icon="solar:map-point-outline" class="w-4 h-4 text-gray-400"></iconify-icon>
+                <span>{site.location}</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <iconify-icon icon="solar:case-outline" class="w-4 h-4 text-gray-400"></iconify-icon>
+                <span>Available for freelance & consulting</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <iconify-icon icon="solar:clock-outline" class="w-4 h-4 text-gray-400"></iconify-icon>
+                <span>Response time: Usually within 24h</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Section>
+    </main>
+
+    <Footer />
+  </body>
+</html>
