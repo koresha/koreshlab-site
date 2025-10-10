@@ -1,80 +1,12 @@
-# Security Headers Configuration for Netlify
+# Optimized security headers - Production ready
 
-[[headers]]
-  for = "/*"
-  [headers.values]
-    # Prevent clickjacking attacks
-    X-Frame-Options = "DENY"
-    
-    # Prevent MIME type sniffing
-    X-Content-Type-Options = "nosniff"
-    
-    # Enable XSS protection
-    X-XSS-Protection = "1; mode=block"
-    
-    # Enforce HTTPS
-    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
-    
-    # Content Security Policy
-    Content-Security-Policy = """
-      default-src 'self';
-      script-src 'self' 'unsafe-inline' https://unpkg.com https://code.iconify.design;
-      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-      font-src 'self' https://fonts.gstatic.com;
-      img-src 'self' data: https: https://api.iconify.design;
-      connect-src 'self' https: https://api.iconify.design;
-      frame-ancestors 'none';
-      base-uri 'self';
-      form-action 'self';
-      upgrade-insecure-requests
-    """
-    
-    # Referrer Policy
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    
-    # Permissions Policy
-    Permissions-Policy = """
-      geolocation=(),
-      microphone=(),
-      camera=(),
-      payment=(),
-      usb=(),
-      gyroscope=(),
-      magnetometer=(),
-      accelerometer=(),
-      ambient-light-sensor=(),
-      autoplay=(),
-      encrypted-media=(),
-      fullscreen=(self),
-      picture-in-picture=()
-    """
-
-# Security headers for API endpoints
-[[headers]]
-  for = "/api/*"
-  [headers.values]
-    X-Robots-Tag = "noindex, nofollow"
-    Cache-Control = "no-store, no-cache, must-revalidate, proxy-revalidate"
-
-# Security headers for sensitive files
-[[headers]]
-  for = "/.well-known/*"
-  [headers.values]
-    X-Robots-Tag = "noindex, nofollow"
-    Cache-Control = "public, max-age=3600"
-
-# Deny access to sensitive files
-[[redirects]]
-  from = "/.env*"
-  to = "/404"
-  status = 404
-
-[[redirects]]
-  from = "/config.json"
-  to = "/404"
-  status = 404
-
-[[redirects]]
-  from = "/*.log"
-  to = "/404"
-  status = 404
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  
+# Balanced CSP: Secure but functional
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://code.iconify.design; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://api.iconify.design https://cdn.iconify.design; connect-src 'self' https://api.iconify.design https://cdn.iconify.design; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self';
