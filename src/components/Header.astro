@@ -1,5 +1,4 @@
 ---
-import { Icon } from 'astro-icon/components';
 const links = [
   { href:'/#about', label:'About' },
   { href:'/#experience', label:'Experience' },
@@ -23,11 +22,11 @@ const links = [
     </nav>
     <div class="flex items-center gap-2">
       <button id="themeToggle" class="rounded-xl p-2 hover:bg-black/5 dark:hover:bg-white/10" aria-label="Toggle theme">
-        <Icon name="solar:sun-2-outline" class="w-5 h-5 dark:hidden"/>
-        <Icon name="solar:moon-outline" class="w-5 h-5 hidden dark:block"/>
+        <iconify-icon icon="solar:sun-2-outline" class="w-5 h-5 dark:hidden"></iconify-icon>
+        <iconify-icon icon="solar:moon-outline" class="w-5 h-5 hidden dark:block"></iconify-icon>
       </button>
       <button id="mobileMenuToggle" class="md:hidden rounded-xl p-2 hover:bg-black/5 dark:hover:bg-white/10" aria-label="Toggle menu">
-        <Icon name="heroicons:bars-3" class="w-5 h-5"/>
+        <iconify-icon icon="heroicons:bars-3" class="w-5 h-5"></iconify-icon>
       </button>
     </div>
   </div>

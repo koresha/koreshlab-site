@@ -45,3 +45,10 @@ html,body {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Iconify icon fixes */
+iconify-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
