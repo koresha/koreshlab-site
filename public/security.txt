@@ -1,0 +1,7 @@
+Contact: mailto:security@koreshlab.com
+Expires: 2026-12-31T23:59:59.000Z
+Encryption: https://koreshlab.com/.well-known/pgp-key.txt
+Preferred-Languages: en, fr
+Canonical: https://koreshlab.com/.well-known/security.txt
+Policy: https://koreshlab.com/security-policy
+Acknowledgments: https://koreshlab.com/security-acknowledgments

@@ -1,5 +1,207 @@
-public/
-resources/
+# Build outputs
+dist/
+build/
+out/
+.output/
+.astro/
+
+# Keep public/ but exclude sensitive files in it
+public/.env*
+public/*secret*
+public/*.key
+public/*.pem
+public/*token*
+public/config.json
+
+# Dependencies
+node_modules/
+.npm
+.yarn/
+.pnp/
+.pnp.js
+yarn-error.log*
+npm-debug.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Environment variables & secrets
+.env*
+*.env*
+.environment
+.secrets/
+secrets/
+secret.*
+*secret*
+*credential*
+*password*
+*passwd*
+
+# Security keys & certificates
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+*.cer
+*.der
+*.jks
+*.keystore
+*.truststore
+*private*
+ssh_*
+id_rsa*
+id_ed25519*
+id_ecdsa*
+
+# API keys & tokens
+*token*
+*api-key*
+*apikey*
+*.token
+.auth
+auth.*
+.credentials
+credentials.*
+
+# Configuration files with potential secrets
+config.json
+settings.json
+local.json
+production.json
+staging.json
+development.json
+.config/
+.settings/
+
+# Logs & debug files
+*.log
+*.log.*
+.last_build.log
+.last_git.log
+logs/
+debug/
+error.log
+access.log
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+.pm2/
+
+# Coverage & testing
+coverage/
+*.lcov
+.nyc_output
+test-results/
+.coverage
+junit.xml
+
+# Temporary folders & cache
+tmp/
+temp/
+.tmp/
+.cache/
+.parcel-cache
+.next/
+.nuxt/
+.vuepress/dist
+.serverless/
+
+# Operating System files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Editor & IDE files
+.vscode/settings.json
+.vscode/launch.json
+.vscode/extensions.json
+.vscode/tasks.json
+.idea/
+*.swp
+*.swo
+*.tmp
+*~
+.sublime-*
+
+# Backup & archive files
+*.backup
+*.bak
+*.tar.gz
+*.zip
+*.rar
+*.7z
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+*.mdb
+
+# Compiled files
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+*.dylib
+
+# Package files
+*.dmg
+*.pkg
+*.deb
+*.rpm
+
+# TypeScript
+*.tsbuildinfo
+.tscache/
+
+# Node.js specific
+.node_repl_history
+*.tgz
+.yarn-integrity
+.fusebox/
+.dynamodb/
+.tern-port
+
+# Framework specific
 .hugo_build.lock
-node_modules
+resources/
+.vercel
+.netlify
+.output
+.nitro
+
+# Security & compliance
+security-scan-results/
+vulnerability-report.*
+audit-report.*
+compliance-report.*
+
+# Git security
+.gitconfig
+.git-credentials
+.netrc
+
+# Cloud & deployment
+.aws/
+.azure/
+.gcp/
+terraform.tfstate*
+terraform.tfvars*
+.terraform/
+ansible-vault-*
+vault-*
+
+# Monitoring & analytics
+.sentry
+.bugsnag
+newrelic.js

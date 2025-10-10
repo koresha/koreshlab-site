@@ -1,0 +1,41 @@
+# Environment files and secrets
+*.env*
+*.key
+*.pem
+*secret*
+*credential*
+*token*
+config.json
+settings.json
+.secrets/
+
+# Development and testing files
+src/**/*.map
+src/**/*.test.*
+src/**/*.spec.*
+**/.DS_Store
+**/Thumbs.db
+**/*.log
+
+# Security scan results
+security-scan-results/
+vulnerability-report.*
+audit-report.*
+
+# Git files
+.git/
+.gitignore
+.gitmodules
+
+# CI/CD files
+.github/
+.vscode/
+
+# Backup files
+*.backup
+*.bak
+*.tmp
+
+# Log files
+logs/
+*.log.*
