@@ -1,0 +1,1 @@
+import"./Header.astro_astro_type_script_index_0_lang.DaWtPCz3.js";(function(){const e=localStorage.getItem("theme")||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.dataset.theme=e})();

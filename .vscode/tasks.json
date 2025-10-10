@@ -1,0 +1,80 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build",
+      "type": "shell",
+      "command": "set -euo pipefail; npm ci --no-audit --fund=false; npm run -s build 2>&1 | tee .last_build.log",
+      "options": { 
+        "env": { "CI": "true" },
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": ["$tsc","$eslint-stylish"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "dev-once",
+      "type": "shell",
+      "command": "set -euo pipefail; npm run -s build 2>&1 | tee .last_build.log",
+      "options": { 
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": { 
+        "reveal": "always", 
+        "panel": "dedicated", 
+        "clear": true 
+      }
+    },
+    {
+      "label": "preview",
+      "type": "shell",
+      "command": "npm run preview",
+      "options": { 
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": { 
+        "reveal": "always", 
+        "panel": "dedicated", 
+        "clear": true 
+      }
+    },
+    {
+      "label": "git-push",
+      "type": "shell",
+      "command": "set -euo pipefail; git add . && git commit -m 'Auto commit from VS Code task' && git push origin main 2>&1 | tee .last_git.log",
+      "options": { 
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": { 
+        "reveal": "always", 
+        "panel": "dedicated", 
+        "clear": true 
+      }
+    },
+    {
+      "label": "check-status",
+      "type": "shell",
+      "command": "echo '=== Git Status ===' && git status && echo '\\n=== Last Build Log ===' && tail -20 .last_build.log 2>/dev/null || echo 'No build log found'",
+      "options": { 
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "presentation": { 
+        "reveal": "always", 
+        "panel": "dedicated", 
+        "clear": true 
+      }
+    }
+  ]
+}

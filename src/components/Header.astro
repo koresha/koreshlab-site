@@ -14,17 +14,33 @@ const links = [
       <div class="w-7 h-7 rounded-xl bg-gradient-to-br from-brand-red to-red-400 flex items-center justify-center text-white font-bold text-sm">
         K
       </div>
-      <span>Koresha</span>
+      <span class="hidden sm:inline">Koresha</span>
     </a>
     <nav class="hidden md:flex items-center gap-6">
       {links.map(l => 
-        <a href={l.href} class="hover:opacity-80 transition font-medium">{l.label}</a>
+        <a href={l.href} class="hover:opacity-80 transition font-medium text-sm">{l.label}</a>
       )}
     </nav>
-    <button id="themeToggle" class="rounded-xl p-2 hover:bg-black/5 dark:hover:bg-white/10" aria-label="Toggle theme">
-      <Icon name="solar:sun-2-outline" class="w-5 h-5 dark:hidden"/>
-      <Icon name="solar:moon-outline" class="w-5 h-5 hidden dark:block"/>
-    </button>
+    <div class="flex items-center gap-2">
+      <button id="themeToggle" class="rounded-xl p-2 hover:bg-black/5 dark:hover:bg-white/10" aria-label="Toggle theme">
+        <Icon name="solar:sun-2-outline" class="w-5 h-5 dark:hidden"/>
+        <Icon name="solar:moon-outline" class="w-5 h-5 hidden dark:block"/>
+      </button>
+      <button id="mobileMenuToggle" class="md:hidden rounded-xl p-2 hover:bg-black/5 dark:hover:bg-white/10" aria-label="Toggle menu">
+        <Icon name="heroicons:bars-3" class="w-5 h-5"/>
+      </button>
+    </div>
+  </div>
+  
+  <!-- Mobile Menu -->
+  <div id="mobileMenu" class="hidden md:hidden border-t border-white/10 bg-white/80 dark:bg-black/80 backdrop-blur">
+    <div class="container py-4">
+      <nav class="flex flex-col gap-3">
+        {links.map(l => 
+          <a href={l.href} class="py-2 hover:opacity-80 transition font-medium text-sm border-b border-gray-200/50 dark:border-gray-700/50 last:border-0">{l.label}</a>
+        )}
+      </nav>
+    </div>
   </div>
 </header>
 
@@ -57,21 +73,55 @@ const links = [
     // Initialize immediately
     init();
     
-    // Setup button when DOM is ready
+    // Setup theme toggle when DOM is ready
     document.addEventListener('DOMContentLoaded', () => {
       const btn = document.getElementById('themeToggle');
       if(btn) {
         btn.addEventListener('click', toggle);
       }
+      
+      // Setup mobile menu toggle
+      const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+      const mobileMenu = document.getElementById('mobileMenu');
+      
+      if(mobileMenuToggle && mobileMenu) {
+        mobileMenuToggle.addEventListener('click', () => {
+          mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Close menu when clicking on a link
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+          link.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+          });
+        });
+      }
     });
     
-    // Fallback: setup button immediately if DOM is already loaded
-    if(document.readyState === 'loading') {
-      // DOM not ready yet
-    } else {
+    // Fallback: setup immediately if DOM is already loaded
+    if(document.readyState !== 'loading') {
       const btn = document.getElementById('themeToggle');
       if(btn) {
         btn.addEventListener('click', toggle);
+      }
+      
+      // Setup mobile menu toggle
+      const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+      const mobileMenu = document.getElementById('mobileMenu');
+      
+      if(mobileMenuToggle && mobileMenu) {
+        mobileMenuToggle.addEventListener('click', () => {
+          mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Close menu when clicking on a link
+        const mobileLinks = mobileMenu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+          link.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+          });
+        });
       }
     }
   })();
