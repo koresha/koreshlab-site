@@ -1,4 +1,5 @@
 ---
+import Layout from '../layouts/Layout.astro';
 import '../styles/globals.css';
 import Header from '../components/Header.astro';
 import Section from '../components/Section.astro';
@@ -12,30 +13,7 @@ const featuredPosts = sortedPosts.filter(post => post.featured);
 const regularPosts = sortedPosts.filter(post => !post.featured);
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="/fav.png" />
-    <link rel="icon" href="/fav.svg" type="image/svg+xml" />
-    
-    <!-- Theme initialization script (must be first) -->
-    <script>
-      (function() {
-        const theme = localStorage.getItem('theme') || 
-          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        document.documentElement.dataset.theme = theme;
-      })();
-    </script>
-    
-    <title>Blog — Koresha</title>
-    <meta name="description" content="Technical articles about DevOps, SRE, DevSecOps, Kubernetes and modern infrastructure." />
-    
-    <!-- Iconify -->
-    <script type="module" src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
-  </head>
-  
-  <body class="antialiased">
+<Layout title="Blog — Koresha" description="Technical articles about DevOps, SRE, DevSecOps, Kubernetes and modern infrastructure.">
     <Header />
     
     <main class="pt-20">
@@ -94,5 +72,4 @@ const regularPosts = sortedPosts.filter(post => !post.featured);
     </main>
 
     <Footer />
-  </body>
-</html>
+</Layout>

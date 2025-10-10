@@ -1,4 +1,5 @@
 ---
+import Layout from '../layouts/Layout.astro';
 import '../styles/globals.css';
 import Header from '../components/Header.astro';
 import Hero from '../components/Hero.astro';
@@ -15,49 +16,7 @@ import { site } from '../content/data/site';
 import { chip } from '../components/TechChip';
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="/fav.png" />
-    <link rel="icon" href="/fav.svg" type="image/svg+xml" />
-    
-    <!-- Theme initialization script (must be first) -->
-    <script>
-      (function() {
-        const theme = localStorage.getItem('theme') || 
-          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        document.documentElement.dataset.theme = theme;
-      })();
-    </script>
-    
-    <!-- SEO Meta Tags -->
-    <title>Koresha — SRE | DevSecOps</title>
-    <meta name="description" content="SRE and DevSecOps engineer specialized in Kubernetes, cloud infrastructure, automation and security. Always keen to share knowledge and build things together." />
-    <meta name="keywords" content="SRE, DevSecOps, Kubernetes, Docker, Terraform, Ansible, Cloud, Infrastructure" />
-    
-    <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://koreshalab.com" />
-    <meta property="og:title" content="Koresha — SRE | DevSecOps" />
-    <meta property="og:description" content="SRE and DevSecOps engineer specialized in Kubernetes, cloud infrastructure, automation and security." />
-    <meta property="og:image" content="/og-cover.png" />
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://koreshalab.com" />
-    <meta property="twitter:title" content="Koresha — SRE | DevSecOps" />
-    <meta property="twitter:description" content="SRE and DevSecOps engineer specialized in Kubernetes, cloud infrastructure, automation and security." />
-    <meta property="twitter:image" content="/og-cover.png" />
-    
-    <!-- Preload important resources -->
-    <link rel="preload" href="/themeToggle.js" as="script" />
-    
-    <!-- Iconify -->
-    <script type="module" src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
-  </head>
-  
-  <body class="antialiased">
+<Layout title="Koresha — SRE | DevSecOps">
     <Header />
     <main>
       <Hero />
@@ -166,5 +125,4 @@ import { chip } from '../components/TechChip';
     </main>
 
     <Footer />
-  </body>
-</html>
+</Layout>
