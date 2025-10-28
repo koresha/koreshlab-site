@@ -29,14 +29,16 @@ import { site } from '../content/data/site';
       </div>
     </div>
     <div class="glass rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-2xl hover:shadow-brand-red/10 hover:shadow-3xl transition-all duration-500 order-first md:order-last">
-      <div class="rounded-xl sm:rounded-2xl overflow-hidden bg-gradient-to-br from-gray-800 via-gray-900 to-black p-6 sm:p-8 text-center">
+      <div class="rounded-xl sm:rounded-2xl overflow-hidden bg-gradient-to-br from-gray-100 via-gray-50 to-white dark:from-gray-800 dark:via-gray-900 dark:to-black p-6 sm:p-8 text-center border border-gray-200/50 dark:border-gray-700/50">
         <div class="space-y-3 sm:space-y-4">
-          <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-full bg-gradient-to-br from-brand-red to-red-400 flex items-center justify-center overflow-hidden">
-            <img src="/logo-koresha.png" alt="Koresha Logo" class="w-12 h-12 sm:w-16 sm:h-16 object-contain" />
+          <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-full bg-gradient-to-br from-brand-red to-red-400 flex items-center justify-center p-1 sm:p-1.5">
+            <div class="w-full h-full rounded-full overflow-hidden bg-white/10 backdrop-blur-sm">
+              <img src="/logo-koresha-small.png" alt="Koresha Logo" class="w-full h-full object-cover rounded-full" />
+            </div>
           </div>
-          <h3 class="text-xl sm:text-2xl font-bold text-white">{site.name}</h3>
-          <p class="text-gray-300 text-sm sm:text-base">{site.role}</p>
-          <div class="flex items-center justify-center gap-2 text-gray-400">
+          <h3 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">{site.name}</h3>
+          <p class="text-gray-600 dark:text-gray-300 text-sm sm:text-base">{site.role}</p>
+          <div class="flex items-center justify-center gap-2 text-gray-500 dark:text-gray-400">
             <iconify-icon icon="solar:map-point-outline" class="w-4 h-4"></iconify-icon>
             <span class="text-xs sm:text-sm">{site.location}</span>
           </div>
