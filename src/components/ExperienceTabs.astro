@@ -62,6 +62,15 @@ import { experience } from '../content/data/experience';
             </div>
           </div>
 
+          <!-- Company Description -->
+          {e.description && (
+            <div class="mb-4 sm:mb-6">
+              <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 leading-relaxed bg-gray-50 dark:bg-gray-800/50 rounded-xl p-3 sm:p-4 border border-gray-200 dark:border-gray-700 break-words">
+                {e.description}
+              </p>
+            </div>
+          )}
+
           <!-- Key Achievements -->
           <div class="mb-4 sm:mb-6">
             <h4 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-3 sm:mb-4 flex items-center gap-2">
