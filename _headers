@@ -10,3 +10,8 @@
 # Balanced CSP: Secure but functional
 /*
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://code.iconify.design; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://api.iconify.design https://cdn.iconify.design; connect-src 'self' https://api.iconify.design https://cdn.iconify.design; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self';
+
+# Protect sensitive assets
+/logo-koresha.png
+  X-Robots-Tag: noindex, nofollow, noarchive, nosnippet, noimageindex
+  Cache-Control: private, no-cache, no-store, must-revalidate

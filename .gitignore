@@ -12,6 +12,7 @@ public/*.key
 public/*.pem
 public/*token*
 public/config.json
+public/logo-koresha.png
 
 # Dependencies
 node_modules/
