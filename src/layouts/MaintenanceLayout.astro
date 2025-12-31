@@ -1,6 +1,5 @@
 ---
-import '../styles/globals.css';
-
+// Don't import globals.css to avoid style conflicts
 export interface Props {
   title: string;
   description?: string;
@@ -21,11 +20,23 @@ const { title, description = "System maintenance in progress", image = "/og-cove
     <title>{title}</title>
     
     <!-- Force dark theme for maintenance -->
+    <style is:inline>
+      html, body {
+        background: #0a0a0f !important;
+        color: #ffffff !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+    </style>
     <script is:inline>
       (function() {
         document.documentElement.dataset.theme = 'dark';
-        document.documentElement.style.background = '#0a0a0f';
-        document.documentElement.style.color = '#ffffff';
+        document.documentElement.style.setProperty('background', '#0a0a0f', 'important');
+        document.documentElement.style.setProperty('color', '#ffffff', 'important');
+        if (document.body) {
+          document.body.style.setProperty('background', '#0a0a0f', 'important');
+          document.body.style.setProperty('color', '#ffffff', 'important');
+        }
       })();
     </script>
     
