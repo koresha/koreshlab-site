@@ -4,116 +4,117 @@ import Layout from '../layouts/Layout.astro';
 
 <Layout title="Maintenance — Koresha">
   <div class="maintenance-container">
-    <!-- Animated Background Particles -->
-    <div class="particles">
-      <div class="particle"></div>
-      <div class="particle"></div>
-      <div class="particle"></div>
-      <div class="particle"></div>
-      <div class="particle"></div>
-    </div>
-
-    <!-- Scanlines Effect -->
-    <div class="scanlines"></div>
+    <!-- Animated Grid Background -->
+    <div class="grid-background"></div>
+    
+    <!-- Gradient Orbs -->
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
 
     <!-- Main Content -->
     <div class="maintenance-wrapper">
-      <!-- Terminal Window -->
-      <div class="terminal-window">
-        <!-- Terminal Header -->
-        <div class="terminal-header">
-          <div class="terminal-buttons">
-            <span class="terminal-btn close"></span>
-            <span class="terminal-btn minimize"></span>
-            <span class="terminal-btn maximize"></span>
-          </div>
-          <div class="terminal-title">
-            <iconify-icon icon="mdi:console" class="w-4 h-4"></iconify-icon>
-            <span>koreshlab-sre@maintenance:~</span>
-          </div>
-        </div>
+      <!-- Hero Section -->
+      <div class="hero-section">
+        <div class="badge">SYSTEM MAINTENANCE</div>
+        <h1 class="main-title">
+          <span class="title-line">Infrastructure</span>
+          <span class="title-line">Upgrade</span>
+        </h1>
+        <p class="subtitle">We're deploying the latest updates to improve your experience</p>
+      </div>
 
-        <!-- Terminal Body -->
-        <div class="terminal-body" id="terminal">
-          <div class="terminal-line">
-            <span class="terminal-prompt">$</span>
-            <span class="terminal-command typing" data-command="kubectl get pods --all-namespaces"></span>
+      <!-- Terminal Window -->
+      <div class="terminal-container">
+        <div class="terminal-window">
+          <div class="terminal-header">
+            <div class="terminal-buttons">
+              <span class="terminal-btn close"></span>
+              <span class="terminal-btn minimize"></span>
+              <span class="terminal-btn maximize"></span>
+            </div>
+            <div class="terminal-title">
+              <iconify-icon icon="mdi:console-line" class="w-3.5 h-3.5"></iconify-icon>
+              <span>koreshlab-sre@maintenance</span>
+            </div>
           </div>
+          <div class="terminal-body" id="terminal"></div>
         </div>
       </div>
 
-      <!-- Status Cards -->
+      <!-- Status Grid -->
       <div class="status-grid">
         <div class="status-card">
-          <div class="status-icon">
-            <iconify-icon icon="mdi:kubernetes" class="w-8 h-8"></iconify-icon>
+          <div class="status-icon-wrapper">
+            <iconify-icon icon="mdi:kubernetes" class="status-icon"></iconify-icon>
           </div>
-          <div class="status-content">
-            <div class="status-label">Kubernetes</div>
-            <div class="status-value">
-              <span class="status-indicator active"></span>
+          <div class="status-info">
+            <div class="status-name">Kubernetes</div>
+            <div class="status-state">
+              <span class="status-dot"></span>
               <span>Operational</span>
             </div>
           </div>
         </div>
 
         <div class="status-card">
-          <div class="status-icon">
-            <iconify-icon icon="mdi:database" class="w-8 h-8"></iconify-icon>
+          <div class="status-icon-wrapper">
+            <iconify-icon icon="mdi:database-outline" class="status-icon"></iconify-icon>
           </div>
-          <div class="status-content">
-            <div class="status-label">Database</div>
-            <div class="status-value">
-              <span class="status-indicator active"></span>
+          <div class="status-info">
+            <div class="status-name">Database</div>
+            <div class="status-state">
+              <span class="status-dot"></span>
               <span>Syncing</span>
             </div>
           </div>
         </div>
 
         <div class="status-card">
-          <div class="status-icon">
-            <iconify-icon icon="mdi:cloud" class="w-8 h-8"></iconify-icon>
+          <div class="status-icon-wrapper">
+            <iconify-icon icon="mdi:cloud-outline" class="status-icon"></iconify-icon>
           </div>
-          <div class="status-content">
-            <div class="status-label">CDN</div>
-            <div class="status-value">
-              <span class="status-indicator active"></span>
+          <div class="status-info">
+            <div class="status-name">CDN</div>
+            <div class="status-state">
+              <span class="status-dot"></span>
               <span>Propagating</span>
             </div>
           </div>
         </div>
 
         <div class="status-card">
-          <div class="status-icon">
-            <iconify-icon icon="mdi:security" class="w-8 h-8"></iconify-icon>
+          <div class="status-icon-wrapper">
+            <iconify-icon icon="mdi:shield-check-outline" class="status-icon"></iconify-icon>
           </div>
-          <div class="status-content">
-            <div class="status-label">Security</div>
-            <div class="status-value">
-              <span class="status-indicator active"></span>
+          <div class="status-info">
+            <div class="status-name">Security</div>
+            <div class="status-state">
+              <span class="status-dot"></span>
               <span>Hardening</span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Main Message -->
-      <div class="main-message">
-        <div class="glitch-wrapper">
-          <h1 class="glitch" data-text="SYSTEM MAINTENANCE">SYSTEM MAINTENANCE</h1>
+      <!-- Progress Section -->
+      <div class="progress-section">
+        <div class="progress-header">
+          <span class="progress-label">Deployment Progress</span>
+          <span class="progress-percent" id="progress-percent">0%</span>
         </div>
-        <p class="subtitle">Infrastructure upgrade in progress</p>
-        <div class="progress-bar">
-          <div class="progress-fill"></div>
+        <div class="progress-bar-wrapper">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
         </div>
-        <p class="progress-text">Deploying updates... <span id="progress-percent">0%</span></p>
       </div>
 
       <!-- Contact Section -->
       <div class="contact-section">
-        <p class="contact-label">For urgent matters:</p>
-        <a href="mailto:contact.koreshlab@gmail.com" class="contact-btn">
-          <iconify-icon icon="mdi:email-fast" class="w-5 h-5"></iconify-icon>
+        <p class="contact-text">Need immediate assistance?</p>
+        <a href="mailto:contact.koreshlab@gmail.com" class="contact-link">
+          <iconify-icon icon="mdi:email-outline" class="w-4 h-4"></iconify-icon>
           <span>contact.koreshlab@gmail.com</span>
         </a>
       </div>
@@ -121,114 +122,83 @@ import Layout from '../layouts/Layout.astro';
   </div>
 
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
     .maintenance-container {
       min-height: 100vh;
-      background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1419 100%);
+      background: #0a0a0f;
       position: relative;
       overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 2rem;
-      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+      padding: 3rem 1.5rem;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: #ffffff;
     }
 
-    /* Particles Animation */
-    .particles {
+    /* Grid Background */
+    .grid-background {
       position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      overflow: hidden;
-      z-index: 1;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.4;
+      animation: grid-move 20s linear infinite;
     }
 
-    .particle {
+    @keyframes grid-move {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(60px, 60px); }
+    }
+
+    /* Gradient Orbs */
+    .gradient-orb {
       position: absolute;
-      width: 4px;
-      height: 4px;
-      background: #00ff88;
       border-radius: 50%;
-      box-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88;
-      animation: float-particle 20s infinite ease-in-out;
-      opacity: 0.6;
+      filter: blur(80px);
+      opacity: 0.15;
+      animation: orb-float 20s ease-in-out infinite;
     }
 
-    .particle:nth-child(1) {
-      left: 10%;
+    .orb-1 {
+      width: 500px;
+      height: 500px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      top: -250px;
+      left: -250px;
       animation-delay: 0s;
-      animation-duration: 15s;
     }
 
-    .particle:nth-child(2) {
-      left: 30%;
-      animation-delay: 2s;
-      animation-duration: 18s;
+    .orb-2 {
+      width: 400px;
+      height: 400px;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      bottom: -200px;
+      right: -200px;
+      animation-delay: 7s;
     }
 
-    .particle:nth-child(3) {
-      left: 50%;
-      animation-delay: 4s;
-      animation-duration: 22s;
+    .orb-3 {
+      width: 350px;
+      height: 350px;
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      top: 50%;
+      right: 10%;
+      animation-delay: 14s;
     }
 
-    .particle:nth-child(4) {
-      left: 70%;
-      animation-delay: 6s;
-      animation-duration: 16s;
-    }
-
-    .particle:nth-child(5) {
-      left: 90%;
-      animation-delay: 8s;
-      animation-duration: 20s;
-    }
-
-    @keyframes float-particle {
+    @keyframes orb-float {
       0%, 100% {
-        transform: translateY(100vh) translateX(0) scale(0);
-        opacity: 0;
+        transform: translate(0, 0) scale(1);
       }
-      10% {
-        opacity: 0.6;
+      33% {
+        transform: translate(30px, -30px) scale(1.1);
       }
-      50% {
-        transform: translateY(0) translateX(50px) scale(1);
-        opacity: 1;
-      }
-      90% {
-        opacity: 0.6;
-      }
-      100% {
-        transform: translateY(-100vh) translateX(0) scale(0);
-        opacity: 0;
-      }
-    }
-
-    /* Scanlines Effect */
-    .scanlines {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      background: linear-gradient(
-        transparent 50%,
-        rgba(0, 255, 136, 0.03) 50%
-      );
-      background-size: 100% 4px;
-      pointer-events: none;
-      z-index: 2;
-      animation: scanline 8s linear infinite;
-    }
-
-    @keyframes scanline {
-      0% {
-        transform: translateY(0);
-      }
-      100% {
-        transform: translateY(4px);
+      66% {
+        transform: translate(-20px, 20px) scale(0.9);
       }
     }
 
@@ -237,45 +207,97 @@ import Layout from '../layouts/Layout.astro';
       position: relative;
       z-index: 10;
       width: 100%;
-      max-width: 1400px;
+      max-width: 1200px;
       display: flex;
       flex-direction: column;
-      gap: 2rem;
+      gap: 3rem;
     }
 
-    /* Terminal Window */
-    .terminal-window {
-      background: rgba(10, 14, 39, 0.95);
-      border: 1px solid rgba(0, 255, 136, 0.3);
-      border-radius: 12px;
-      box-shadow: 
-        0 0 30px rgba(0, 255, 136, 0.2),
-        inset 0 0 30px rgba(0, 255, 136, 0.05);
-      overflow: hidden;
+    /* Hero Section */
+    .hero-section {
+      text-align: center;
+      padding: 2rem 0;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.5rem 1.25rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 2rem;
       backdrop-filter: blur(10px);
-      animation: terminal-glow 3s ease-in-out infinite;
     }
 
-    @keyframes terminal-glow {
-      0%, 100% {
-        box-shadow: 
-          0 0 30px rgba(0, 255, 136, 0.2),
-          inset 0 0 30px rgba(0, 255, 136, 0.05);
+    .main-title {
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin: 0;
+      background: linear-gradient(135deg, #ffffff 0%, rgba(255, 255, 255, 0.7) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.02em;
+    }
+
+    .title-line {
+      display: block;
+      animation: fadeInUp 0.8s ease-out backwards;
+    }
+
+    .title-line:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
       }
-      50% {
-        box-shadow: 
-          0 0 50px rgba(0, 255, 136, 0.4),
-          inset 0 0 30px rgba(0, 255, 136, 0.1);
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
+    }
+
+    .subtitle {
+      font-size: 1.25rem;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 1.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    /* Terminal Container */
+    .terminal-container {
+      margin: 2rem 0;
+    }
+
+    .terminal-window {
+      background: rgba(10, 10, 15, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      overflow: hidden;
+      backdrop-filter: blur(20px);
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
 
     .terminal-header {
-      background: rgba(0, 0, 0, 0.4);
-      padding: 0.75rem 1rem;
+      background: rgba(255, 255, 255, 0.03);
+      padding: 0.875rem 1.25rem;
       display: flex;
       align-items: center;
       gap: 1rem;
-      border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .terminal-buttons {
@@ -288,6 +310,11 @@ import Layout from '../layouts/Layout.astro';
       height: 12px;
       border-radius: 50%;
       display: block;
+      transition: opacity 0.2s;
+    }
+
+    .terminal-btn:hover {
+      opacity: 0.7;
     }
 
     .terminal-btn.close {
@@ -306,52 +333,71 @@ import Layout from '../layouts/Layout.astro';
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      color: #00ff88;
-      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.8125rem;
       font-weight: 500;
+      font-family: 'JetBrains Mono', monospace;
       flex: 1;
     }
 
     .terminal-body {
-      padding: 1.5rem;
+      padding: 2rem;
       min-height: 400px;
-      color: #00ff88;
+      max-height: 500px;
+      overflow-y: auto;
+      font-family: 'JetBrains Mono', monospace;
       font-size: 0.875rem;
       line-height: 1.8;
-      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .terminal-body::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .terminal-body::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .terminal-body::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
     }
 
     .terminal-line {
       display: flex;
-      gap: 0.5rem;
-      margin-bottom: 0.5rem;
-      animation: fadeInUp 0.5s ease-out;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      animation: terminalFadeIn 0.4s ease-out;
     }
 
-    @keyframes fadeInUp {
+    @keyframes terminalFadeIn {
       from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateX(-10px);
       }
       to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateX(0);
       }
     }
 
     .terminal-prompt {
-      color: #00ff88;
-      font-weight: bold;
+      color: #667eea;
+      font-weight: 600;
+      flex-shrink: 0;
     }
 
     .terminal-command {
-      color: #ffffff;
+      color: rgba(255, 255, 255, 0.95);
+      font-weight: 400;
     }
 
     .terminal-command.typing::after {
       content: '▊';
       animation: blink 1s infinite;
-      color: #00ff88;
+      color: #667eea;
+      margin-left: 2px;
     }
 
     @keyframes blink {
@@ -360,297 +406,230 @@ import Layout from '../layouts/Layout.astro';
     }
 
     .terminal-output {
-      color: #888;
+      color: rgba(255, 255, 255, 0.5);
       margin-left: 1.5rem;
+      font-weight: 400;
+      line-height: 1.6;
     }
 
     /* Status Grid */
     .status-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.25rem;
     }
 
     .status-card {
-      background: rgba(10, 14, 39, 0.6);
-      border: 1px solid rgba(0, 255, 136, 0.2);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 12px;
       padding: 1.5rem;
       display: flex;
       align-items: center;
       gap: 1rem;
       backdrop-filter: blur(10px);
-      transition: all 0.3s ease;
-      animation: cardFloat 6s ease-in-out infinite;
-    }
-
-    .status-card:nth-child(1) { animation-delay: 0s; }
-    .status-card:nth-child(2) { animation-delay: 1.5s; }
-    .status-card:nth-child(3) { animation-delay: 3s; }
-    .status-card:nth-child(4) { animation-delay: 4.5s; }
-
-    @keyframes cardFloat {
-      0%, 100% {
-        transform: translateY(0);
-        box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
-      }
-      50% {
-        transform: translateY(-5px);
-        box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
-      }
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .status-card:hover {
-      border-color: rgba(0, 255, 136, 0.5);
-      transform: translateY(-3px);
-      box-shadow: 0 0 40px rgba(0, 255, 136, 0.4);
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
     }
 
-    .status-icon {
-      color: #00ff88;
+    .status-icon-wrapper {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      background: rgba(102, 126, 234, 0.1);
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
 
-    .status-content {
+    .status-icon {
+      width: 24px;
+      height: 24px;
+      color: #667eea;
+    }
+
+    .status-info {
       flex: 1;
+      min-width: 0;
     }
 
-    .status-label {
-      color: #888;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 0.25rem;
-    }
-
-    .status-value {
-      color: #00ff88;
+    .status-name {
       font-size: 0.875rem;
-      font-weight: 600;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 0.375rem;
+    }
+
+    .status-state {
       display: flex;
       align-items: center;
       gap: 0.5rem;
+      font-size: 0.8125rem;
+      color: rgba(255, 255, 255, 0.6);
+      font-weight: 400;
     }
 
-    .status-indicator {
-      width: 8px;
-      height: 8px;
+    .status-dot {
+      width: 6px;
+      height: 6px;
       border-radius: 50%;
-      background: #00ff88;
-      box-shadow: 0 0 10px #00ff88;
-      animation: pulse 2s ease-in-out infinite;
+      background: #10b981;
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+      animation: pulse-dot 2s ease-in-out infinite;
     }
 
-    .status-indicator.active {
-      background: #00ff88;
-    }
-
-    @keyframes pulse {
+    @keyframes pulse-dot {
       0%, 100% {
         opacity: 1;
         transform: scale(1);
       }
       50% {
-        opacity: 0.7;
+        opacity: 0.8;
         transform: scale(1.2);
       }
     }
 
-    /* Main Message */
-    .main-message {
-      text-align: center;
-      margin: 2rem 0;
+    /* Progress Section */
+    .progress-section {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 1.5rem;
+      backdrop-filter: blur(10px);
     }
 
-    .glitch-wrapper {
-      position: relative;
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 1rem;
     }
 
-    .glitch {
-      font-size: clamp(2rem, 8vw, 5rem);
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: #00ff88;
+    .progress-label {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .progress-percent {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #667eea;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .progress-bar-wrapper {
       position: relative;
-      text-shadow: 
-        0 0 10px #00ff88,
-        0 0 20px #00ff88,
-        0 0 40px #00ff88;
-      animation: glitch-anim 3s infinite;
-    }
-
-    .glitch::before,
-    .glitch::after {
-      content: attr(data-text);
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
-
-    .glitch::before {
-      left: 2px;
-      text-shadow: -2px 0 #ff00ff;
-      clip: rect(44px, 450px, 56px, 0);
-      animation: glitch-anim-1 0.5s infinite linear alternate-reverse;
-    }
-
-    .glitch::after {
-      left: -2px;
-      text-shadow: 2px 0 #00ffff;
-      clip: rect(44px, 450px, 56px, 0);
-      animation: glitch-anim-2 0.5s infinite linear alternate-reverse;
-    }
-
-    @keyframes glitch-anim {
-      0% { transform: translate(0); }
-      20% { transform: translate(-2px, 2px); }
-      40% { transform: translate(-2px, -2px); }
-      60% { transform: translate(2px, 2px); }
-      80% { transform: translate(2px, -2px); }
-      100% { transform: translate(0); }
-    }
-
-    @keyframes glitch-anim-1 {
-      0% { clip: rect(31px, 9999px, 94px, 0); }
-      20% { clip: rect(54px, 9999px, 66px, 0); }
-      40% { clip: rect(28px, 9999px, 112px, 0); }
-      60% { clip: rect(42px, 9999px, 75px, 0); }
-      80% { clip: rect(38px, 9999px, 103px, 0); }
-      100% { clip: rect(17px, 9999px, 85px, 0); }
-    }
-
-    @keyframes glitch-anim-2 {
-      0% { clip: rect(65px, 9999px, 100px, 0); }
-      20% { clip: rect(41px, 9999px, 74px, 0); }
-      40% { clip: rect(87px, 9999px, 110px, 0); }
-      60% { clip: rect(23px, 9999px, 92px, 0); }
-      80% { clip: rect(76px, 9999px, 105px, 0); }
-      100% { clip: rect(12px, 9999px, 98px, 0); }
-    }
-
-    .subtitle {
-      color: #888;
-      font-size: 1.25rem;
-      margin-bottom: 2rem;
-      letter-spacing: 0.05em;
     }
 
     .progress-bar {
       width: 100%;
-      max-width: 600px;
-      height: 8px;
-      background: rgba(0, 255, 136, 0.1);
-      border-radius: 4px;
-      margin: 2rem auto;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 3px;
       overflow: hidden;
       position: relative;
     }
 
-    .progress-bar::before {
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      border-radius: 3px;
+      width: 0%;
+      transition: width 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-fill::after {
       content: '';
       position: absolute;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
+      right: 0;
+      bottom: 0;
       background: linear-gradient(
         90deg,
         transparent,
-        rgba(0, 255, 136, 0.3),
+        rgba(255, 255, 255, 0.3),
         transparent
       );
       animation: shimmer 2s infinite;
     }
 
     @keyframes shimmer {
-      0% { transform: translateX(-100%); }
-      100% { transform: translateX(100%); }
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #00ff88, #00cc6a);
-      box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
-      border-radius: 4px;
-      width: 0%;
-      animation: progress 10s ease-in-out infinite;
-    }
-
-    @keyframes progress {
-      0% { width: 0%; }
-      50% { width: 75%; }
-      100% { width: 100%; }
-    }
-
-    .progress-text {
-      color: #00ff88;
-      font-size: 0.875rem;
-      margin-top: 1rem;
-    }
-
-    .progress-text span {
-      font-weight: bold;
+      0% {
+        transform: translateX(-100%);
+      }
+      100% {
+        transform: translateX(100%);
+      }
     }
 
     /* Contact Section */
     .contact-section {
       text-align: center;
-      margin-top: 2rem;
+      padding: 2rem 0;
     }
 
-    .contact-label {
-      color: #888;
-      font-size: 0.875rem;
+    .contact-text {
+      font-size: 0.9375rem;
+      color: rgba(255, 255, 255, 0.6);
       margin-bottom: 1rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
     }
 
-    .contact-btn {
+    .contact-link {
       display: inline-flex;
       align-items: center;
       gap: 0.75rem;
-      padding: 1rem 2rem;
-      background: rgba(0, 255, 136, 0.1);
-      border: 1px solid rgba(0, 255, 136, 0.3);
+      padding: 0.875rem 1.75rem;
+      background: rgba(102, 126, 234, 0.1);
+      border: 1px solid rgba(102, 126, 234, 0.3);
       border-radius: 8px;
-      color: #00ff88;
+      color: #667eea;
       text-decoration: none;
-      font-weight: 600;
-      transition: all 0.3s ease;
+      font-weight: 500;
+      font-size: 0.9375rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       backdrop-filter: blur(10px);
     }
 
-    .contact-btn:hover {
-      background: rgba(0, 255, 136, 0.2);
-      border-color: rgba(0, 255, 136, 0.5);
-      box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+    .contact-link:hover {
+      background: rgba(102, 126, 234, 0.2);
+      border-color: rgba(102, 126, 234, 0.5);
       transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(102, 126, 234, 0.2);
     }
 
     /* Responsive */
     @media (max-width: 768px) {
       .maintenance-container {
-        padding: 1rem;
+        padding: 2rem 1rem;
+      }
+
+      .maintenance-wrapper {
+        gap: 2rem;
       }
 
       .terminal-body {
         min-height: 300px;
-        font-size: 0.75rem;
+        padding: 1.5rem;
+        font-size: 0.8125rem;
       }
 
       .status-grid {
         grid-template-columns: 1fr;
       }
 
-      .glitch {
-        font-size: 2.5rem;
+      .subtitle {
+        font-size: 1.125rem;
       }
     }
   </style>
@@ -659,14 +638,34 @@ import Layout from '../layouts/Layout.astro';
     // Terminal Animation
     const terminal = document.getElementById('terminal');
     const commands = [
-      { cmd: 'kubectl get pods --all-namespaces', output: 'NAMESPACE     NAME                              READY   STATUS    RESTARTS   AGE\nkube-system   coredns-xxx                       1/1     Running   0          5d\nkube-system   kube-proxy-xxx                   1/1     Running   0          5d' },
-      { cmd: 'helm list --all-namespaces', output: 'NAME            NAMESPACE       REVISION    STATUS      CHART\nnginx-ingress   ingress-nginx   1           deployed    nginx-ingress-4.0.0' },
-      { cmd: 'kubectl get nodes', output: 'NAME           STATUS   ROLES           AGE   VERSION\nnode-1         Ready    control-plane   5d    v1.28.0\nnode-2         Ready    <none>          5d    v1.28.0' },
-      { cmd: 'terraform plan', output: 'Plan: 12 to add, 3 to change, 1 to destroy.\n\nChanges to Outputs:\n  + infrastructure_version = "2.0.0"' },
-      { cmd: 'ansible-playbook deploy.yml', output: 'PLAY [Deploy Infrastructure] ****************************\nTASK [Gathering Facts] ****************************\nok: [localhost]\nTASK [Deploy services] ****************************\nchanged: [localhost]' },
-      { cmd: 'docker ps', output: 'CONTAINER ID   IMAGE                    STATUS          PORTS\nabc123def456   nginx:latest             Up 2 hours      0.0.0.0:80->80/tcp\n789ghi012jkl   postgres:15              Up 2 hours      5432/tcp' },
-      { cmd: 'kubectl rollout status deployment/app', output: 'deployment "app" successfully rolled out' },
-      { cmd: 'git status', output: 'On branch main\nYour branch is up to date with origin/main.\n\nChanges to be committed:\n  (use "git reset HEAD <file>..." to unstage)\n        modified:   src/pages/maintenance.astro' }
+      { 
+        cmd: 'kubectl get pods --all-namespaces', 
+        output: 'NAMESPACE     NAME                              READY   STATUS    RESTARTS   AGE\nkube-system   coredns-xxx                       1/1     Running   0          5d\nkube-system   kube-proxy-xxx                   1/1     Running   0          5d' 
+      },
+      { 
+        cmd: 'helm list --all-namespaces', 
+        output: 'NAME            NAMESPACE       REVISION    STATUS      CHART\nnginx-ingress   ingress-nginx   1           deployed    nginx-ingress-4.0.0' 
+      },
+      { 
+        cmd: 'kubectl get nodes', 
+        output: 'NAME           STATUS   ROLES           AGE   VERSION\nnode-1         Ready    control-plane   5d    v1.28.0\nnode-2         Ready    <none>          5d    v1.28.0' 
+      },
+      { 
+        cmd: 'terraform plan', 
+        output: 'Plan: 12 to add, 3 to change, 1 to destroy.\n\nChanges to Outputs:\n  + infrastructure_version = "2.0.0"' 
+      },
+      { 
+        cmd: 'ansible-playbook deploy.yml', 
+        output: 'PLAY [Deploy Infrastructure] ****************************\nTASK [Gathering Facts] ****************************\nok: [localhost]\nTASK [Deploy services] ****************************\nchanged: [localhost]' 
+      },
+      { 
+        cmd: 'docker ps', 
+        output: 'CONTAINER ID   IMAGE                    STATUS          PORTS\nabc123def456   nginx:latest             Up 2 hours      0.0.0.0:80->80/tcp\n789ghi012jkl   postgres:15              Up 2 hours      5432/tcp' 
+      },
+      { 
+        cmd: 'kubectl rollout status deployment/app', 
+        output: 'deployment "app" successfully rolled out' 
+      }
     ];
 
     let commandIndex = 0;
@@ -694,7 +693,8 @@ import Layout from '../layouts/Layout.astro';
           outputLine.className = 'terminal-output';
           outputLine.textContent = output;
           terminal.appendChild(outputLine);
-        }, 1000);
+          terminal.scrollTop = terminal.scrollHeight;
+        }, 800);
       }
     }
 
@@ -741,25 +741,31 @@ import Layout from '../layouts/Layout.astro';
           commandIndex = (commandIndex + 1) % commands.length;
           isTyping = false;
           
-          // Auto-scroll
           terminal.scrollTop = terminal.scrollHeight;
         }
-      }, 50);
+      }, 40);
     }
 
     // Start typing commands
     setTimeout(() => {
       typeNextCommand();
-      setInterval(typeNextCommand, 4000);
-    }, 1000);
+      setInterval(typeNextCommand, 4500);
+    }, 1500);
 
     // Progress bar animation
+    const progressFill = document.getElementById('progress-fill');
     const progressPercent = document.getElementById('progress-percent');
     let progress = 0;
+    
     const progressInterval = setInterval(() => {
-      progress = (progress + Math.random() * 2) % 100;
-      progressPercent.textContent = Math.floor(progress) + '%';
-    }, 200);
+      if (progress < 100) {
+        progress = Math.min(progress + Math.random() * 1.5, 100);
+        progressFill.style.width = progress + '%';
+        progressPercent.textContent = Math.floor(progress) + '%';
+      } else {
+        clearInterval(progressInterval);
+      }
+    }, 150);
 
     // Auto-scroll terminal
     setInterval(() => {
