@@ -3,16 +3,13 @@
   publish = "dist"
 
 # Redirection vers la page de maintenance
-# Toutes les routes sont redirigées vers /maintenance.html
-# SAUF la page de maintenance elle-même et les fichiers statiques nécessaires
-[[redirects]]
-  from = "/maintenance"
-  to = "/maintenance.html"
-  status = 200
+# Astro génère /maintenance/index.html avec format: directory
+# Les fichiers statiques (.js, .css, .png, .svg, etc.) sont automatiquement servis par Netlify
+# avant l'application des redirections
 
-# Redirection de toutes les autres routes vers la page de maintenance
+# Redirection de toutes les routes vers la page de maintenance
 [[redirects]]
   from = "/*"
-  to = "/maintenance.html"
+  to = "/maintenance/"
   status = 200
   force = true
