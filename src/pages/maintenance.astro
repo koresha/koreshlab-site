@@ -1,0 +1,43 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Maintenance — Koresha">
+  <div class="min-h-screen flex items-center justify-center px-4">
+    <div class="max-w-2xl mx-auto text-center space-y-8">
+      <div class="glass rounded-2xl p-12">
+        <iconify-icon 
+          icon="solar:maintenance-outline" 
+          class="w-24 h-24 text-brand-red mx-auto mb-6"
+        ></iconify-icon>
+        
+        <h1 class="h1 mb-4">Site en maintenance</h1>
+        
+        <p class="p text-lg mb-6">
+          Nous effectuons actuellement des travaux de maintenance sur le site. 
+          Nous serons de retour très bientôt !
+        </p>
+        
+        <div class="space-y-4">
+          <p class="text-sm text-gray-500 dark:text-gray-400">
+            Merci de votre patience.
+          </p>
+          
+          <div class="pt-6 border-t border-gray-200 dark:border-gray-700">
+            <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">
+              Pour toute question urgente, vous pouvez nous contacter :
+            </p>
+            <a 
+              href="mailto:contact.koreshlab@gmail.com" 
+              class="btn inline-flex"
+            >
+              <iconify-icon icon="solar:letter-outline" class="w-5 h-5"></iconify-icon>
+              Nous contacter
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>
+

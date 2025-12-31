@@ -47,6 +47,6 @@ jobs:
       uses: trufflesecurity/trufflehog@main
       with:
         path: ./
-        base: main
+        base: ${{ github.event.before || 'HEAD~1' }}
         head: HEAD
-        extra_args: --debug --only-verified
+        extra_args: --only-verified

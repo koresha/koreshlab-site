@@ -1,11 +1,15 @@
 export type Exp = {
-  company: string; role: string; date: string; location?: string;
+  company: string;
+  role: string;
+  date: string;
+  location?: string;
   bullets: string[];
   tags: string[];
   description?: string;
   employees?: string;
   industry?: string;
 };
+
 export const experience: Exp[] = [
   {
     company: 'unyc',
@@ -15,15 +19,45 @@ export const experience: Exp[] = [
     employees: '200 (Inherent Group: 1,300)',
     description: 'Connectivity, cloud and cyber operator specializing in indirect sales with an ecosystem of 1,300 partners and an automated services platform serving French businesses and communities.',
     bullets: [
-      'Architect and manage multi-tenant OpenStack private cloud with 200+ VMs and Ceph storage.',
-      'Infrastructure as Code with OpenTofu: complete automation of compute, network and storage resources.',
-      'Deploy and maintain Kubernetes clusters (3 environments: dev, staging, prod) with high availability.',
-      'Implement GitOps CI/CD pipeline with Helm, Ansible and ArgoCD for 15+ applications.',
-      'Integrate External-DNS with Azure for automated DNS records management.',
-      'Advanced monitoring with Prometheus, Grafana and AlertManager: 99.9% uptime maintained.',
-      'Manage S3-compatible object storage (MinIO) with backup and cross-region replication.'
+      'Operate and administer a multi-site OpenStack private cloud (3 datacenters, Paris region) hosting a large-scale infrastructure with core services such as Neutron and Ceph.',
+      'Deploy and maintain Kubernetes clusters on Talos OS via OpenTofu, managing development, staging, and production environments with HA control planes.',
+      'Automate full infrastructure lifecycle — compute, network, storage — using OpenTofu and Kolla Ansible for reproducible, version-controlled deployments.',
+      'Deploy and manage ArgoCD with Helm and Kustomize for many production workloads; implement advanced GitOps practices and custom CRDs management.',
+      'Integrate External-DNS with Azure DNS zones for automated record management synchronized with Kubernetes ingress resources.',
+      'Design and maintain observability stack with Prometheus, Mimir, Grafana, and Alertmanager.',
+      'Implement centralized logging and alerting using Loki with Teams integration for critical applications and on-call alerting.',
+      'Manage S3-compatible object storage (Garage, MinIO) with encrypted backups, replication, and migration between regions.',
+      'Build secure CI/CD pipelines in GitLab integrating Trivy scanning, automated Helm chart updates, and infrastructure validation.',
+      'Perform low-level infrastructure diagnostics (compute, network, storage) and root cause analysis to maintain high availability for services used by hundreds of thousands of users daily.',
+      'Provide Level 3+ support and infrastructure guidance to developers; lead internal training on Kubernetes, GitOps, and observability tools.',
+      'Deploy and maintain HashiCorp Boundary for secure, identity-based infrastructure access.',
+      'Research and deliver Proofs of Concept (PoCs) for innovative infrastructure, monitoring, and automation solutions.'
     ],
-    tags: ['OpenStack','Kubernetes','OpenTofu','Helm','Ansible','ArgoCD','Azure DNS','Prometheus','Grafana','S3','MinIO']
+    tags: [
+      'OpenStack',
+      'Ceph',
+      'Neutron',
+      'OVN',
+      'Kubernetes',
+      'Talos',
+      'OpenTofu',
+      'Ansible',
+      'ArgoCD',
+      'Helm',
+      'Kustomize',
+      'GitLab CI',
+      'External-DNS',
+      'Azure DNS',
+      'Prometheus',
+      'Grafana',
+      'Mimir',
+      'Alertmanager',
+      'Loki',
+      'Trivy',
+      'Garage',
+      'MinIO',
+      'Boundary'
+    ]
   },
   {
     company: 'Interstis',
@@ -36,11 +70,25 @@ export const experience: Exp[] = [
       'Managed multi-cluster Kubernetes environments (OVH, OutScale, Scalingo).',
       'Deployed CI/CD pipelines (GitLab CI, Helm, Ansible) for app and technical clusters.',
       'Managed cloud resources and secrets via Terraform and Vault.',
-      'Deployed and maintained GitLab, Vault, OnlyOffice, Jitsi, Harbor.',
-      'Designed and hardened an enterprise SSO (Keycloak) microservice with DNS integration.',
+      'Deployed and maintained GitLab, Vault, OnlyOffice, Jitsi, Harbor, Teleport (Kubernetes)...',
+      'Designed and hardened multi-environment SSO microservice using Keycloak with DNS integration.',
       'Authored project documentation and led internal DevOps tutorials.'
     ],
-    tags: ['Kubernetes','GitLab CI','Helm','Ansible','Terraform','Vault','Keycloak','OVH','OutScale','Scalingo','Harbor','OnlyOffice','Jitsi']
+    tags: [
+      'Kubernetes',
+      'GitLab CI',
+      'Helm',
+      'Ansible',
+      'Terraform',
+      'Vault',
+      'Keycloak',
+      'OVH',
+      'OutScale',
+      'Scalingo',
+      'Harbor',
+      'OnlyOffice',
+      'Jitsi'
+    ]
   },
   {
     company: 'Pixid',
@@ -59,7 +107,24 @@ export const experience: Exp[] = [
       'Performed DR testing (PCA/PRA) and managed backups (Veeam, Avamar, IDPA).',
       'Provided API support (Gravitee, JBoss, Kafka) and onboarded new engineers.'
     ],
-    tags: ['Terraform','Jenkins','ArgoCD','ELK','Instana','Prometheus','Grafana','F5 BIG-IP','MariaDB','MongoDB','Veeam','Tanzu','Kafka','Gravitee','JBoss','GoAnywhere']
+    tags: [
+      'Terraform',
+      'Jenkins',
+      'ArgoCD',
+      'ELK',
+      'Instana',
+      'Prometheus',
+      'Grafana',
+      'F5 BIG-IP',
+      'MariaDB',
+      'MongoDB',
+      'Veeam',
+      'Tanzu',
+      'Kafka',
+      'Gravitee',
+      'JBoss',
+      'GoAnywhere'
+    ]
   },
   {
     company: 'IOR System',
@@ -75,7 +140,18 @@ export const experience: Exp[] = [
       'Managed Exchange, O365, and Gmail messaging systems.',
       'Provided IT support and automated tasks with PowerShell.'
     ],
-    tags: ['Windows Server','Azure DevOps','Veeam','RADIUS','Exchange','O365','PowerShell','Security Audits','HP Switches','Gmail']
+    tags: [
+      'Windows Server',
+      'Azure DevOps',
+      'Veeam',
+      'RADIUS',
+      'Exchange',
+      'O365',
+      'PowerShell',
+      'Security Audits',
+      'HP Switches',
+      'Gmail'
+    ]
   },
   {
     company: 'Epresspack',
@@ -90,7 +166,16 @@ export const experience: Exp[] = [
       'Automated deployments with Ansible.',
       'Strengthened security and maintained technical documentation.'
     ],
-    tags: ['Linux','MySQL','MariaDB','Centreon','Ansible','Security','Documentation','Monitoring']
+    tags: [
+      'Linux',
+      'MySQL',
+      'MariaDB',
+      'Centreon',
+      'Ansible',
+      'Security',
+      'Documentation',
+      'Monitoring'
+    ]
   },
   {
     company: 'Louis Vuitton Malletier',
@@ -104,6 +189,13 @@ export const experience: Exp[] = [
       'Managed technical incidents and hardware/software troubleshooting.',
       'Supported daily operations for retail stores and corporate offices.'
     ],
-    tags: ['IT Support','Windows','Hardware','Troubleshooting','Retail','L1/L2 Support']
+    tags: [
+      'IT Support',
+      'Windows',
+      'Hardware',
+      'Troubleshooting',
+      'Retail',
+      'L1/L2 Support'
+    ]
   }
 ];

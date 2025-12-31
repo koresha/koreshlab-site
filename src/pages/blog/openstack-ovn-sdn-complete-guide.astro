@@ -1,0 +1,770 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<Layout 
+  title="OpenStack & OVN: Complete SDN Guide — Koresha" 
+  description="Deep dive into Software Defined Networking with OpenStack and OVN: architecture, pipelines, troubleshooting and best practices for modern cloud infrastructure."
+>
+  <Header />
+  
+  <main class="pt-20">
+    <article class="section pt-28 md:pt-40 max-w-4xl mx-auto">
+      <!-- Article Header -->
+      <header class="mb-12 text-center">
+        <div class="flex items-center justify-center gap-4 text-sm text-gray-500 dark:text-gray-400 mb-4">
+          <time datetime="2025-10-28">28 octobre 2025</time>
+          <span>•</span>
+          <span>15 min read</span>
+        </div>
+        
+        <h1 class="text-4xl md:text-5xl font-bold mb-6">
+          OpenStack & OVN: Complete SDN Guide
+        </h1>
+        
+        <div class="flex flex-wrap gap-2 justify-center mb-8">
+          {["OpenStack", "OVN", "SDN", "Networking", "Cloud", "Infrastructure"].map(tag => (
+            <span class="tag">{tag}</span>
+          ))}
+        </div>
+      </header>
+
+      <!-- Article Content -->
+      <div class="prose prose-lg dark:prose-invert max-w-none">
+        
+        <h2 id="introduction">Introduction générale</h2>
+        
+        <h3>Contexte</h3>
+        <p>
+          OpenStack est devenu la référence en matière de cloud computing open source. 
+          Au cœur de cette plateforme modulaire, Neutron joue un rôle crucial : c'est lui qui gère toute la partie réseau. 
+          On parle de création de réseaux virtuels, de routage entre ces réseaux, d'isolation des tenants, de sécurité avec les security groups, etc.
+        </p>
+        <p>
+          Mais voilà, la gestion réseau dans un cloud privé, c'est complexe. Il faut gérer des centaines voire des milliers de machines virtuelles qui doivent communiquer entre elles, tout en respectant des règles de sécurité strictes. 
+          C'est là qu'intervient le SDN (Software Defined Networking), et plus particulièrement OVN (Open Virtual Network), qui va moderniser complètement la façon dont Neutron gère le réseau.
+        </p>
+
+        <h2 id="sdn">Software Defined Networking (SDN)</h2>
+        
+        <h3>Le principe fondamental</h3>
+        <p>
+          Le SDN, c'est une révolution dans la façon de penser le réseau. Traditionnellement, un switch ou un routeur embarque à la fois la logique de décision (où envoyer les paquets) et l'exécution de ces décisions. 
+          Avec le SDN, on sépare ces deux aspects en trois plans distincts :
+        </p>
+
+        <div class="overflow-x-auto my-6">
+          <table class="min-w-full glass rounded-xl">
+            <thead>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <th class="px-6 py-3 text-left">Plan</th>
+                <th class="px-6 py-3 text-left">Rôle</th>
+                <th class="px-6 py-3 text-left">Exemple concret</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <td class="px-6 py-4"><strong>Control Plane</strong></td>
+                <td class="px-6 py-4">C'est le cerveau. Il prend les décisions : quel chemin doit prendre un paquet, quelles règles de sécurité appliquer, comment router le trafic entre réseaux.</td>
+                <td class="px-6 py-4">OVN, OpenDaylight, ONOS</td>
+              </tr>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <td class="px-6 py-4"><strong>Data Plane</strong></td>
+                <td class="px-6 py-4">Ce sont les muscles. Il exécute simplement les instructions reçues : transférer ce paquet vers tel port, appliquer cette règle, etc.</td>
+                <td class="px-6 py-4">Open vSwitch (OVS), commutateurs physiques compatibles OpenFlow</td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4"><strong>Application Plane</strong></td>
+                <td class="px-6 py-4">L'interface de gestion. C'est par là que les humains ou les systèmes d'orchestration donnent leurs instructions au réseau.</td>
+                <td class="px-6 py-4">OpenStack Neutron, Kubernetes CNI, scripts Ansible</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Pourquoi c'est révolutionnaire</h3>
+        <p>
+          Cette séparation apporte des avantages considérables. D'abord, vous centralisez toute la logique réseau au même endroit. 
+          Plus besoin de configurer manuellement chaque équipement : le contrôleur SDN a une vue globale et peut orchestrer l'ensemble du réseau.
+        </p>
+        <p>
+          Ensuite, tout devient programmable via des API. Vous pouvez automatiser n'importe quelle tâche réseau, de la création d'un VLAN à la mise en place de règles de firewall complexes. 
+          L'isolation entre tenants devient triviale, et vous pouvez scaler horizontalement sans problème majeur.
+        </p>
+        <p>
+          Mais surtout, le dépannage devient beaucoup plus simple. Au lieu de chercher sur 50 équipements différents, vous avez une source de vérité unique : le contrôleur SDN et ses bases de données.
+        </p>
+
+        <h2 id="ovs">Open vSwitch (OVS) - La fondation</h2>
+        
+        <h3>Qu'est-ce qu'OVS exactement ?</h3>
+        <p>
+          Open vSwitch, c'est un switch virtuel qui tourne directement sur vos hyperviseurs Linux. Si vous faites du KVM, du Xen ou même des containers, 
+          OVS va créer des bridges virtuels qui vont interconnecter vos VMs entre elles et avec le monde extérieur.
+        </p>
+        <p>
+          Ce n'est pas juste un bridge Linux classique. OVS est bien plus puissant : il comprend le protocole OpenFlow, 
+          il peut faire du VLAN tagging, du VXLAN ou du Geneve pour les overlays, et il expose une API (OVSDB) pour être piloté programmatiquement.
+        </p>
+
+        <h3>Comment ça marche concrètement</h3>
+        <p>
+          Quand vous déployez OVS sur un hyperviseur, vous créez généralement plusieurs bridges. Le plus important, c'est <code>br-int</code> (integration bridge), 
+          qui connecte toutes vos VMs. Ensuite, vous pouvez avoir <code>br-ex</code> pour les connexions externes, <code>br-tun</code> pour les tunnels entre hosts, etc.
+        </p>
+        <p>
+          Chaque VM a un port virtuel (vport) connecté à br-int. Et c'est là que la magie opère : OVS va appliquer des règles de flux (flow rules) 
+          pour décider quoi faire de chaque paquet. Ces règles sont écrites en OpenFlow : "si l'IP source est X, envoie vers le port Y", 
+          "si le paquet vient du VLAN 100, applique ce tag Geneve et envoie dans le tunnel vers l'host Z", etc.
+        </p>
+
+        <h3>Architecture interne d'OVS</h3>
+        <div class="overflow-x-auto my-6">
+          <table class="min-w-full glass rounded-xl">
+            <thead>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <th class="px-6 py-3 text-left">Composant</th>
+                <th class="px-6 py-3 text-left">Plan</th>
+                <th class="px-6 py-3 text-left">Ce qu'il fait</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <td class="px-6 py-4"><code>ovs-vswitchd</code></td>
+                <td class="px-6 py-4">Control Plane</td>
+                <td class="px-6 py-4">Le daemon principal. Il parle OpenFlow avec les contrôleurs, gère les flow tables, et programme le kernel datapath.</td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4">Kernel datapath</td>
+                <td class="px-6 py-4">Data Plane</td>
+                <td class="px-6 py-4">Module kernel qui fait le transfert de paquets ultra-rapide. Pour les paquets qu'il connaît déjà, il n'a même pas besoin de remonter en userspace.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Un point important : OVS utilise un système de cache intelligent. Quand un paquet arrive pour la première fois, 
+          il remonte vers ovs-vswitchd qui demande au contrôleur SDN quoi en faire. Une fois la décision prise, elle est mise en cache dans le kernel datapath. 
+          Les paquets suivants du même flux sont traités directement dans le kernel, ce qui donne d'excellentes performances.
+        </p>
+
+        <h3>Les commandes de base</h3>
+        <p>
+          Pour administrer OVS au quotidien, vous allez utiliser principalement deux outils :
+        </p>
+        <pre class="bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-xl p-4 overflow-x-auto"><code># Voir la topologie complète : bridges, ports, interfaces
+ovs-vsctl show
+
+# Lister tous les flux OpenFlow sur le bridge d'intégration
+ovs-ofctl dump-flows br-int
+
+# Ajouter un bridge
+ovs-vsctl add-br br-test
+
+# Ajouter un port à un bridge  
+ovs-vsctl add-port br-int vnet0</code></pre>
+
+        <h2 id="neutron">Neutron - Le réseau dans OpenStack</h2>
+        
+        <h3>Le rôle de Neutron</h3>
+        <p>
+          Neutron, c'est le composant réseau d'OpenStack. Il expose une API REST qui permet aux utilisateurs (et aux autres services OpenStack comme Nova) 
+          de créer et gérer des ressources réseau : réseaux privés, sous-réseaux, routeurs virtuels, floating IPs pour accéder aux VMs depuis l'extérieur, 
+          security groups pour contrôler les flux, etc.
+        </p>
+        <p>
+          En gros, Neutron c'est un Network-as-a-Service complet. Vous demandez "je veux un réseau privé 10.0.0.0/24 avec un routeur qui a une IP publique", 
+          et Neutron s'occupe de tout mettre en place dans l'infrastructure sous-jacente.
+        </p>
+
+        <h3>L'architecture traditionnelle avec ML2</h3>
+        <p>
+          Historiquement, Neutron utilise un plugin appelé ML2 (Modular Layer 2). C'est une architecture modulaire qui permet à Neutron de supporter différents types de réseaux 
+          (VLAN, VXLAN, flat, etc.) et différents backends (Linux Bridge, OVS, des SDN controllers commerciaux, etc.).
+        </p>
+        <p>
+          Dans cette architecture classique, Neutron déploie plusieurs agents sur les nodes :
+        </p>
+        <ul>
+          <li><strong>neutron-openvswitch-agent</strong> (ou neutron-linuxbridge-agent) : tourne sur chaque compute node, configure les bridges et les ports OVS localement</li>
+          <li><strong>neutron-l3-agent</strong> : gère les routeurs virtuels, le NAT, les floating IPs. Souvent déployé sur des network nodes dédiés</li>
+          <li><strong>neutron-dhcp-agent</strong> : fournit le service DHCP aux VMs</li>
+          <li><strong>neutron-metadata-agent</strong> : permet aux VMs d'accéder au service de metadata d'OpenStack</li>
+        </ul>
+
+        <h3>Les limites de ce modèle</h3>
+        <p>
+          Cette architecture agents multiples, ça marche, mais ça a des inconvénients majeurs :
+        </p>
+        <ul>
+          <li><strong>Complexité opérationnelle</strong> : vous devez gérer, monitorer et debugger de nombreux agents distribués sur tous vos nodes</li>
+          <li><strong>Problèmes de synchronisation</strong> : la Neutron DB contient l'état désiré, mais chaque agent maintient son état local dans OVS. 
+          Des désynchronisations peuvent apparaître, et c'est galère à corriger</li>
+          <li><strong>Single Point of Failure</strong> : le L3 agent crée souvent un point de centralisation. Si votre network node tombe, le routage inter-réseaux est cassé</li>
+          <li><strong>Scalabilité limitée</strong> : plus vous avez de compute nodes, plus vous avez d'agents à gérer, et ça ne scale pas linéairement</li>
+          <li><strong>Debugging difficile</strong> : quand un paquet se perd, il faut vérifier les flow tables sur plein de nodes différents, comparer avec la config Neutron, 
+          regarder les logs de chaque agent... C'est long et pénible</li>
+        </ul>
+
+        <p class="text-brand-red font-semibold mt-6">
+          C'est exactement pour résoudre ces problèmes qu'OVN a été développé. L'idée : remplacer tous ces agents par un contrôleur SDN centralisé 
+          qui maintient une vue logique cohérente du réseau et la déploie automatiquement sur tous les nodes.
+        </p>
+
+        <h2 id="openflow">OpenFlow - Le langage du SDN</h2>
+        
+        <p>
+          OpenFlow, c'est le protocole standardisé qui permet à un contrôleur SDN de parler avec des switches (physiques ou virtuels comme OVS). 
+          C'est un peu le langage commun que tout le monde comprend dans le monde SDN.
+        </p>
+        <p>
+          Le principe est simple : le contrôleur envoie des règles de flux (flow rules) au switch. Chaque règle dit : 
+          "si tu reçois un paquet qui match ces critères (IP source, port destination, protocole, VLAN ID, etc.), alors exécute ces actions (forward vers tel port, drop, modifier un header, etc.)".
+        </p>
+        <p>
+          Par exemple : <code>match(ip.src=10.0.0.5, tcp.dst=80) → action(output:port3, set_vlan=100)</code>
+        </p>
+        <p>
+          Ces règles sont organisées en tables, et peuvent être chaînées : un paquet peut passer par la table 0, puis être redirigé vers la table 10, etc. 
+          C'est comme ça qu'on construit des pipelines de traitement complexes.
+        </p>
+
+        <h2 id="ovn">Open Virtual Network (OVN) - Le cerveau du réseau</h2>
+        
+        <h3>Qu'est-ce qu'OVN</h3>
+        <p>
+          OVN, c'est un contrôleur SDN complet, développé spécifiquement pour piloter Open vSwitch. Il a été créé par les mêmes équipes qui maintiennent OVS, 
+          donc l'intégration est parfaite.
+        </p>
+        <p>
+          L'idée fondamentale d'OVN, c'est de vous donner une vision logique de votre réseau. Vous définissez des logical switches, des logical routers, 
+          des ACLs, des load balancers... tout ça de façon abstraite, sans vous soucier de l'implémentation physique. Et OVN se charge de traduire automatiquement 
+          cette vision logique en configuration concrète sur chaque hyperviseur.
+        </p>
+
+        <div class="overflow-x-auto my-6">
+          <table class="min-w-full glass rounded-xl">
+            <thead>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <th class="px-6 py-3 text-left">Configuration</th>
+                <th class="px-6 py-3 text-left">Ce que ça change</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <td class="px-6 py-4"><strong>OVS seul</strong></td>
+                <td class="px-6 py-4">Vous avez un switch programmable puissant, mais vous devez configurer manuellement chaque instance OVS sur chaque host. 
+                Pas de vision globale, pas d'orchestration automatique.</td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4"><strong>OVN + OVS</strong></td>
+                <td class="px-6 py-4">OVN agit comme le cerveau central. Vous définissez votre topologie logique une seule fois, et OVN configure automatiquement 
+                tous les OVS sur tous vos hosts. Il maintient la cohérence, gère les tunnels inter-hosts, et vous donne des outils de debugging centralisés.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Architecture d'OVN</h3>
+        <p>
+          OVN s'appuie sur deux bases de données pour fonctionner :
+        </p>
+        <pre class="bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-xl p-4 overflow-x-auto text-sm"><code>             ┌──────────────────────────────────────────┐
+             │              OVN Central                 │
+             │ ┌───────────┐  ┌──────────┐  ┌────────┐ │
+             │ │ CMS       │→ │ NB DB    │→ │ SB DB │ │
+             │ │(Neutron)  │  │(logique) │  │(réel)  │ │
+             │ └───────────┘  └──────────┘  └────────┘ │
+             │                     ↕                     │
+             │                ovn-northd                │
+             └──────────────────────────────────────────┘
+                      ↑                     ↓
+           ┌──────────┘                     └──────────┐
+           │                                            │
+ ┌──────────────────────┐                    ┌──────────────────────┐
+ │ Compute Node A       │                    │ Compute Node B       │
+ │ ┌─────────────────┐  │                    │ ┌─────────────────┐  │
+ │ │ovn-controller   │  │                    │ │ovn-controller   │  │
+ │ └────────┬────────┘  │                    │ └────────┬────────┘  │
+ │          ↓            │                    │          ↓            │
+ │ ┌─────────────────┐  │                    │ ┌─────────────────┐  │
+ │ │ ovs-vswitchd    │  │                    │ │ ovs-vswitchd    │  │
+ │ │ (br-int)        │←─┼────Geneve tunnel──┼→│ (br-int)        │  │
+ │ └─────────────────┘  │                    │ └─────────────────┘  │
+ └──────────────────────┘                    └──────────────────────┘</code></pre>
+
+        <h3>Les composants d'OVN</h3>
+        <div class="overflow-x-auto my-6">
+          <table class="min-w-full glass rounded-xl">
+            <thead>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <th class="px-6 py-3 text-left">Composant</th>
+                <th class="px-6 py-3 text-left">Rôle détaillé</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <td class="px-6 py-4"><strong>Northbound DB (NBDB)</strong></td>
+                <td class="px-6 py-4">C'est là que vous (ou Neutron) exprimez vos intentions : "je veux un switch logique nommé 'demo-net' avec ces ports", 
+                "je veux un routeur qui connecte ces deux réseaux", "je veux cette ACL qui bloque le traffic SSH". C'est la vue "logique" et "haut niveau" du réseau.</td>
+              </tr>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <td class="px-6 py-4"><strong>Southbound DB (SBDB)</strong></td>
+                <td class="px-6 py-4">C'est la traduction concrète pour chaque hyperviseur : quels flows OpenFlow installer, comment configurer les tunnels Geneve, 
+                où sont connectés physiquement les ports logiques (port binding). Les ovn-controllers lisent la SBDB pour savoir quoi faire.</td>
+              </tr>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <td class="px-6 py-4"><strong>ovn-northd</strong></td>
+                <td class="px-6 py-4">Le daemon qui fait le lien entre les deux bases. Il surveille la NBDB, et dès qu'un changement apparaît (nouveau réseau, nouvelle ACL...), 
+                il calcule la config nécessaire et la pousse dans la SBDB. C'est le "compilateur" du réseau logique vers le réseau physique.</td>
+              </tr>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <td class="px-6 py-4"><strong>ovn-controller</strong></td>
+                <td class="px-6 py-4">Il tourne sur chaque compute node. Il lit la partie de la SBDB qui le concerne, et configure l'OVS local en conséquence : 
+                il crée les ports, installe les flows OpenFlow, met en place les tunnels Geneve vers les autres nodes.</td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4"><strong>ovn-nbctl / ovn-sbctl</strong></td>
+                <td class="px-6 py-4">Les outils en ligne de commande pour interagir avec les bases. ovn-nbctl pour manipuler la vue logique, 
+                ovn-sbctl pour inspecter (en lecture seule généralement) la config réelle déployée.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Le pipeline OVN - Comment un paquet est traité</h3>
+        <p>
+          OVN organise le traitement des paquets en pipelines. Chaque paquet va traverser plusieurs étapes, et à chaque étape, 
+          des règles peuvent être appliquées. C'est comme une chaîne de traitement.
+        </p>
+
+        <div class="overflow-x-auto my-6">
+          <table class="min-w-full glass rounded-xl">
+            <thead>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <th class="px-6 py-3 text-left">Pipeline</th>
+                <th class="px-6 py-3 text-left">Ce qui se passe</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <td class="px-6 py-4"><strong>Logical Switch Pipeline (L2)</strong></td>
+                <td class="px-6 py-4">Le paquet arrive sur un logical switch. OVN va gérer : l'apprentissage MAC/ARP (comme un switch classique), 
+                les ACLs niveau 2, le DHCP si nécessaire, la port security (anti-spoofing), et enfin le forwarding vers le bon port de destination ou vers un router.</td>
+              </tr>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <td class="px-6 py-4"><strong>Logical Router Pipeline (L3)</strong></td>
+                <td class="px-6 py-4">Si le paquet doit être routé (destination dans un autre subnet), il entre dans le pipeline du routeur logique. 
+                Là, OVN va : vérifier les ACLs niveau 3, faire le routage IP classique (lookup dans la table de routage), gérer le NAT (SNAT pour les connexions sortantes, DNAT pour les floating IPs entrantes), 
+                et renvoyer le paquet vers le logical switch de destination.</td>
+              </tr>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <td class="px-6 py-4"><strong>Port Binding</strong></td>
+                <td class="px-6 py-4">C'est le mécanisme qui fait le lien entre un port logique et sa localisation physique. 
+                Quand une VM démarre sur le compute node X, ovn-controller signale à la SBDB "le port logique port-vm1 est maintenant sur le chassis X". 
+                Tous les autres ovn-controllers voient cette info et savent maintenant qu'il faut envoyer les paquets pour port-vm1 via un tunnel Geneve vers le chassis X.</td>
+              </tr>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <td class="px-6 py-4"><strong>ACLs</strong></td>
+                <td class="px-6 py-4">Ce sont les ACLs qu'OVN génère automatiquement à partir des security groups Neutron. 
+                Elles sont appliquées au niveau du logical switch et du logical router, et se traduisent en flows OpenFlow très efficaces.</td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4"><strong>Tunnels Geneve</strong></td>
+                <td class="px-6 py-4">Quand un paquet doit aller vers une VM sur un autre host, OVN l'encapsule dans un tunnel Geneve. 
+                Geneve, c'est comme VXLAN mais en mieux : plus extensible, supporte des métadonnées additionnelles. Le tunnel est établi automatiquement entre tous les compute nodes.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Commandes OVN pratiques</h3>
+        <pre class="bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-xl p-4 overflow-x-auto"><code># Créer un logical switch
+ovn-nbctl ls-add demo-network
+
+# Ajouter un port au switch
+ovn-nbctl lsp-add demo-network vm1-port
+ovn-nbctl lsp-set-addresses vm1-port "fa:16:3e:aa:bb:cc 10.0.0.10"
+
+# Voir la topologie logique complète
+ovn-nbctl show
+
+# Voir ce qui est déployé réellement sur les chassis
+ovn-sbctl show
+
+# Tracer un paquet (super utile pour debugger)
+ovn-trace demo-network 'inport == "vm1-port" && ip4.dst == 10.0.0.20'
+
+# Lister les ACLs
+ovn-nbctl list ACL
+
+# Voir les règles NAT (floating IPs, etc.)
+ovn-nbctl list NAT
+
+# Voir les chassis connectés
+ovn-sbctl list Chassis</code></pre>
+
+        <h2 id="integration">Intégration OpenStack + Neutron + OVN</h2>
+        
+        <h3>Comment ça marche ensemble</h3>
+        <p>
+          Quand on intègre OVN avec OpenStack, Neutron utilise le driver ML2/OVN. Ce driver remplace complètement les anciens agents (openvswitch-agent, l3-agent, dhcp-agent, metadata-agent).
+        </p>
+        <p>
+          Voici comment les composants s'articulent :
+        </p>
+
+        <h4>Architecture : OVN seul (usage générique)</h4>
+        <pre class="bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-xl p-4 overflow-x-auto text-sm"><code>         ┌─────────────────┐
+         │   Admin/Script  │  ← Vous configurez directement OVN
+         └────────┬────────┘
+                  ↓
+         ┌────────────────────────────┐
+         │    OVN Central             │
+         │  (NBDB + SBDB + northd)    │
+         └───────────┬────────────────┘
+                     ↓
+         ┌───────────────────────────────┐
+         │  Compute Nodes                │
+         │  (ovn-controller + OVS)       │
+         └───────────────────────────────┘</code></pre>
+
+        <p>
+          Dans ce mode, vous utilisez directement les commandes ovn-nbctl pour créer vos réseaux logiques. 
+          Pas d'abstraction, pas d'orchestrateur. C'est puissant mais vous gérez tout manuellement.
+        </p>
+
+        <h4>Architecture : OpenStack + Neutron + OVN (production réelle)</h4>
+        <pre class="bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-xl p-4 overflow-x-auto text-sm"><code>         ┌─────────────────┐
+         │  User / Horizon │  ← Interface utilisateur OpenStack
+         └────────┬────────┘
+                  ↓
+         ┌────────────────────────────┐
+         │    Neutron API Server      │  ← API REST pour gérer le réseau
+         │  (neutron-server)          │
+         └───────────┬────────────────┘
+                     ↓
+         ┌────────────────────────────┐
+         │   ML2 Plugin + OVN Driver  │  ← Traduit les appels Neutron en OVN
+         │  (networking-ovn)          │
+         └───────────┬────────────────┘
+                     ↓
+         ┌────────────────────────────────────────┐
+         │         OVN Central                    │
+         │  ┌──────────┐     ┌──────────┐        │
+         │  │  NBDB    │ ←→  │  SBDB    │        │  ← Bases de données OVN
+         │  └──────────┘     └──────────┘        │
+         │         ↕                               │
+         │    ovn-northd                          │  ← Compilateur logique→physique
+         └────────────────────┬───────────────────┘
+                              ↓
+         ┌──────────────────────────────────────────────┐
+         │          Compute Nodes (x N)                 │
+         │  ┌──────────────────────────────────┐        │
+         │  │  ovn-controller                  │        │  ← Agent local OVN
+         │  └────────────┬─────────────────────┘        │
+         │               ↓                               │
+         │  ┌──────────────────────────────────┐        │
+         │  │  ovs-vswitchd (br-int)           │        │  ← Switch virtuel
+         │  │  ┌──────┐  ┌──────┐  ┌──────┐    │        │
+         │  │  │ VM1  │  │ VM2  │  │ VM3  │    │        │  ← VMs des utilisateurs
+         │  │  └──────┘  └──────┘  └──────┘    │        │
+         │  └──────────────────────────────────┘        │
+         └──────────────────────────────────────────────┘</code></pre>
+
+        <h3>Le flux de création d'un réseau</h3>
+        <p>
+          Prenons un exemple concret. Un utilisateur veut créer un réseau privé via Horizon (l'interface web d'OpenStack) :
+        </p>
+        <ol>
+          <li><strong>Appel API Neutron</strong> : L'utilisateur clique sur "Create Network". Horizon envoie une requête REST à neutron-server : 
+          "CREATE network name=private-net, subnet=10.0.0.0/24"</li>
+          
+          <li><strong>ML2/OVN traitement</strong> : Le plugin ML2 avec le driver OVN reçoit cette demande. Il va traduire cette intention Neutron en objets OVN : 
+          "je dois créer un logical switch dans OVN"</li>
+          
+          <li><strong>Écriture dans NBDB</strong> : Le driver OVN utilise l'API OVSDB pour écrire dans la Northbound Database : 
+          "créer un Logical_Switch nommé neutron-xxxxxx avec tel subnet"</li>
+          
+          <li><strong>ovn-northd détecte le changement</strong> : Le daemon ovn-northd surveille en permanence la NBDB. Dès qu'il voit ce nouveau logical switch, 
+          il calcule ce qu'il faut faire : "pour implémenter ce switch, je dois créer tel pipeline L2, avec ces flows pour le DHCP, ces flows pour les ACLs par défaut..."</li>
+          
+          <li><strong>Écriture dans SBDB</strong> : ovn-northd écrit toute cette config compilée dans la Southbound Database. C'est maintenant des instructions concrètes : 
+          "installer ces flows OpenFlow, configurer ce bridge..."</li>
+          
+          <li><strong>ovn-controllers déploient</strong> : Tous les ovn-controllers sur tous les compute nodes sont connectés à la SBDB. Ils voient les changements qui les concernent 
+          et configurent immédiatement leur OVS local. Les flows sont installés, le réseau est prêt.</li>
+          
+          <li><strong>VM boot</strong> : Quand une VM démarre sur ce réseau, Nova appelle Neutron pour créer un port. Neutron (via OVN) crée un logical switch port, 
+          et ovn-controller sur le compute node concerné l'attache à la VM. En quelques millisecondes, la VM a son IP via DHCP et peut communiquer.</li>
+        </ol>
+
+        <h3>Ce qui change avec OVN</h3>
+        <p>
+          La différence majeure, c'est qu'on n'a plus d'agents Neutron qui tournent partout. Plus de neutron-openvswitch-agent à debugger, 
+          plus de neutron-l3-agent qui pourrait tomber, plus de synchronisation foireuse entre la DB Neutron et OVS.
+        </p>
+        <p>
+          Tout passe par les bases OVN. C'est une source de vérité unique. Si vous voulez savoir ce qui est déployé, vous interrogez la SBDB. 
+          Si vous voulez changer quelque chose, vous modifiez la NBDB et ovn-northd se charge de propager le changement partout.
+        </p>
+        <p>
+          Le routage devient distribué : chaque compute node peut router directement le traffic de ses VMs, sans passer par un network node centralisé. 
+          Les floating IPs sont gérées en DNAT local, le traffic ne traverse plus un goulot d'étranglement.
+        </p>
+
+        <h3>Les bénéfices concrets</h3>
+        <ul>
+          <li><strong>Simplicité opérationnelle</strong> : Au lieu de gérer 3-4 agents par node, vous n'avez qu'ovn-controller. Un seul process à monitorer, un seul log à regarder.</li>
+          
+          <li><strong>Pas de SPOF</strong> : Le routage L3 est distribué, chaque node peut router. Si un compute node tombe, seules ses VMs sont affectées, pas le routage global.</li>
+          
+          <li><strong>Scalabilité</strong> : Vous pouvez facilement passer à 500, 1000 compute nodes. OVN a été conçu pour scaler. Les bases OVSDB sont performantes, 
+          et les ovn-controllers ne chargent que la partie de config qui les concerne.</li>
+          
+          <li><strong>Performance</strong> : Les flows OpenFlow générés par OVN sont optimisés. Le traffic reste local autant que possible. Les tunnels Geneve sont efficaces.</li>
+          
+          <li><strong>Debugging simplifié</strong> : La commande <code>ovn-trace</code> vous permet de simuler le passage d'un paquet à travers toute la topologie logique. 
+          Vous voyez exactement quelles règles matchent, quelles actions sont appliquées, où le paquet sort. C'est infiniment plus simple que de dumper les flows sur 10 compute nodes différents.</li>
+          
+          <li><strong>Features avancées</strong> : OVN supporte nativement des fonctionnalités que Neutron seul avait du mal à implémenter : 
+          load balancing L4, IPv6 complet, QoS granulaire, etc.</li>
+        </ul>
+
+        <h2 id="troubleshooting">Debugging et troubleshooting</h2>
+        
+        <p>
+          Quand quelque chose ne marche pas dans un réseau OVN, il y a des outils très puissants pour investiguer. Voici comment procéder.
+        </p>
+
+        <h3>Approche systématique</h3>
+        <p>
+          En général, suivez ce workflow :
+        </p>
+        <ol>
+          <li><strong>Vérifier la topologie logique</strong> : Utilisez <code>ovn-nbctl show</code> pour voir si les objets logiques sont bien créés (switches, routers, ports).</li>
+          
+          <li><strong>Vérifier la compilation</strong> : Regardez les logs de ovn-northd. Y a-t-il des erreurs de compilation ? Les objets logiques sont-ils bien traduits en flows physiques ?</li>
+          
+          <li><strong>Vérifier le déploiement</strong> : Sur un compute node, utilisez <code>ovn-sbctl show</code> pour voir si les chassis sont bien enregistrés, 
+          si les ports sont bien bindés au bon chassis.</li>
+          
+          <li><strong>Tracer un paquet</strong> : La killer feature, c'est <code>ovn-trace</code>. Vous simulez un paquet et OVN vous dit exactement ce qui se passe : 
+          "le paquet entre par port X, il match l'ACL Y, il est routé par le router Z, il sort par le port W via un tunnel Geneve vers le chassis Q". 
+          Si le trace montre que le paquet est droppé à une étape, vous savez exactement où chercher.</li>
+          
+          <li><strong>Vérifier OVS</strong> : Descendez au niveau OVS avec <code>ovs-vsctl show</code> pour voir les bridges et ports physiques, 
+          et <code>ovs-ofctl dump-flows br-int</code> pour voir les flows OpenFlow réellement installés.</li>
+        </ol>
+
+        <h3>Commandes de debugging par situation</h3>
+        <div class="overflow-x-auto my-6">
+          <table class="min-w-full glass rounded-xl">
+            <thead>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <th class="px-6 py-3 text-left">Symptôme</th>
+                <th class="px-6 py-3 text-left">Commandes à utiliser</th>
+                <th class="px-6 py-3 text-left">Ce que vous cherchez</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <td class="px-6 py-4">Une VM ne reçoit pas d'IP DHCP</td>
+                <td class="px-6 py-4"><code>ovn-nbctl show</code><br><code>ovn-nbctl list DHCP_Options</code><br><code>ovn-trace ...</code></td>
+                <td class="px-6 py-4">Vérifiez que le logical switch a bien des DHCP_Options configurées. 
+                Tracez un paquet DHCP DISCOVER pour voir s'il est bien traité par le pipeline DHCP interne d'OVN.</td>
+              </tr>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <td class="px-6 py-4">Les VMs ne se pinguent pas entre compute nodes</td>
+                <td class="px-6 py-4"><code>ovn-sbctl show</code><br><code>ovn-sbctl list Chassis</code><br><code>ovs-vsctl show</code><br><code>ip -d link show</code></td>
+                <td class="px-6 py-4">Vérifiez que tous les chassis sont bien visibles dans la SBDB. 
+                Vérifiez que les tunnels Geneve sont bien créés entre les compute nodes (<code>genev_sys_6081</code>). 
+                Si les tunnels ne sont pas là, c'est probablement un problème réseau underlay ou de firewall.</td>
+              </tr>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <td class="px-6 py-4">Le traffic est bloqué par des ACLs</td>
+                <td class="px-6 py-4"><code>ovn-nbctl list ACL</code><br><code>ovn-trace ... --detailed</code></td>
+                <td class="px-6 py-4">Listez toutes les ACLs et regardez leurs priorités et leurs actions (allow/drop). 
+                Tracez le paquet pour voir quelle ACL matche. Si c'est un security group trop restrictif, vous le verrez immédiatement.</td>
+              </tr>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <td class="px-6 py-4">Une floating IP ne fonctionne pas</td>
+                <td class="px-6 py-4"><code>ovn-nbctl list NAT</code><br><code>ovn-nbctl lr-nat-list &lt;router&gt;</code><br><code>ovn-trace ...</code></td>
+                <td class="px-6 py-4">Vérifiez que la règle NAT (type dnat_and_snat) est bien présente sur le logical router. 
+                Tracez un paquet entrant sur la floating IP pour voir s'il est bien DNATé vers l'IP privée de la VM.</td>
+              </tr>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <td class="px-6 py-4">ovn-controller crashe ou ne répond plus</td>
+                <td class="px-6 py-4"><code>journalctl -u ovn-controller</code><br><code>ovs-appctl -t ovn-controller ...</code></td>
+                <td class="px-6 py-4">Regardez les logs système. ovn-controller expose aussi des commandes appctl pour dumper son état interne. 
+                Parfois c'est lié à une déconnexion OVSDB, vérifiez la connectivité réseau vers les serveurs OVSDB.</td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4">Performance dégradée, latence élevée</td>
+                <td class="px-6 py-4"><code>ovs-ofctl dump-flows br-int | wc -l</code><br><code>ovs-appctl dpif/show</code><br><code>ovs-dpctl show</code></td>
+                <td class="px-6 py-4">Comptez le nombre de flows. Si vous avez des dizaines de milliers de flows, ça peut ralentir. 
+                Vérifiez les stats du datapath kernel, vérifiez que le fast path (kernel datapath) est bien utilisé et pas seulement le slow path (userspace).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>Exemple pratique de trace</h3>
+        <p>
+          Imaginons : une VM (10.0.0.10) ne peut pas pinguer une autre VM (10.0.0.20) qui est sur un autre compute node.
+        </p>
+        <pre class="bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-xl p-4 overflow-x-auto"><code># On fait un trace depuis le port source
+ovn-trace --detailed demo-network \
+  'inport == "vm1-port" && eth.src == fa:16:3e:aa:bb:cc && eth.dst == fa:16:3e:dd:ee:ff && ip4.src == 10.0.0.10 && ip4.dst == 10.0.0.20 && icmp4.type == 8'
+
+# Output (simplifié) :
+# ingress(dp="demo-network", inport="vm1-port")
+# --------------------------------------------------
+# 0. ls_in_port_sec_l2 (ovn-northd.c:4512): inport == "vm1-port" && eth.src == fa:16:3e:aa:bb:cc, priority 50, uuid xxxxx
+#     next;
+# ...
+# 15. ls_in_l2_lkup (ovn-northd.c:5123): eth.dst == fa:16:3e:dd:ee:ff, priority 50, uuid xxxxx
+#     outport = "vm2-port";
+#     output;
+#
+# egress(dp="demo-network", inport="vm1-port", outport="vm2-port")
+# --------------------------------------------------
+# ...
+# 8. ls_out_port_sec_l2 (ovn-northd.c:4798): outport == "vm2-port", priority 50, uuid xxxxx
+#     output;
+#     /* output to "vm2-port", type "patch" (connected to chassis-2 via geneve tunnel) */</code></pre>
+        <p>
+          Ici on voit que le paquet passe toutes les étapes du pipeline L2, arrive bien sur le port de destination, 
+          et qu'il devrait sortir via un tunnel Geneve vers le chassis-2. Si la connectivité échoue quand même, le problème est probablement au niveau du réseau underlay 
+          (firewall qui bloque UDP 6081, MTU trop faible pour l'encapsulation, etc.).
+        </p>
+
+        <h3>Logs utiles</h3>
+        <ul>
+          <li><strong>ovn-northd</strong> : <code>/var/log/ovn/ovn-northd.log</code> ou via journalctl. Vous y verrez les erreurs de compilation logique→physique.</li>
+          <li><strong>ovn-controller</strong> : <code>/var/log/ovn/ovn-controller.log</code> ou journalctl. Logs du compute node, erreurs de connexion OVSDB, problèmes de binding.</li>
+          <li><strong>ovsdb-server (NB/SB)</strong> : <code>/var/log/ovn/ovsdb-server-nb.log</code> et <code>ovsdb-server-sb.log</code>. Utile pour voir les connexions clients, les transactions OVSDB.</li>
+          <li><strong>OVS</strong> : <code>/var/log/openvswitch/ovs-vswitchd.log</code>. Logs du switch virtuel lui-même, erreurs de programmation des flows.</li>
+        </ul>
+
+        <h2 id="conclusion">Conclusion</h2>
+        <p>
+          OVN, c'est vraiment une évolution majeure pour le réseau dans OpenStack. On passe d'une architecture avec plein d'agents qui peuvent désynchroniser, 
+          à une architecture centralisée où tout est dans des bases de données cohérentes et où le déploiement est automatique.
+        </p>
+        <p>
+          Le modèle logique→physique est élégant : vous pensez en termes de switches et routers logiques (abstraction simple), 
+          et OVN se charge de compiler ça en flows OpenFlow optimisés sur tous vos compute nodes. Vous n'avez plus besoin de vous soucier de savoir sur quel node tourne tel service.
+        </p>
+        <p>
+          Pour OpenStack, ça apporte de la simplicité (moins d'agents à gérer), de la performance (routage distribué, flows optimisés), 
+          et de la scalabilité (vous pouvez passer à des milliers de nodes sans refondre votre architecture réseau).
+        </p>
+        <p>
+          Mais attention, il y a une courbe d'apprentissage. Il faut comprendre OVSDB, les pipelines OVN, les commandes ovn-nbctl/sbctl, le tracing. 
+          Une fois que vous maîtrisez ces outils, par contre, vous gagnez énormément en visibilité et en contrôle.
+        </p>
+        <p>
+          En résumé : si vous déployez OpenStack aujourd'hui, utilisez Neutron avec le driver ML2/OVN. 
+          Si vous avez déjà un cloud avec les anciens agents Neutron, planifiez une migration vers OVN. 
+          Vous ne le regretterez pas.
+        </p>
+
+        <div class="mt-12 p-6 glass rounded-xl">
+          <h3 class="text-xl font-bold mb-4">Ressources pour aller plus loin</h3>
+          <ul class="space-y-2">
+            <li><a href="https://docs.ovn.org/" target="_blank" rel="noopener noreferrer" class="text-[var(--color-brand-red)] hover:underline">Documentation officielle OVN</a></li>
+            <li><a href="https://docs.openstack.org/neutron/latest/" target="_blank" rel="noopener noreferrer" class="text-[var(--color-brand-red)] hover:underline">Documentation Neutron OpenStack</a></li>
+            <li><a href="https://www.openvswitch.org/" target="_blank" rel="noopener noreferrer" class="text-[var(--color-brand-red)] hover:underline">Open vSwitch website</a></li>
+            <li>Conférences OpenStack Summit sur OVN (cherchez sur YouTube "OpenStack OVN")</li>
+            <li>IRC/Slack : #openstack-neutron, #ovn sur OFTC</li>
+          </ul>
+        </div>
+
+        <div class="glass rounded-2xl p-6 mt-8">
+          <h3 class="text-xl font-bold mb-4">Questions ou commentaires ?</h3>
+          <p class="mb-4">
+            Cet article vous a été utile ? Vous avez des questions sur OpenStack, OVN ou l'architecture SDN ? 
+            N'hésitez pas à me contacter !
+          </p>
+          <a href="mailto:contact.koreshlab@gmail.com" class="btn inline-flex items-center gap-2">
+            <iconify-icon icon="solar:letter-outline" class="w-5 h-5"></iconify-icon>
+            Contactez-moi
+          </a>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .prose {
+    color: var(--color-text);
+  }
+  
+  .prose h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+    color: var(--color-heading);
+  }
+  
+  .prose h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: var(--color-heading);
+  }
+  
+  .prose h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--color-heading);
+  }
+  
+  .prose p {
+    margin-bottom: 1rem;
+    line-height: 1.75;
+  }
+  
+  .prose ul, .prose ol {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+  }
+  
+  .prose li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .prose code {
+    background: rgba(220, 38, 38, 0.1);
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+    font-size: 0.9em;
+    color: var(--color-brand-red);
+  }
+  
+  .prose pre code {
+    background: transparent;
+    padding: 0;
+    color: inherit;
+  }
+  
+  .prose table td, .prose table th {
+    padding: 0.75rem 1rem;
+  }
+  
+  .prose blockquote {
+    font-style: italic;
+    color: var(--color-text-muted);
+  }
+</style>

@@ -2,52 +2,48 @@
 const { post } = Astro.props;
 ---
 <article class="glass rounded-2xl p-6 hover:translate-y-[-2px] transition-all duration-300 group">
-  <div class="flex items-start justify-between mb-3">
-    <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-      <iconify-icon icon="solar:calendar-outline" class="w-4 h-4"></iconify-icon>
-      <time datetime={post.date}>
-        {new Date(post.date).toLocaleDateString('fr-FR', { 
-          year: 'numeric', 
-          month: 'long', 
-          day: 'numeric' 
-        })}
-      </time>
-      {post.readTime && (
-        <>
-          <span>•</span>
-          <span>{post.readTime}</span>
-        </>
+  <a href={`/blog/${post.slug}`} class="block">
+    <div class="flex items-start justify-between mb-3">
+      <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+        <iconify-icon icon="solar:calendar-outline" class="w-4 h-4"></iconify-icon>
+        <time datetime={post.date}>
+          {new Date(post.date).toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+          })}
+        </time>
+        {post.readTime && (
+          <>
+            <span>•</span>
+            <span>{post.readTime}</span>
+          </>
+        )}
+      </div>
+      {post.featured && (
+        <span class="px-2 py-1 text-xs font-semibold bg-brand-red/10 text-brand-red rounded-full">
+          Featured
+        </span>
       )}
     </div>
-    {post.featured && (
-      <span class="px-2 py-1 text-xs font-semibold bg-brand-red/10 text-brand-red rounded-full">
-        Featured
-      </span>
-    )}
-  </div>
-  
-  <h3 class="text-xl font-bold mb-3 group-hover:text-brand-red transition-colors">
-    {post.title}
-  </h3>
-  
-  <p class="p mb-4 line-clamp-3">
-    {post.summary}
-  </p>
-  
-  <div class="flex flex-wrap gap-2 mb-4">
-    {post.tags.map((tag: string) => (
-      <span class="tag text-xs">{tag}</span>
-    ))}
-  </div>
-  
-  <div class="flex items-center justify-between">
-    <a 
-      href={`mailto:contact.koreshlab@gmail.com?subject=Article: ${post.title}`}
-      class="inline-flex items-center gap-2 text-brand-red font-semibold hover:gap-3 transition-all"
-      title="Contact me for more information about this article"
-    >
-      Contact me about this article
-      <iconify-icon icon="solar:letter-outline" class="w-4 h-4"></iconify-icon>
-    </a>
-  </div>
+    
+    <h3 class="text-xl font-bold mb-3 group-hover:text-brand-red transition-colors">
+      {post.title}
+    </h3>
+    
+    <p class="p mb-4 line-clamp-3">
+      {post.summary}
+    </p>
+    
+    <div class="flex flex-wrap gap-2 mb-4">
+      {post.tags.map((tag: string) => (
+        <span class="tag text-xs">{tag}</span>
+      ))}
+    </div>
+    
+    <div class="inline-flex items-center gap-2 text-brand-red font-semibold group-hover:gap-3 transition-all">
+      Read article
+      <iconify-icon icon="solar:arrow-right-outline" class="w-4 h-4"></iconify-icon>
+    </div>
+  </a>
 </article>

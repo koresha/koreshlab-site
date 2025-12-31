@@ -1,0 +1,753 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+---
+
+<Layout 
+  title="External-DNS: Automate DNS Management on Kubernetes with Azure | Chahine Azlouk"
+  description="Complete guide to deploy and configure External-DNS on Kubernetes with Azure DNS via ArgoCD. Practical examples, troubleshooting and best practices."
+>
+  <Header />
+  
+  <main class="min-h-screen pt-20 pb-16">
+    <article class="max-w-4xl mx-auto px-6">
+      <header class="mb-12">
+        <div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-4">
+          <time datetime="2025-10-29">October 29, 2025</time>
+          <span>•</span>
+          <span>12 min read</span>
+        </div>
+        
+        <h1 class="text-4xl sm:text-5xl font-bold mb-6 text-[var(--color-heading)]">
+          External-DNS: Automate DNS Management on Kubernetes with Azure
+        </h1>
+        
+        <p class="text-xl text-gray-600 dark:text-gray-400 mb-6">
+          How to deploy and configure External-DNS to automatically sync your Kubernetes Ingress with Azure DNS via ArgoCD. 
+          Complete guide with practical examples and troubleshooting.
+        </p>
+        
+        <div class="flex flex-wrap gap-2">
+          <span class="px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-full text-sm">Kubernetes</span>
+          <span class="px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-full text-sm">DNS</span>
+          <span class="px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-full text-sm">Azure</span>
+          <span class="px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-full text-sm">ArgoCD</span>
+          <span class="px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-full text-sm">GitOps</span>
+          <span class="px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 rounded-full text-sm">DevOps</span>
+        </div>
+      </header>
+
+      <div class="prose prose-lg max-w-none">
+        <h2>The Problem: Manually Managing Hundreds of DNS Records</h2>
+        <p>
+          When you deploy applications on Kubernetes and want to expose them to the outside world, 
+          you create Ingress resources with domain names. So far, so good. But then, you need to go to your 
+          DNS provider (Azure DNS, Route53, Cloudflare...) and manually create CNAME or A records that point 
+          to your cluster.
+        </p>
+        <p>
+          This works fine for 5 applications. But when you have 50, 100, or deploy 20 times a day in staging, 
+          it quickly becomes unmanageable. Not to mention the errors: you forget to delete a DNS record when an app is decommissioned, 
+          you create a duplicate, you point to the wrong environment...
+        </p>
+        <p>
+          External-DNS solves exactly this problem. It's a Kubernetes controller that watches your Ingress resources 
+          (or Services, or HTTPRoute if you use the Gateway API) and automatically creates, updates, or deletes 
+          the corresponding DNS records in your external DNS zone.
+        </p>
+
+        <h2>How It Works</h2>
+        <p>
+          The principle is simple: External-DNS runs in your Kubernetes cluster. It watches the resources you tell it 
+          to monitor (typically Ingress resources). When it sees an Ingress with a <code>host</code> defined, 
+          it extracts the domain name and creates a DNS record with your provider.
+        </p>
+        
+        <h3>The Detailed Flow</h3>
+        <pre class="bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-xl p-4 overflow-x-auto text-sm"><code>┌─────────────────────┐
+│  Kubernetes Ingress │  spec.rules[].host = "grafana.example.com"
+└──────────┬──────────┘
+           │
+           ↓
+┌──────────────────────────────────────┐
+│  External-DNS (controller)           │
+│  - Reads Ingress resources           │
+│  - Extracts FQDNs                    │
+│  - Applies annotations               │
+└──────────┬───────────────────────────┘
+           │
+           ↓
+┌──────────────────────────────────────┐
+│  Azure DNS (public zone)             │
+│  - CNAME: grafana.example.com        │
+│    → your-loadbalancer.azure.com     │
+│  - TXT: ownership metadata           │
+└──────────────────────────────────────┘</code></pre>
+
+        <p>
+          What's clever is that External-DNS also creates TXT records alongside each CNAME/A record. 
+          These TXT records contain metadata: which controller created this record, for which Kubernetes resource, etc. 
+          This prevents conflicts if you have multiple External-DNS instances (for example, one per environment).
+        </p>
+
+        <h2>Deployment with ArgoCD</h2>
+        <p>
+          In a pure GitOps approach, you don't deploy External-DNS manually with <code>helm install</code>. 
+          You create an ArgoCD Application that points to your Git repo, and ArgoCD takes care of everything.
+        </p>
+
+        <h3>Repository Architecture</h3>
+        <p>
+          You organize your Git repo by environment. For example:
+        </p>
+        <pre class="bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-xl p-4 overflow-x-auto"><code>argocd-apps/
+├── base/
+│   └── external-dns/
+│       ├── kustomization.yaml
+│       └── values.yaml
+└── overlays/
+    ├── staging/
+    │   └── external-dns/
+    │       ├── kustomization.yaml
+    │       └── values-override.yaml
+    ├── preprod/
+    │   └── external-dns/
+    └── prod/
+        └── external-dns/</code></pre>
+
+        <p>
+          The <code>base</code> contains the common config (Helm chart, version, etc.). 
+          Each <code>overlay</code> contains environment-specific details: different DNS zones, 
+          different Azure credentials, unique owner ID, different DNS target.
+        </p>
+
+        <h3>ArgoCD Application</h3>
+        <p>
+          You create an ArgoCD Application for each environment:
+        </p>
+        <pre class="bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-xl p-4 overflow-x-auto"><code>apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: external-dns-staging
+  namespace: argocd
+spec:
+  project: platform
+  source:
+    repoURL: https://github.com/example/argocd-apps.git
+    targetRevision: main
+    path: overlays/staging/external-dns
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: external-dns
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true</code></pre>
+
+        <p>
+          As soon as you push a change to the Git repo, ArgoCD detects the diff and applies it automatically. 
+          Pure GitOps: your desired state is in Git, ArgoCD converges the cluster to that state.
+        </p>
+
+        <h2>Configuring External-DNS for Azure</h2>
+        <p>
+          Here's a complete and commented configuration for Azure DNS. I'll detail each important option.
+        </p>
+
+        <pre class="bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-xl p-4 overflow-x-auto"><code># DNS Provider (Azure, AWS Route53, Cloudflare, etc.)
+provider: azure
+
+# Which Kubernetes resources to watch
+sources:
+  - ingress
+
+# DNS record types to manage
+managedRecordTypes:
+  - CNAME
+  - TXT
+
+# Allowed DNS zones (security filter)
+domainFilters:
+  - example.com
+  - staging.example.com
+
+# Record management policy
+# - upsert-only: only create/update (never delete)
+# - sync: full synchronization (deletes orphan records)
+policy: upsert-only
+
+# Registry to track record ownership
+registry: txt
+
+# Unique identifier for this instance (CRITICAL to avoid conflicts)
+txtOwnerId: external-dns-staging
+
+# TXT records prefix
+txtPrefix: external-dns-
+
+# Reconciliation interval (how often External-DNS scans)
+interval: 3m
+
+# Log level (info, debug, warning)
+logLevel: debug
+
+# RBAC: required to read Ingress resources
+rbac:
+  create: true
+
+serviceAccount:
+  create: true
+  name: external-dns
+
+image:
+  tag: v0.15.0
+
+# Additional arguments for External-DNS
+extraArgs:
+  # Azure Resource Group where the DNS zone is located
+  - --azure-resource-group=my-dns-rg
+  
+  # Filter Ingress: ignore those with exclude=true annotation
+  - --annotation-filter=external-dns.alpha.kubernetes.io/exclude notin (true)
+  
+  # Azure credentials file
+  - --azure-config-file=/etc/kubernetes/azure.json
+  
+  # Default target (ex: your Load Balancer or Traffic Manager)
+  - --default-targets=my-cluster-lb.eastus.cloudapp.azure.com
+  
+  # Force using default-targets even if no LoadBalancer IP
+  - --force-default-targets
+  
+  # Timeout for Azure API requests
+  - --request-timeout=2m
+
+# Volume containing Azure credentials
+extraVolumes:
+  - name: azure-config-file
+    secret:
+      secretName: azure-dns-secret
+
+extraVolumeMounts:
+  - name: azure-config-file
+    mountPath: /etc/kubernetes
+    readOnly: true</code></pre>
+
+        <h3>Azure Authentication: Service Principal</h3>
+        <p>
+          External-DNS needs credentials to modify Azure DNS zones. We use a Service Principal 
+          with the <strong>DNS Zone Contributor</strong> role on the Resource Group containing the DNS zones.
+        </p>
+        
+        <p>
+          You create the Service Principal in Azure:
+        </p>
+        <pre class="bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-xl p-4 overflow-x-auto"><code># Create the Service Principal
+az ad sp create-for-rbac --name external-dns-staging --role "DNS Zone Contributor" \
+  --scopes /subscriptions/YOUR_SUBSCRIPTION_ID/resourceGroups/my-dns-rg
+
+# Output:
+# appId: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+# password: your-client-secret
+# tenant: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx</code></pre>
+
+        <p>
+          Then, you create a Kubernetes secret with these credentials:
+        </p>
+        <pre class="bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-xl p-4 overflow-x-auto"><code># azure.json file (JSON format)
+# tenantId: YOUR_TENANT_ID
+# subscriptionId: YOUR_SUBSCRIPTION_ID
+# resourceGroup: my-dns-rg
+# aadClientId: YOUR_APP_ID
+# aadClientSecret: YOUR_CLIENT_SECRET
+
+# Create the secret
+kubectl create secret generic azure-dns-secret \
+  --from-file=azure.json=azure.json \
+  -n external-dns</code></pre>
+
+        <p>
+          In a real GitOps setup, you'll use <strong>Sealed Secrets</strong> or <strong>External Secrets Operator</strong> 
+          to avoid committing credentials in plain text in Git. You encrypt the secret with kubeseal:
+        </p>
+        <pre class="bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-xl p-4 overflow-x-auto"><code>kubeseal --format=yaml --cert=cert.pem &lt; azure-secret.yaml &gt; azure-secret-sealed.yaml</code></pre>
+
+        <h2>Properly Separating Environments</h2>
+        <p>
+          Critical point: if you have multiple environments (staging, preprod, prod), 
+          you must deploy one External-DNS instance <strong>per environment</strong>, 
+          each with a unique <code>txtOwnerId</code>.
+        </p>
+
+        <div class="overflow-x-auto my-6">
+          <table class="min-w-full glass rounded-xl">
+            <thead>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <th class="px-6 py-3 text-left">Environment</th>
+                <th class="px-6 py-3 text-left">Namespace</th>
+                <th class="px-6 py-3 text-left">Owner ID</th>
+                <th class="px-6 py-3 text-left">DNS Zone</th>
+                <th class="px-6 py-3 text-left">Target</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <td class="px-6 py-4">staging</td>
+                <td class="px-6 py-4">external-dns</td>
+                <td class="px-6 py-4">external-dns-staging</td>
+                <td class="px-6 py-4">staging.example.com</td>
+                <td class="px-6 py-4">staging-lb.cloudapp.azure.com</td>
+              </tr>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <td class="px-6 py-4">preprod</td>
+                <td class="px-6 py-4">external-dns</td>
+                <td class="px-6 py-4">external-dns-preprod</td>
+                <td class="px-6 py-4">preprod.example.com</td>
+                <td class="px-6 py-4">preprod-lb.cloudapp.azure.com</td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4">prod</td>
+                <td class="px-6 py-4">external-dns</td>
+                <td class="px-6 py-4">external-dns-prod</td>
+                <td class="px-6 py-4">example.com</td>
+                <td class="px-6 py-4">prod-lb.cloudapp.azure.com</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>
+          Why is this important? Because External-DNS uses the <code>txtOwnerId</code> to know 
+          which DNS records it "owns". If two instances have the same owner ID, they'll fight to manage the same records. 
+          You'll have unexpected deletions, conflicts, chaos.
+        </p>
+
+        <h3>Policy: upsert-only vs sync</h3>
+        <p>
+          Two modes of operation:
+        </p>
+        <ul>
+          <li>
+            <strong>upsert-only</strong>: External-DNS only creates or updates. It never deletes. 
+            This is the safe mode for production: if an Ingress disappears (because the app is temporarily down), 
+            the DNS stays in place.
+          </li>
+          <li>
+            <strong>sync</strong>: Full synchronization. If an Ingress disappears, External-DNS deletes the corresponding DNS. 
+            Useful for staging where you want to automatically clean up orphan records. 
+            But dangerous in prod if you have a deployment bug and all your Ingress resources temporarily disappear.
+          </li>
+        </ul>
+
+        <p>
+          My recommendation: <code>upsert-only</code> for preprod and prod, <code>sync</code> for staging.
+        </p>
+
+        <h2>Annotating Ingress Resources</h2>
+        <p>
+          By default, External-DNS will create a DNS record for every Ingress it finds. 
+          But you can finely control the behavior with annotations.
+        </p>
+
+        <h3>Explicit Activation</h3>
+        <pre class="bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-xl p-4 overflow-x-auto"><code>apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grafana
+  namespace: monitoring
+  annotations:
+    external-dns.alpha.kubernetes.io/enabled: "true"
+spec:
+  rules:
+    - host: grafana.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: grafana
+                port:
+                  number: 3000</code></pre>
+
+        <p>
+          If you use <code>--annotation-filter</code> in the External-DNS config, 
+          only Ingress resources with <code>enabled: "true"</code> will be considered. 
+          This is a good way to explicitly opt-in.
+        </p>
+
+        <h3>Specifying the Record Type</h3>
+        <pre class="bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-xl p-4 overflow-x-auto"><code>metadata:
+  annotations:
+    external-dns.alpha.kubernetes.io/record-type: CNAME
+    external-dns.alpha.kubernetes.io/target: my-custom-lb.azure.com</code></pre>
+
+        <p>
+          By default, External-DNS creates a CNAME to the <code>--default-targets</code> you configured. 
+          But you can override with a specific target. Useful if you have multiple Load Balancers or Traffic Managers.
+        </p>
+
+        <h3>Excluding an Ingress</h3>
+        <pre class="bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-xl p-4 overflow-x-auto"><code>metadata:
+  annotations:
+    external-dns.alpha.kubernetes.io/exclude: "true"</code></pre>
+
+        <p>
+          You want an internal-only Ingress (no public DNS)? Add this annotation. 
+          External-DNS will ignore it.
+        </p>
+
+        <h3>Complete Example with Cert-Manager</h3>
+        <p>
+          Typically, you combine External-DNS with Cert-Manager for automatic HTTPS. Here's a complete example:
+        </p>
+        <pre class="bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-xl p-4 overflow-x-auto"><code>apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grafana
+  namespace: monitoring
+  annotations:
+    # NGINX Ingress Controller
+    kubernetes.io/ingress.class: nginx
+    
+    # Cert-Manager for Let's Encrypt
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    
+    # External-DNS
+    external-dns.alpha.kubernetes.io/enabled: "true"
+    external-dns.alpha.kubernetes.io/record-type: CNAME
+    external-dns.alpha.kubernetes.io/target: prod-lb.cloudapp.azure.com
+spec:
+  rules:
+    - host: grafana.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: grafana
+                port:
+                  number: 3000
+  tls:
+    - hosts:
+        - grafana.example.com
+      secretName: grafana-tls</code></pre>
+
+        <p>
+          Complete workflow:
+        </p>
+        <ol>
+          <li>You apply this Ingress.</li>
+          <li>External-DNS sees the Ingress, creates the CNAME <code>grafana.example.com → prod-lb.cloudapp.azure.com</code> in Azure DNS.</li>
+          <li>Cert-Manager sees the Ingress, launches an ACME Let's Encrypt challenge, obtains the TLS certificate.</li>
+          <li>NGINX Ingress Controller routes HTTPS traffic to the Grafana service.</li>
+        </ol>
+        <p>
+          All of this without manual intervention. You deploy an Ingress, 2 minutes later your app is accessible over HTTPS 
+          with a valid certificate and DNS pointing to the right place.
+        </p>
+
+        <h2>TXT Records and Ownership</h2>
+        <p>
+          For each DNS record it creates, External-DNS also creates an associated TXT record. Example:
+        </p>
+        <pre class="bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-xl p-4 overflow-x-auto"><code># CNAME record
+grafana.example.com → prod-lb.cloudapp.azure.com
+
+# Associated TXT record
+external-dns-cname-grafana.example.com
+  "heritage=external-dns,external-dns/owner=external-dns-prod,external-dns/resource=ingress/monitoring/grafana"</code></pre>
+
+        <p>
+          This TXT contains:
+        </p>
+        <ul>
+          <li><code>heritage=external-dns</code>: created by External-DNS</li>
+          <li><code>owner=external-dns-prod</code>: the owner ID of the instance that created this record</li>
+          <li><code>resource=ingress/monitoring/grafana</code>: the source Kubernetes resource</li>
+        </ul>
+
+        <p>
+          Why is this crucial? Imagine you have two clusters:
+        </p>
+        <ul>
+          <li>Preprod cluster with External-DNS <code>txtOwnerId: external-dns-preprod</code></li>
+          <li>Prod cluster with External-DNS <code>txtOwnerId: external-dns-prod</code></li>
+        </ul>
+
+        <p>
+          You create an Ingress <code>grafana.example.com</code> in both clusters (config error). 
+          External-DNS preprod will try to create the record, but it will see that the TXT indicates <code>owner=external-dns-prod</code>. 
+          It will log:
+        </p>
+        <pre class="bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-xl p-4 overflow-x-auto"><code>Skipping endpoint grafana.example.com because owner id does not match
+found: "external-dns-prod", required: "external-dns-preprod"</code></pre>
+
+        <p>
+          And it won't touch it. This prevents destructive conflicts.
+        </p>
+
+        <h2>Debugging and Troubleshooting</h2>
+        <p>
+          When something doesn't work, here's how to investigate.
+        </p>
+
+        <h3>View Logs</h3>
+        <pre class="bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-xl p-4 overflow-x-auto"><code># Real-time logs
+kubectl -n external-dns logs -l app.kubernetes.io/name=external-dns --tail=100 -f
+
+# Search for a specific host
+kubectl -n external-dns logs -l app.kubernetes.io/name=external-dns | grep "grafana.example.com"</code></pre>
+
+        <h3>Restart External-DNS</h3>
+        <p>
+          Sometimes, a simple restart forces reconciliation:
+        </p>
+        <pre class="bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-xl p-4 overflow-x-auto"><code>kubectl -n external-dns rollout restart deployment external-dns</code></pre>
+
+        <h3>Check Records in Azure</h3>
+        <pre class="bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-xl p-4 overflow-x-auto"><code># List all CNAMEs
+az network dns record-set cname list -g my-dns-rg -z example.com -o table
+
+# View a specific record
+az network dns record-set cname show -g my-dns-rg -z example.com -n grafana
+
+# List TXT records
+az network dns record-set txt list -g my-dns-rg -z example.com -o table</code></pre>
+
+        <h3>Common Issues</h3>
+        <div class="overflow-x-auto my-6">
+          <table class="min-w-full glass rounded-xl">
+            <thead>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <th class="px-6 py-3 text-left">Symptom</th>
+                <th class="px-6 py-3 text-left">Probable Cause</th>
+                <th class="px-6 py-3 text-left">Solution</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <td class="px-6 py-4">No DNS record created</td>
+                <td class="px-6 py-4">Ingress not detected by External-DNS</td>
+                <td class="px-6 py-4">Check: <code>enabled: "true"</code> annotation present, <code>domainFilters</code> matches the host, 
+                <code>sources: ingress</code> configured, External-DNS logs to see if it sees the Ingress</td>
+              </tr>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <td class="px-6 py-4">Error: <code>Conflict: The CNAME record could not be created</code></td>
+                <td class="px-6 py-4">An A or CNAME record with the same name already exists</td>
+                <td class="px-6 py-4">Manually delete the old record:<br>
+                <code>az network dns record-set a delete -g my-dns-rg -z example.com -n grafana --yes</code></td>
+              </tr>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <td class="px-6 py-4">Log: <code>Skipping endpoint ... because owner id does not match</code></td>
+                <td class="px-6 py-4">The TXT record belongs to another instance (different owner)</td>
+                <td class="px-6 py-4">Either you have two External-DNS with the same domain (config error), 
+                or you need to delete the conflicting TXT:<br>
+                <code>az network dns record-set txt delete -g my-dns-rg -z example.com -n external-dns-cname-grafana --yes</code></td>
+              </tr>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <td class="px-6 py-4">Records deleted while Ingress still exists</td>
+                <td class="px-6 py-4">Policy in <code>sync</code> mode and Ingress temporarily not detected</td>
+                <td class="px-6 py-4">Switch to <code>upsert-only</code> for prod. Check annotation-filters. 
+                Review logs to see why Ingress is no longer seen.</td>
+              </tr>
+              <tr class="border-b border-gray-200 dark:border-gray-700">
+                <td class="px-6 py-4">Azure error: <code>failed to get resource group</code></td>
+                <td class="px-6 py-4">Invalid Azure credentials or wrong Resource Group</td>
+                <td class="px-6 py-4">Check the <code>azure-dns-secret</code> secret: correct <code>resourceGroup</code>, 
+                valid <code>aadClientSecret</code>, Service Principal has DNS Zone Contributor role</td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4">Slow DNS propagation</td>
+                <td class="px-6 py-4">Local DNS cache or high TTL</td>
+                <td class="px-6 py-4">Wait 60-120 seconds (default TTL). Flush local DNS cache: 
+                <code>sudo systemd-resolve --flush-caches</code> (Linux) or <code>dscacheutil -flushcache</code> (macOS)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Best Practices</h2>
+        <ul>
+          <li>
+            <strong>Unique txtOwnerId per environment</strong>: Never use the same owner ID on two different clusters. 
+            Otherwise you'll have ownership conflicts.
+          </li>
+          <li>
+            <strong>policy: upsert-only in prod</strong>: Don't risk automatic deletions in production. 
+            If an Ingress temporarily disappears due to a deployment bug, you don't want the DNS to disappear.
+          </li>
+          <li>
+            <strong>policy: sync in staging</strong>: However, in staging, auto-cleanup is convenient. 
+            You deploy, test, destroy the app, DNS is automatically cleaned up.
+          </li>
+          <li>
+            <strong>Restrictive domainFilters</strong>: Don't give access to all your DNS zones. 
+            If staging External-DNS can modify the prod zone, it's dangerous. Use subdomains per environment.
+          </li>
+          <li>
+            <strong>annotation-filter for opt-in</strong>: Rather than processing all Ingress by default, 
+            require an explicit <code>enabled: "true"</code> annotation. This avoids surprises.
+          </li>
+          <li>
+            <strong>Delete A records before creating a CNAME</strong>: Azure (and most DNS providers) 
+            won't let you have a CNAME and an A record with the same name. If you're migrating from a manual config with A records, 
+            delete them first.
+          </li>
+          <li>
+            <strong>Monitor External-DNS</strong>: Set up alerts if External-DNS crashloops or if logs show 
+            repeated errors. It's a critical component: if it fails, your new deployments won't have DNS.
+          </li>
+        </ul>
+
+        <h2>Going Further: Multi-Provider, HTTPRoute, etc.</h2>
+        <p>
+          External-DNS isn't limited to Azure and Ingress. You can:
+        </p>
+        <ul>
+          <li>
+            <strong>Use multiple providers</strong>: deploy one instance for Azure DNS, 
+            another for Route53 if you're multi-cloud.
+          </li>
+          <li>
+            <strong>Watch LoadBalancer Services</strong>: <code>sources: service</code>. 
+            External-DNS will create an A record with the LoadBalancer's public IP.
+          </li>
+          <li>
+            <strong>Gateway API (HTTPRoute)</strong>: <code>sources: gateway-httproute</code>. 
+            If you use the new Gateway API instead of Ingress, External-DNS supports it.
+          </li>
+          <li>
+            <strong>Istio VirtualService</strong>: <code>sources: istio-virtualservice</code>. 
+            Same for Istio meshes.
+          </li>
+        </ul>
+
+        <p>
+          In short, External-DNS is very extensible. The principle remains the same: it watches Kubernetes resources, 
+          extracts FQDNs, and syncs with an external DNS provider.
+        </p>
+
+        <h2>Conclusion</h2>
+        <p>
+          External-DNS is one of those tools that changes your life when you manage dozens or hundreds of applications 
+          on Kubernetes. No more manually touching DNS with every deployment. 
+          You deploy an Ingress, DNS is created automatically. You delete the app, DNS disappears (if you're in sync mode).
+        </p>
+        <p>
+          Combined with ArgoCD for GitOps and Cert-Manager for TLS certificates, you have a fully automated deployment workflow: 
+          you push code, ArgoCD deploys, External-DNS creates the DNS, Cert-Manager obtains the certificate, 
+          and your app is accessible over HTTPS with a proper domain. All in a few minutes, without manual intervention.
+        </p>
+        <p>
+          Just be careful to properly separate your environments with unique owner IDs, use <code>upsert-only</code> 
+          in prod to avoid bad surprises, and monitor External-DNS like any critical component.
+        </p>
+        <p>
+          If you're not using it yet, try it in staging. You'll quickly see the gain in productivity 
+          and reliability. And you'll wonder how you managed before.
+        </p>
+
+        <div class="mt-12 p-6 glass rounded-xl">
+          <h3 class="text-xl font-bold mb-4">Resources to Go Further</h3>
+          <ul class="space-y-2">
+            <li><a href="https://github.com/kubernetes-sigs/external-dns" target="_blank" rel="noopener noreferrer" class="text-[var(--color-brand-red)] hover:underline">External-DNS on GitHub (Kubernetes SIGs)</a></li>
+            <li><a href="https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/azure.md" target="_blank" rel="noopener noreferrer" class="text-[var(--color-brand-red)] hover:underline">Official Azure DNS Tutorial</a></li>
+            <li><a href="https://artifacthub.io/packages/helm/bitnami/external-dns" target="_blank" rel="noopener noreferrer" class="text-[var(--color-brand-red)] hover:underline">Bitnami External-DNS Helm Chart</a></li>
+            <li><a href="https://argo-cd.readthedocs.io/" target="_blank" rel="noopener noreferrer" class="text-[var(--color-brand-red)] hover:underline">ArgoCD Documentation</a></li>
+            <li><a href="https://cert-manager.io/" target="_blank" rel="noopener noreferrer" class="text-[var(--color-brand-red)] hover:underline">Cert-Manager for Let's Encrypt</a></li>
+          </ul>
+        </div>
+
+        <div class="glass rounded-2xl p-6 mt-8">
+          <h3 class="text-xl font-bold mb-4">Questions or Comments?</h3>
+          <p class="mb-4">
+            Was this article helpful? Have questions about External-DNS, ArgoCD, or DNS automation on Kubernetes? 
+            Feel free to reach out!
+          </p>
+          <a href="mailto:contact.koreshlab@gmail.com" class="btn inline-flex items-center gap-2">
+            <iconify-icon icon="solar:letter-outline" class="w-5 h-5"></iconify-icon>
+            Contact Me
+          </a>
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .prose {
+    color: var(--color-text);
+  }
+  
+  .prose h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+    color: var(--color-heading);
+  }
+  
+  .prose h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: var(--color-heading);
+  }
+  
+  .prose h4 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--color-heading);
+  }
+  
+  .prose p {
+    margin-bottom: 1rem;
+    line-height: 1.75;
+  }
+  
+  .prose ul, .prose ol {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+  }
+  
+  .prose li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .prose code {
+    background: rgba(220, 38, 38, 0.1);
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+    font-size: 0.9em;
+    color: var(--color-brand-red);
+  }
+  
+  .prose pre code {
+    background: transparent;
+    padding: 0;
+    color: inherit;
+  }
+  
+  .prose table td, .prose table th {
+    padding: 0.75rem 1rem;
+  }
+  
+  .prose a {
+    color: var(--color-brand-red);
+    text-decoration: none;
+  }
+  
+  .prose a:hover {
+    text-decoration: underline;
+  }
+</style>

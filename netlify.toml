@@ -2,24 +2,17 @@
   command = "npm run build"
   publish = "dist"
 
-# Block access to sensitive files
+# Redirection vers la page de maintenance
+# Toutes les routes sont redirigées vers /maintenance.html
+# SAUF la page de maintenance elle-même et les fichiers statiques nécessaires
 [[redirects]]
-  from = "/.env*"
-  to = "/404"
-  status = 404
+  from = "/maintenance"
+  to = "/maintenance.html"
+  status = 200
 
-[[redirects]]
-  from = "/config.json"
-  to = "/404"
-  status = 404
-
-[[redirects]]
-  from = "/*.log"
-  to = "/404"
-  status = 404
-
-# Main redirect (keep as last)
+# Redirection de toutes les autres routes vers la page de maintenance
 [[redirects]]
   from = "/*"
-  to = "/index.html"
+  to = "/maintenance.html"
   status = 200
+  force = true
