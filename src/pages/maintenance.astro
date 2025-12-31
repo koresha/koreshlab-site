@@ -3,41 +3,767 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="Maintenance — Koresha">
-  <div class="min-h-screen flex items-center justify-center px-4">
-    <div class="max-w-2xl mx-auto text-center space-y-8">
-      <div class="glass rounded-2xl p-12">
-        <iconify-icon 
-          icon="solar:maintenance-outline" 
-          class="w-24 h-24 text-brand-red mx-auto mb-6"
-        ></iconify-icon>
-        
-        <h1 class="h1 mb-4">Site en maintenance</h1>
-        
-        <p class="p text-lg mb-6">
-          Nous effectuons actuellement des travaux de maintenance sur le site. 
-          Nous serons de retour très bientôt !
-        </p>
-        
-        <div class="space-y-4">
-          <p class="text-sm text-gray-500 dark:text-gray-400">
-            Merci de votre patience.
-          </p>
-          
-          <div class="pt-6 border-t border-gray-200 dark:border-gray-700">
-            <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">
-              Pour toute question urgente, vous pouvez nous contacter :
-            </p>
-            <a 
-              href="mailto:contact.koreshlab@gmail.com" 
-              class="btn inline-flex"
-            >
-              <iconify-icon icon="solar:letter-outline" class="w-5 h-5"></iconify-icon>
-              Nous contacter
-            </a>
+  <div class="maintenance-container">
+    <!-- Animated Background Particles -->
+    <div class="particles">
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+      <div class="particle"></div>
+    </div>
+
+    <!-- Scanlines Effect -->
+    <div class="scanlines"></div>
+
+    <!-- Main Content -->
+    <div class="maintenance-wrapper">
+      <!-- Terminal Window -->
+      <div class="terminal-window">
+        <!-- Terminal Header -->
+        <div class="terminal-header">
+          <div class="terminal-buttons">
+            <span class="terminal-btn close"></span>
+            <span class="terminal-btn minimize"></span>
+            <span class="terminal-btn maximize"></span>
+          </div>
+          <div class="terminal-title">
+            <iconify-icon icon="mdi:console" class="w-4 h-4"></iconify-icon>
+            <span>koreshlab-sre@maintenance:~</span>
+          </div>
+        </div>
+
+        <!-- Terminal Body -->
+        <div class="terminal-body" id="terminal">
+          <div class="terminal-line">
+            <span class="terminal-prompt">$</span>
+            <span class="terminal-command typing" data-command="kubectl get pods --all-namespaces"></span>
           </div>
         </div>
       </div>
+
+      <!-- Status Cards -->
+      <div class="status-grid">
+        <div class="status-card">
+          <div class="status-icon">
+            <iconify-icon icon="mdi:kubernetes" class="w-8 h-8"></iconify-icon>
+          </div>
+          <div class="status-content">
+            <div class="status-label">Kubernetes</div>
+            <div class="status-value">
+              <span class="status-indicator active"></span>
+              <span>Operational</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="status-card">
+          <div class="status-icon">
+            <iconify-icon icon="mdi:database" class="w-8 h-8"></iconify-icon>
+          </div>
+          <div class="status-content">
+            <div class="status-label">Database</div>
+            <div class="status-value">
+              <span class="status-indicator active"></span>
+              <span>Syncing</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="status-card">
+          <div class="status-icon">
+            <iconify-icon icon="mdi:cloud" class="w-8 h-8"></iconify-icon>
+          </div>
+          <div class="status-content">
+            <div class="status-label">CDN</div>
+            <div class="status-value">
+              <span class="status-indicator active"></span>
+              <span>Propagating</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="status-card">
+          <div class="status-icon">
+            <iconify-icon icon="mdi:security" class="w-8 h-8"></iconify-icon>
+          </div>
+          <div class="status-content">
+            <div class="status-label">Security</div>
+            <div class="status-value">
+              <span class="status-indicator active"></span>
+              <span>Hardening</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Message -->
+      <div class="main-message">
+        <div class="glitch-wrapper">
+          <h1 class="glitch" data-text="SYSTEM MAINTENANCE">SYSTEM MAINTENANCE</h1>
+        </div>
+        <p class="subtitle">Infrastructure upgrade in progress</p>
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
+        </div>
+        <p class="progress-text">Deploying updates... <span id="progress-percent">0%</span></p>
+      </div>
+
+      <!-- Contact Section -->
+      <div class="contact-section">
+        <p class="contact-label">For urgent matters:</p>
+        <a href="mailto:contact.koreshlab@gmail.com" class="contact-btn">
+          <iconify-icon icon="mdi:email-fast" class="w-5 h-5"></iconify-icon>
+          <span>contact.koreshlab@gmail.com</span>
+        </a>
+      </div>
     </div>
   </div>
-</Layout>
 
+  <style>
+    .maintenance-container {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f1419 100%);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+    }
+
+    /* Particles Animation */
+    .particles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: #00ff88;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88;
+      animation: float-particle 20s infinite ease-in-out;
+      opacity: 0.6;
+    }
+
+    .particle:nth-child(1) {
+      left: 10%;
+      animation-delay: 0s;
+      animation-duration: 15s;
+    }
+
+    .particle:nth-child(2) {
+      left: 30%;
+      animation-delay: 2s;
+      animation-duration: 18s;
+    }
+
+    .particle:nth-child(3) {
+      left: 50%;
+      animation-delay: 4s;
+      animation-duration: 22s;
+    }
+
+    .particle:nth-child(4) {
+      left: 70%;
+      animation-delay: 6s;
+      animation-duration: 16s;
+    }
+
+    .particle:nth-child(5) {
+      left: 90%;
+      animation-delay: 8s;
+      animation-duration: 20s;
+    }
+
+    @keyframes float-particle {
+      0%, 100% {
+        transform: translateY(100vh) translateX(0) scale(0);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.6;
+      }
+      50% {
+        transform: translateY(0) translateX(50px) scale(1);
+        opacity: 1;
+      }
+      90% {
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateY(-100vh) translateX(0) scale(0);
+        opacity: 0;
+      }
+    }
+
+    /* Scanlines Effect */
+    .scanlines {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background: linear-gradient(
+        transparent 50%,
+        rgba(0, 255, 136, 0.03) 50%
+      );
+      background-size: 100% 4px;
+      pointer-events: none;
+      z-index: 2;
+      animation: scanline 8s linear infinite;
+    }
+
+    @keyframes scanline {
+      0% {
+        transform: translateY(0);
+      }
+      100% {
+        transform: translateY(4px);
+      }
+    }
+
+    /* Main Wrapper */
+    .maintenance-wrapper {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 1400px;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    /* Terminal Window */
+    .terminal-window {
+      background: rgba(10, 14, 39, 0.95);
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      border-radius: 12px;
+      box-shadow: 
+        0 0 30px rgba(0, 255, 136, 0.2),
+        inset 0 0 30px rgba(0, 255, 136, 0.05);
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      animation: terminal-glow 3s ease-in-out infinite;
+    }
+
+    @keyframes terminal-glow {
+      0%, 100% {
+        box-shadow: 
+          0 0 30px rgba(0, 255, 136, 0.2),
+          inset 0 0 30px rgba(0, 255, 136, 0.05);
+      }
+      50% {
+        box-shadow: 
+          0 0 50px rgba(0, 255, 136, 0.4),
+          inset 0 0 30px rgba(0, 255, 136, 0.1);
+      }
+    }
+
+    .terminal-header {
+      background: rgba(0, 0, 0, 0.4);
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      border-bottom: 1px solid rgba(0, 255, 136, 0.2);
+    }
+
+    .terminal-buttons {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .terminal-btn {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .terminal-btn.close {
+      background: #ff5f56;
+    }
+
+    .terminal-btn.minimize {
+      background: #ffbd2e;
+    }
+
+    .terminal-btn.maximize {
+      background: #27c93f;
+    }
+
+    .terminal-title {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #00ff88;
+      font-size: 0.875rem;
+      font-weight: 500;
+      flex: 1;
+    }
+
+    .terminal-body {
+      padding: 1.5rem;
+      min-height: 400px;
+      color: #00ff88;
+      font-size: 0.875rem;
+      line-height: 1.8;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', monospace;
+    }
+
+    .terminal-line {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+      animation: fadeInUp 0.5s ease-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .terminal-prompt {
+      color: #00ff88;
+      font-weight: bold;
+    }
+
+    .terminal-command {
+      color: #ffffff;
+    }
+
+    .terminal-command.typing::after {
+      content: '▊';
+      animation: blink 1s infinite;
+      color: #00ff88;
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
+    .terminal-output {
+      color: #888;
+      margin-left: 1.5rem;
+    }
+
+    /* Status Grid */
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .status-card {
+      background: rgba(10, 14, 39, 0.6);
+      border: 1px solid rgba(0, 255, 136, 0.2);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+      animation: cardFloat 6s ease-in-out infinite;
+    }
+
+    .status-card:nth-child(1) { animation-delay: 0s; }
+    .status-card:nth-child(2) { animation-delay: 1.5s; }
+    .status-card:nth-child(3) { animation-delay: 3s; }
+    .status-card:nth-child(4) { animation-delay: 4.5s; }
+
+    @keyframes cardFloat {
+      0%, 100% {
+        transform: translateY(0);
+        box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
+      }
+      50% {
+        transform: translateY(-5px);
+        box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+      }
+    }
+
+    .status-card:hover {
+      border-color: rgba(0, 255, 136, 0.5);
+      transform: translateY(-3px);
+      box-shadow: 0 0 40px rgba(0, 255, 136, 0.4);
+    }
+
+    .status-icon {
+      color: #00ff88;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .status-content {
+      flex: 1;
+    }
+
+    .status-label {
+      color: #888;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.25rem;
+    }
+
+    .status-value {
+      color: #00ff88;
+      font-size: 0.875rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .status-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #00ff88;
+      box-shadow: 0 0 10px #00ff88;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .status-indicator.active {
+      background: #00ff88;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 0.7;
+        transform: scale(1.2);
+      }
+    }
+
+    /* Main Message */
+    .main-message {
+      text-align: center;
+      margin: 2rem 0;
+    }
+
+    .glitch-wrapper {
+      position: relative;
+      margin-bottom: 1rem;
+    }
+
+    .glitch {
+      font-size: clamp(2rem, 8vw, 5rem);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #00ff88;
+      position: relative;
+      text-shadow: 
+        0 0 10px #00ff88,
+        0 0 20px #00ff88,
+        0 0 40px #00ff88;
+      animation: glitch-anim 3s infinite;
+    }
+
+    .glitch::before,
+    .glitch::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .glitch::before {
+      left: 2px;
+      text-shadow: -2px 0 #ff00ff;
+      clip: rect(44px, 450px, 56px, 0);
+      animation: glitch-anim-1 0.5s infinite linear alternate-reverse;
+    }
+
+    .glitch::after {
+      left: -2px;
+      text-shadow: 2px 0 #00ffff;
+      clip: rect(44px, 450px, 56px, 0);
+      animation: glitch-anim-2 0.5s infinite linear alternate-reverse;
+    }
+
+    @keyframes glitch-anim {
+      0% { transform: translate(0); }
+      20% { transform: translate(-2px, 2px); }
+      40% { transform: translate(-2px, -2px); }
+      60% { transform: translate(2px, 2px); }
+      80% { transform: translate(2px, -2px); }
+      100% { transform: translate(0); }
+    }
+
+    @keyframes glitch-anim-1 {
+      0% { clip: rect(31px, 9999px, 94px, 0); }
+      20% { clip: rect(54px, 9999px, 66px, 0); }
+      40% { clip: rect(28px, 9999px, 112px, 0); }
+      60% { clip: rect(42px, 9999px, 75px, 0); }
+      80% { clip: rect(38px, 9999px, 103px, 0); }
+      100% { clip: rect(17px, 9999px, 85px, 0); }
+    }
+
+    @keyframes glitch-anim-2 {
+      0% { clip: rect(65px, 9999px, 100px, 0); }
+      20% { clip: rect(41px, 9999px, 74px, 0); }
+      40% { clip: rect(87px, 9999px, 110px, 0); }
+      60% { clip: rect(23px, 9999px, 92px, 0); }
+      80% { clip: rect(76px, 9999px, 105px, 0); }
+      100% { clip: rect(12px, 9999px, 98px, 0); }
+    }
+
+    .subtitle {
+      color: #888;
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      letter-spacing: 0.05em;
+    }
+
+    .progress-bar {
+      width: 100%;
+      max-width: 600px;
+      height: 8px;
+      background: rgba(0, 255, 136, 0.1);
+      border-radius: 4px;
+      margin: 2rem auto;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-bar::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(0, 255, 136, 0.3),
+        transparent
+      );
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #00ff88, #00cc6a);
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+      border-radius: 4px;
+      width: 0%;
+      animation: progress 10s ease-in-out infinite;
+    }
+
+    @keyframes progress {
+      0% { width: 0%; }
+      50% { width: 75%; }
+      100% { width: 100%; }
+    }
+
+    .progress-text {
+      color: #00ff88;
+      font-size: 0.875rem;
+      margin-top: 1rem;
+    }
+
+    .progress-text span {
+      font-weight: bold;
+    }
+
+    /* Contact Section */
+    .contact-section {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .contact-label {
+      color: #888;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .contact-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 2rem;
+      background: rgba(0, 255, 136, 0.1);
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      border-radius: 8px;
+      color: #00ff88;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .contact-btn:hover {
+      background: rgba(0, 255, 136, 0.2);
+      border-color: rgba(0, 255, 136, 0.5);
+      box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+      transform: translateY(-2px);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .maintenance-container {
+        padding: 1rem;
+      }
+
+      .terminal-body {
+        min-height: 300px;
+        font-size: 0.75rem;
+      }
+
+      .status-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .glitch {
+        font-size: 2.5rem;
+      }
+    }
+  </style>
+
+  <script>
+    // Terminal Animation
+    const terminal = document.getElementById('terminal');
+    const commands = [
+      { cmd: 'kubectl get pods --all-namespaces', output: 'NAMESPACE     NAME                              READY   STATUS    RESTARTS   AGE\nkube-system   coredns-xxx                       1/1     Running   0          5d\nkube-system   kube-proxy-xxx                   1/1     Running   0          5d' },
+      { cmd: 'helm list --all-namespaces', output: 'NAME            NAMESPACE       REVISION    STATUS      CHART\nnginx-ingress   ingress-nginx   1           deployed    nginx-ingress-4.0.0' },
+      { cmd: 'kubectl get nodes', output: 'NAME           STATUS   ROLES           AGE   VERSION\nnode-1         Ready    control-plane   5d    v1.28.0\nnode-2         Ready    <none>          5d    v1.28.0' },
+      { cmd: 'terraform plan', output: 'Plan: 12 to add, 3 to change, 1 to destroy.\n\nChanges to Outputs:\n  + infrastructure_version = "2.0.0"' },
+      { cmd: 'ansible-playbook deploy.yml', output: 'PLAY [Deploy Infrastructure] ****************************\nTASK [Gathering Facts] ****************************\nok: [localhost]\nTASK [Deploy services] ****************************\nchanged: [localhost]' },
+      { cmd: 'docker ps', output: 'CONTAINER ID   IMAGE                    STATUS          PORTS\nabc123def456   nginx:latest             Up 2 hours      0.0.0.0:80->80/tcp\n789ghi012jkl   postgres:15              Up 2 hours      5432/tcp' },
+      { cmd: 'kubectl rollout status deployment/app', output: 'deployment "app" successfully rolled out' },
+      { cmd: 'git status', output: 'On branch main\nYour branch is up to date with origin/main.\n\nChanges to be committed:\n  (use "git reset HEAD <file>..." to unstage)\n        modified:   src/pages/maintenance.astro' }
+    ];
+
+    let commandIndex = 0;
+    let isTyping = false;
+
+    function addTerminalLine(command, output = null) {
+      const line = document.createElement('div');
+      line.className = 'terminal-line';
+      
+      const prompt = document.createElement('span');
+      prompt.className = 'terminal-prompt';
+      prompt.textContent = '$';
+      
+      const cmd = document.createElement('span');
+      cmd.className = 'terminal-command';
+      cmd.textContent = command;
+      
+      line.appendChild(prompt);
+      line.appendChild(cmd);
+      terminal.appendChild(line);
+
+      if (output) {
+        setTimeout(() => {
+          const outputLine = document.createElement('div');
+          outputLine.className = 'terminal-output';
+          outputLine.textContent = output;
+          terminal.appendChild(outputLine);
+        }, 1000);
+      }
+    }
+
+    function typeNextCommand() {
+      if (isTyping) return;
+      isTyping = true;
+
+      const { cmd, output } = commands[commandIndex];
+      
+      const line = document.createElement('div');
+      line.className = 'terminal-line';
+      
+      const prompt = document.createElement('span');
+      prompt.className = 'terminal-prompt';
+      prompt.textContent = '$';
+      
+      const cmdSpan = document.createElement('span');
+      cmdSpan.className = 'terminal-command typing';
+      cmdSpan.textContent = '';
+      
+      line.appendChild(prompt);
+      line.appendChild(cmdSpan);
+      terminal.appendChild(line);
+
+      let charIndex = 0;
+      const typingInterval = setInterval(() => {
+        if (charIndex < cmd.length) {
+          cmdSpan.textContent += cmd[charIndex];
+          charIndex++;
+        } else {
+          clearInterval(typingInterval);
+          cmdSpan.classList.remove('typing');
+          
+          if (output) {
+            setTimeout(() => {
+              const outputLine = document.createElement('div');
+              outputLine.className = 'terminal-output';
+              outputLine.textContent = output;
+              terminal.appendChild(outputLine);
+              terminal.scrollTop = terminal.scrollHeight;
+            }, 500);
+          }
+
+          commandIndex = (commandIndex + 1) % commands.length;
+          isTyping = false;
+          
+          // Auto-scroll
+          terminal.scrollTop = terminal.scrollHeight;
+        }
+      }, 50);
+    }
+
+    // Start typing commands
+    setTimeout(() => {
+      typeNextCommand();
+      setInterval(typeNextCommand, 4000);
+    }, 1000);
+
+    // Progress bar animation
+    const progressPercent = document.getElementById('progress-percent');
+    let progress = 0;
+    const progressInterval = setInterval(() => {
+      progress = (progress + Math.random() * 2) % 100;
+      progressPercent.textContent = Math.floor(progress) + '%';
+    }, 200);
+
+    // Auto-scroll terminal
+    setInterval(() => {
+      terminal.scrollTop = terminal.scrollHeight;
+    }, 100);
+  </script>
+</Layout>
