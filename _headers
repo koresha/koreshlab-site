@@ -1,5 +1,4 @@
 # Optimized security headers - Production ready
-# CSP complètement désactivé pour éviter tout blocage
 
 /*
   X-Frame-Options: DENY
@@ -7,6 +6,15 @@
   X-XSS-Protection: 1; mode=block
   Referrer-Policy: strict-origin-when-cross-origin
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+
+# CSP sécurisé pour la page de maintenance
+# Autorise uniquement les ressources nécessaires avec domaines explicites
+# Vérifié : scripts inline, styles inline, Google Fonts, Iconify, CSS/JS Astro
+/maintenance
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://code.iconify.design https://*.iconify.design; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https://api.iconify.design https://cdn.iconify.design; connect-src 'self' https://api.iconify.design https://cdn.iconify.design https://*.iconify.design https://fonts.googleapis.com https://fonts.gstatic.com; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self';
+
+/maintenance/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://code.iconify.design https://*.iconify.design; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https://api.iconify.design https://cdn.iconify.design; connect-src 'self' https://api.iconify.design https://cdn.iconify.design https://*.iconify.design https://fonts.googleapis.com https://fonts.gstatic.com; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self';
 
 # Protect sensitive assets
 /logo-koresha.png
