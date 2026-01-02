@@ -1,4 +1,5 @@
 # Optimized security headers - Production ready
+# CSP complètement désactivé pour éviter tout blocage
 
 /*
   X-Frame-Options: DENY
@@ -6,19 +7,6 @@
   X-XSS-Protection: 1; mode=block
   Referrer-Policy: strict-origin-when-cross-origin
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
-  
-# CSP plus permissif pour la page de maintenance
-# Autorise toutes les ressources nécessaires (scripts inline, fonts, icons)
-/*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://code.iconify.design https://*.iconify.design; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://fonts.googleapis.com data:; img-src 'self' data: https: blob:; connect-src 'self' https://api.iconify.design https://cdn.iconify.design https://*.iconify.design https://fonts.googleapis.com https://fonts.gstatic.com; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; worker-src 'self' blob:;
-
-# CSP spécifique pour la page de maintenance - très permissif pour éviter les blocages
-# Autorise toutes les ressources pour éviter tout blocage CSP
-/maintenance
-  Content-Security-Policy: default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; script-src * 'unsafe-inline' 'unsafe-eval' data: blob:; style-src * 'unsafe-inline' data:; font-src * data:; img-src * data: blob:; connect-src *; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self';
-
-/maintenance/*
-  Content-Security-Policy: default-src * 'unsafe-inline' 'unsafe-eval' data: blob:; script-src * 'unsafe-inline' 'unsafe-eval' data: blob:; style-src * 'unsafe-inline' data:; font-src * data:; img-src * data: blob:; connect-src *; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self';
 
 # Protect sensitive assets
 /logo-koresha.png
