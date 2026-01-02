@@ -4,12 +4,33 @@
 
 # Redirection vers la page de maintenance
 # Astro génère /maintenance/index.html avec format: directory
-# Les fichiers statiques (.js, .css, .png, .svg, etc.) sont automatiquement servis par Netlify
-# avant l'application des redirections
 
-# Redirection de toutes les routes vers la page de maintenance
+# IMPORTANT: Netlify sert automatiquement les fichiers statiques existants
+# avant d'appliquer les redirections. Mais pour être sûr, on liste explicitement
+# les exclusions AVANT la redirection générale (ordre important)
+
+# Servir les fichiers Astro (CSS, JS) normalement - pas de redirection
+[[redirects]]
+  from = "/_astro/*"
+  to = "/_astro/:splat"
+  status = 200
+  force = false
+
+# Servir les fichiers publics normalement
+[[redirects]]
+  from = "/fav.svg"
+  to = "/fav.svg"
+  status = 200
+  force = false
+
+[[redirects]]
+  from = "/fav.png"
+  to = "/fav.png"
+  status = 200
+  force = false
+
+# Redirection de toutes les autres routes vers la page de maintenance
 [[redirects]]
   from = "/*"
   to = "/maintenance/"
   status = 200
-  force = true
