@@ -30,7 +30,9 @@
   force = false
 
 # Redirection de toutes les autres routes vers la page de maintenance
+# force = true pour forcer la redirection même si un fichier existe (comme index.html)
 [[redirects]]
   from = "/*"
   to = "/maintenance/"
   status = 200
+  force = true
