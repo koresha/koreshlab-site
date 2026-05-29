@@ -5,7 +5,6 @@ export const GET: APIRoute = () => {
   const body = [
     "User-agent: *",
     "Allow: /",
-    "Disallow: /maintenance/",
     "",
     `Sitemap: ${new URL("/sitemap.xml", site.siteUrl).toString()}`,
   ].join("\n");
