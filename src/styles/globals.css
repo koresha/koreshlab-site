@@ -986,6 +986,15 @@ body.portfolio-home-body .hero__proof > div {
   text-transform: uppercase;
 }
 
+.section-heading .eyebrow {
+  min-height: 1.48rem;
+  margin-bottom: 0.72rem;
+  padding: 0.18rem 0.52rem;
+  font-size: 0.66rem;
+  font-weight: 680;
+  letter-spacing: 0.06em;
+}
+
 .panel {
   position: relative;
   overflow: hidden;

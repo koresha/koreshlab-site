@@ -540,8 +540,8 @@ export const portfolioByLocale: Record<Locale, PortfolioContent> = {
     ],
     contact: {
       badge: "Contact",
-      title: "SRE, DevOps or platform engineering role? Let’s talk.",
-      body: "Send a note for a role, a mission or a technical topic around SRE, DevOps and production platforms.",
+      title: "Open to opportunities that match my skills.",
+      body: "Send a note if my background fits a role, a mission or a technical topic. I’m open to any relevant opportunity.",
       bullets: [],
     },
   },
@@ -859,8 +859,8 @@ export const portfolioByLocale: Record<Locale, PortfolioContent> = {
     ],
     contact: {
       badge: "Contact",
-      title: "Poste SRE, DevOps ou platform engineering : on peut en discuter.",
-      body: "Écrivez-moi pour un poste, une mission ou un sujet technique autour du SRE, du DevOps et des plateformes de production.",
+      title: "Ouvert aux propositions qui correspondent à mes compétences.",
+      body: "Écrivez-moi si mon profil peut correspondre à un poste, une mission ou un sujet technique. Je suis ouvert à toute proposition pertinente.",
       bullets: [],
     },
   },
