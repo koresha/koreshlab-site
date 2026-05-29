@@ -1,4 +1,4 @@
-const CACHE_NAME = "core-sh-static-v4";
+const CACHE_NAME = "kore-sh-static-v5";
 const APP_SHELL = [
   "/",
   "/fr/",
