@@ -1,0 +1,57 @@
+---
+import type { CaseStudy } from "../data/caseStudies";
+import { uiByLocale, type Locale } from "../data/i18n";
+
+const { caseStudies, lang = "en" } = Astro.props as {
+  caseStudies: CaseStudy[];
+  lang?: Locale;
+};
+const ui = uiByLocale[lang];
+---
+
+<div class="case-grid">
+  {
+    caseStudies.map((study, index) => (
+      <article class="panel case-study" aria-labelledby={`case-study-${index}`}>
+        <div class="case-study__eyebrow">{study.sector}</div>
+        <h3 id={`case-study-${index}`}>{study.title}</h3>
+        <p class="case-study__problem">{study.problem}</p>
+
+        <div class="case-study__block">
+          <h4>{ui.caseLabels.constraints}</h4>
+          <ul>
+            {study.constraints.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="case-study__block">
+          <h4>{ui.caseLabels.intervention}</h4>
+          <ul>
+            {study.actions.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="case-study__block">
+          <h4>{ui.caseLabels.outcome}</h4>
+          <ul>
+            {study.outcomes.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="chip-list" aria-label={ui.technicalStack}>
+          {study.stack.map((item) => (
+            <span class="chip">{item}</span>
+          ))}
+        </div>
+
+        <p class="case-study__note">{study.confidentialityNote}</p>
+      </article>
+    ))
+  }
+</div>

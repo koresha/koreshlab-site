@@ -1,59 +1,162 @@
 ---
-import '../styles/globals.css';
+import "../styles/globals.css";
+import { siteByLocale, switchLocalePath, type Locale } from "../data/i18n";
 
 export interface Props {
-  title: string;
+  title?: string;
   description?: string;
   image?: string;
+  robots?: string;
+  lang?: Locale;
+  bodyClass?: string;
+  preloadImages?: Array<{
+    href: string;
+    type?: string;
+    media?: string;
+  }>;
 }
 
-const { title, description = "SRE and DevSecOps engineer specialized in Kubernetes, cloud infrastructure, automation and security.", image = "/og-cover.png" } = Astro.props;
+const {
+  lang = "en",
+  image = "/og-cover.svg",
+  robots,
+  bodyClass,
+  preloadImages = [],
+} = Astro.props;
+
+const site = siteByLocale[lang];
+const title = Astro.props.title ?? site.title;
+const description = Astro.props.description ?? site.description;
+const robotsPolicy = robots ?? site.robotsPolicy;
+const canonical = new URL(Astro.url.pathname, site.siteUrl).toString();
+const hasLocalizedAlternate =
+  ["/", "/fr/", "/blog/", "/fr/blog/"].includes(Astro.url.pathname) ||
+  /^\/(?:fr\/)?blog\/[^/]+\/?$/.test(Astro.url.pathname);
+const alternateLocale = lang === "fr" ? "en" : "fr";
+const alternate = new URL(
+  switchLocalePath(Astro.url.pathname, alternateLocale),
+  site.siteUrl,
+).toString();
+const englishAlternate = lang === "en" ? canonical : alternate;
+const frenchAlternate = lang === "fr" ? canonical : alternate;
+const imageUrl = new URL(image, site.siteUrl).toString();
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: site.publicName,
+  url: site.siteUrl,
+  description,
+  inLanguage: lang,
+  about: [
+    "Site Reliability Engineering",
+    "Platform Engineering",
+    "DevSecOps",
+    "Kubernetes",
+    "OpenStack",
+    "GitOps",
+  ],
+};
 ---
 
-<!DOCTYPE html>
-<html lang="en" data-theme="light">
+<!doctype html>
+<html lang={lang} data-theme="dark">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="description" content={description} />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/fav.svg" />
-    <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
-    
-    <!-- Theme initialization script (must be first) -->
-    <script>
-      (function() {
-        const theme = localStorage.getItem('theme') || 
-          (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        document.documentElement.dataset.theme = theme;
+    <script is:inline>
+      (() => {
+        try {
+          const savedTheme = localStorage.getItem("theme");
+          if (savedTheme === "light" || savedTheme === "dark") {
+            document.documentElement.dataset.theme = savedTheme;
+          }
+        } catch {
+          document.documentElement.dataset.theme = "dark";
+        }
       })();
     </script>
-    
-    <!-- Open Graph / Facebook -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="robots" content={robotsPolicy} />
+    <meta name="theme-color" content="#111314" />
+    <link rel="canonical" href={canonical} />
+    {
+      hasLocalizedAlternate && (
+        <>
+          <link rel="alternate" hreflang="en" href={englishAlternate} />
+          <link rel="alternate" hreflang="fr" href={frenchAlternate} />
+          <link rel="alternate" hreflang="x-default" href={englishAlternate} />
+        </>
+      )
+    }
+    <link rel="icon" type="image/svg+xml" href="/fav.svg" />
+    <link rel="icon" type="image/png" href="/fav.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+    {
+      preloadImages.map((preload) => (
+        <link
+          rel="preload"
+          as="image"
+          href={preload.href}
+          type={preload.type}
+          media={preload.media}
+        />
+      ))
+    }
+    <title>{title}</title>
+
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://koreshlab.com" />
+    <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={image} />
+    <meta property="og:image" content={imageUrl} />
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://koreshlab.com" />
-    <meta property="twitter:title" content={title} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={image} />
-    
-    <!-- Preload important resources -->
-    <link rel="preload" href="/themeToggle.js" as="script" />
-    
-    <!-- Iconify Icons -->
-    <script type="module" src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
-    
-    <!-- Theme Toggle Script - Fixed with is:inline -->
-    <script is:inline src="/themeToggle.js"></script>
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content={canonical} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl} />
+
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(jsonLd)}
+    />
   </head>
-  
-  <body class="antialiased">
+
+  <body class={bodyClass}>
     <slot />
+    <script>
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("/sw.js").catch(() => {});
+        });
+      }
+
+      const canAnimate = !window.matchMedia("(prefers-reduced-motion: reduce)")
+        .matches;
+      const revealTargets = document.querySelectorAll<HTMLElement>(
+        ".section-heading, .panel, .principles-grid > div, .contact-form, .expertise-strip span, .experience-card",
+      );
+
+      if (!canAnimate || !("IntersectionObserver" in window)) {
+        revealTargets.forEach((target) => target.classList.add("is-visible"));
+      } else {
+        revealTargets.forEach((target) =>
+          target.setAttribute("data-reveal", ""),
+        );
+        const revealObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              entry.target.classList.add("is-visible");
+              revealObserver.unobserve(entry.target);
+            });
+          },
+          { rootMargin: "0px 0px -2% 0px", threshold: 0.04 },
+        );
+        revealTargets.forEach((target) => revealObserver.observe(target));
+      }
+    </script>
   </body>
 </html>

@@ -1,0 +1,196 @@
+---
+import Hero from "./Hero.astro";
+import Section from "./Section.astro";
+import { portfolioByLocale, uiByLocale, type Locale } from "../data/i18n";
+
+const { lang = "en" } = Astro.props as { lang?: Locale };
+const portfolio = portfolioByLocale[lang];
+const ui = uiByLocale[lang];
+const isFrench = lang === "fr";
+const formName = isFrench ? "core-sh-contact-fr" : "core-sh-contact-en";
+---
+
+<main id="main">
+  <Hero lang={lang} />
+
+  <Section
+    id="work"
+    kicker={portfolio.sections.work.kicker}
+    title={portfolio.sections.work.title}
+    intro={portfolio.sections.work.intro}
+  >
+    <div class="work-grid">
+      {
+        portfolio.focusAreas.map((area) => (
+          <article class="panel work-card">
+            <div class="card-header">
+              <h3>{area.title}</h3>
+              <p>{area.summary}</p>
+            </div>
+            <ul class="check-list">
+              {area.points.map((point) => (
+                <li>{point}</li>
+              ))}
+            </ul>
+          </article>
+        ))
+      }
+    </div>
+  </Section>
+
+  <Section
+    id="experience"
+    kicker={portfolio.sections.experience.kicker}
+    title={portfolio.sections.experience.title}
+    intro={portfolio.sections.experience.intro}
+  >
+    <div class="experience-timeline">
+      {
+        portfolio.experiences.map((experience) => (
+          <article class="panel experience-card">
+            <div class="experience-card__meta">
+              <p>{experience.period}</p>
+              <p>{experience.location}</p>
+              <p class="experience-card__size">{experience.size}</p>
+            </div>
+            <div class="experience-card__body">
+              <p class="experience-card__company">{experience.company}</p>
+              <h3>{experience.role}</h3>
+              <ul>
+                {experience.highlights.map((highlight) => (
+                  <li>{highlight}</li>
+                ))}
+              </ul>
+              <div class="chip-list" aria-label={ui.technicalStack}>
+                {experience.stack.map((item) => (
+                  <span class="chip">{item}</span>
+                ))}
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </Section>
+
+  <Section
+    id="skills"
+    kicker={portfolio.sections.skills.kicker}
+    title={portfolio.sections.skills.title}
+    intro={portfolio.sections.skills.intro}
+  >
+    <div class="skills-grid">
+      {
+        portfolio.skillGroups.map((group) => (
+          <article class="panel skill-card">
+            <h3>{group.title}</h3>
+            <div
+              class="chip-list"
+              aria-label={`${group.title} ${ui.toolsSuffix}`}
+            >
+              {group.items.map((item) => (
+                <span class="chip">{item}</span>
+              ))}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </Section>
+
+  <Section
+    id="education"
+    kicker={portfolio.sections.profile.kicker}
+    title={portfolio.sections.profile.title}
+  >
+    <div class="profile-grid">
+      {
+        portfolio.profileCards.map((card) => (
+          <article class="panel profile-card">
+            <p class="profile-card__label">{card.label}</p>
+            <h3>{card.title}</h3>
+            <p>{card.body}</p>
+            <div class="chip-list">
+              {card.items.map((item) => (
+                <span class="chip">{item}</span>
+              ))}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </Section>
+
+  <Section
+    id="contact"
+    kicker={portfolio.sections.contact.kicker}
+    title={portfolio.sections.contact.title}
+    intro={portfolio.sections.contact.intro}
+  >
+    <div class="contact-panel panel">
+      <div class="contact-panel__copy">
+        <p class="profile-card__label">{portfolio.contact.badge}</p>
+        <h3>{portfolio.contact.title}</h3>
+        <p>{portfolio.contact.body}</p>
+        {
+          portfolio.contact.bullets.length > 0 && (
+            <ul class="check-list">
+              {portfolio.contact.bullets.map((bullet) => (
+                <li>{bullet}</li>
+              ))}
+            </ul>
+          )
+        }
+      </div>
+      <form
+        class="contact-form contact-form--compact"
+        name={formName}
+        method="POST"
+        data-netlify="true"
+        netlify-honeypot="bot-field"
+      >
+        <input type="hidden" name="form-name" value={formName} />
+        <input type="hidden" name="language" value={lang} />
+        <label class="visually-hidden">
+          {ui.contact.honeypot}
+          <input name="bot-field" autocomplete="off" />
+        </label>
+        <label>
+          {ui.contact.name}
+          <input name="name" type="text" autocomplete="name" />
+        </label>
+        <label>
+          {ui.contact.reply}
+          <input name="reply" type="email" autocomplete="email" required />
+        </label>
+        <label class="contact-form__wide">
+          {ui.contact.context}
+          <select name="topic" required>
+            <option value="">{ui.contact.selectTopic}</option>
+            <option value="kubernetes">{ui.contact.options.kubernetes}</option>
+            <option value="private-cloud">
+              {ui.contact.options.privateCloud}
+            </option>
+            <option value="observability">
+              {ui.contact.options.observability}
+            </option>
+            <option value="security">{ui.contact.options.security}</option>
+            <option value="profile">{ui.contact.options.profile}</option>
+            <option value="other">{ui.contact.options.other}</option>
+          </select>
+        </label>
+        <label class="contact-form__wide">
+          {ui.contact.message}
+          <textarea
+            name="message"
+            rows="5"
+            required
+            placeholder={ui.contact.placeholder}></textarea>
+        </label>
+        <button class="button button--primary" type="submit">
+          {ui.contact.submit}
+        </button>
+      </form>
+    </div>
+  </Section>
+</main>

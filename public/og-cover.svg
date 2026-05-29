@@ -1,0 +1,76 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="1200"
+  height="630"
+  viewBox="0 0 1200 630"
+  role="img"
+  aria-label="Kore.sh - anonymous SRE and DevSecOps portfolio"
+>
+  <rect width="1200" height="630" fill="#0d0f0f" />
+  <path d="M0 0h1200v630H0z" fill="#0d0f0f" />
+  <path
+    d="M80 100h1040v430H80z"
+    fill="none"
+    stroke="#26312d"
+    stroke-width="1"
+  />
+  <g opacity=".2" stroke="#26312d" stroke-width="1">
+    <path
+      d="M80 160h1040M80 220h1040M80 280h1040M80 340h1040M80 400h1040M80 460h1040"
+    />
+    <path
+      d="M160 100v430M240 100v430M320 100v430M400 100v430M480 100v430M560 100v430M640 100v430M720 100v430M800 100v430M880 100v430M960 100v430M1040 100v430"
+    />
+  </g>
+  <text
+    x="112"
+    y="176"
+    fill="#ff4b55"
+    font-family="Arial, sans-serif"
+    font-size="30"
+    font-weight="800"
+    letter-spacing="4"
+  >
+    Kore.sh
+  </text>
+  <text
+    x="112"
+    y="294"
+    fill="#f4f6f0"
+    font-family="Arial, sans-serif"
+    font-size="74"
+    font-weight="800"
+  >
+    Kore.sh
+  </text>
+  <text
+    x="112"
+    y="370"
+    fill="#f4f6f0"
+    font-family="Arial, sans-serif"
+    font-size="38"
+    font-weight="700"
+  >
+    Anonymous SRE · Platform Engineering · DevSecOps
+  </text>
+  <text
+    x="112"
+    y="444"
+    fill="#a9b1aa"
+    font-family="Arial, sans-serif"
+    font-size="27"
+  >
+    OpenStack · Kubernetes · GitOps · Observability · Automation
+  </text>
+  <rect x="112" y="492" width="232" height="54" rx="8" fill="#ff4b55" />
+  <text
+    x="136"
+    y="527"
+    fill="#21070a"
+    font-family="Arial, sans-serif"
+    font-size="20"
+    font-weight="800"
+  >
+    France-based
+  </text>
+</svg>

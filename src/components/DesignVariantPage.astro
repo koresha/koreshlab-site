@@ -1,0 +1,206 @@
+---
+import {
+  portfolioByLocale,
+  publicExpertiseByLocale,
+  type Locale,
+} from "../data/i18n";
+import { getDesignVariant, designVariants } from "../data/designVariants";
+
+const { lang = "fr", variantId } = Astro.props as {
+  lang?: Locale;
+  variantId: string;
+};
+
+const portfolio = portfolioByLocale[lang];
+const expertise = publicExpertiseByLocale[lang];
+const variant = getDesignVariant(variantId);
+const otherVariants = designVariants.filter((item) => item.id !== variant.id);
+const featuredExperiences = portfolio.experiences.slice(0, 3);
+const skillGroups = portfolio.skillGroups.slice(0, 4);
+const stats = portfolio.hero.stats.slice(0, 2);
+---
+
+<main class={`design-preview design-preview--${variant.id}`} id="main">
+  <nav class="design-preview__nav" aria-label="Navigation des propositions">
+    <a class="design-preview__brand" href="/fr/" aria-label="Retour Kore.sh">
+      Kore<span>.sh</span>
+    </a>
+    <div class="design-preview__nav-links">
+      <a href="/fr/designs/">Toutes les pistes</a>
+      {
+        designVariants.map((item) => (
+          <a
+            class:list={[{ "is-active": item.id === variant.id }]}
+            href={item.route}
+          >
+            {item.name}
+          </a>
+        ))
+      }
+    </div>
+  </nav>
+
+  <section class="design-hero" aria-labelledby="design-hero-title">
+    <div class="design-hero__copy dv-reveal" style="--delay: 20ms">
+      <p class="design-kicker">
+        Option {variant.index} · {variant.kicker}
+      </p>
+      <h1 id="design-hero-title">{variant.title}</h1>
+      <p class="design-lead">{variant.lead}</p>
+      <div class="design-actions">
+        <a class="design-button design-button--primary" href="#experience">
+          Voir l'expérience
+        </a>
+        <a class="design-button design-button--secondary" href="/fr/">
+          Retour au site actuel
+        </a>
+      </div>
+    </div>
+
+    <aside class="design-hero__system dv-reveal" style="--delay: 120ms">
+      <div class="design-system-card design-system-card--status">
+        <span class="design-status-dot" aria-hidden="true"></span>
+        <span>Profil anonymisé · production</span>
+      </div>
+      {
+        stats.map((stat) => (
+          <div class="design-system-card">
+            <strong>{stat.value}</strong>
+            <span>{stat.label}</span>
+          </div>
+        ))
+      }
+    </aside>
+  </section>
+
+  <section class="design-strip dv-reveal" style="--delay: 180ms">
+    {expertise.map((item) => <span>{item}</span>)}
+  </section>
+
+  <section class="design-section design-section--overview">
+    <div class="design-section__heading dv-reveal">
+      <p class="design-kicker">Pourquoi cette piste</p>
+      <h2>{variant.name}</h2>
+      <p>{variant.tone}</p>
+    </div>
+    <div class="design-principles">
+      {
+        variant.strengths.map((strength, index) => (
+          <article
+            class="design-card dv-reveal"
+            style={`--delay: ${index * 70}ms`}
+          >
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <p>{strength}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="design-section" id="experience">
+    <div class="design-section__heading dv-reveal">
+      <p class="design-kicker">{portfolio.sections.experience.kicker}</p>
+      <h2>{portfolio.sections.experience.title}</h2>
+      <p>{portfolio.sections.experience.intro}</p>
+    </div>
+
+    <div class="design-experience-list">
+      {
+        featuredExperiences.map((experience, index) => (
+          <article
+            class="design-experience-card dv-reveal"
+            style={`--delay: ${index * 90}ms`}
+          >
+            <div class="design-experience-card__meta">
+              <span>{experience.period}</span>
+              <span>{experience.location}</span>
+              <span>{experience.size}</span>
+            </div>
+            <div>
+              <p class="design-card-label">{experience.company}</p>
+              <h3>{experience.role}</h3>
+              <ul>
+                {experience.highlights.slice(0, 3).map((highlight) => (
+                  <li>{highlight}</li>
+                ))}
+              </ul>
+              <div class="design-chip-list">
+                {experience.stack.map((item) => (
+                  <span>{item}</span>
+                ))}
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="design-section design-section--stack">
+    <div class="design-section__heading dv-reveal">
+      <p class="design-kicker">Stack & signaux</p>
+      <h2>Les domaines restent lisibles sans exposer d'identifiants.</h2>
+      <p>{variant.motion} {variant.mobile}</p>
+    </div>
+
+    <div class="design-skill-grid">
+      {
+        skillGroups.map((group, index) => (
+          <article
+            class="design-card design-card--skill dv-reveal"
+            style={`--delay: ${index * 70}ms`}
+          >
+            <p class="design-card-label">{group.title}</p>
+            <div class="design-chip-list">
+              {group.items.map((item) => (
+                <span>{item}</span>
+              ))}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="design-section design-next">
+    <div class="design-section__heading dv-reveal">
+      <p class="design-kicker">Comparer</p>
+      <h2>Autres directions locales</h2>
+    </div>
+    <div class="design-next__grid">
+      {
+        otherVariants.map((item) => (
+          <a class="design-card design-card--link dv-reveal" href={item.route}>
+            <span>Option {item.index}</span>
+            <strong>{item.name}</strong>
+            <p>{item.tone}</p>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</main>
+
+<script>
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+  const revealItems = document.querySelectorAll<HTMLElement>(".dv-reveal");
+
+  if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+    revealItems.forEach((item) => item.classList.add("is-visible"));
+  } else {
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-visible");
+          revealObserver.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.08, rootMargin: "0px 0px -4% 0px" },
+    );
+    revealItems.forEach((item) => revealObserver.observe(item));
+  }
+</script>

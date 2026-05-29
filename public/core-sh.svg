@@ -1,0 +1,19 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="164"
+  height="54"
+  viewBox="0 0 164 54"
+  role="img"
+  aria-label="Kore.sh"
+>
+  <text
+    x="0"
+    y="38"
+    fill="#f4f6f0"
+    font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace"
+    font-size="38"
+    font-weight="900"
+    letter-spacing="0"
+    >Kore<tspan fill="#ff4b55">.sh</tspan>
+  </text>
+</svg>

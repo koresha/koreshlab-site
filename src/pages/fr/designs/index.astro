@@ -1,0 +1,54 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { designVariants } from "../../../data/designVariants";
+import { siteByLocale } from "../../../data/i18n";
+
+const lang = "fr";
+const site = siteByLocale[lang];
+---
+
+<Layout
+  lang={lang}
+  title={`Pistes design - ${site.publicName}`}
+  description="Pistes locales de refonte visuelle pour Kore.sh."
+  robots="noindex,nofollow"
+  bodyClass="design-preview-body design-body--index"
+>
+  <main class="design-preview design-preview--index" id="main">
+    <nav class="design-preview__nav" aria-label="Navigation des propositions">
+      <a class="design-preview__brand" href="/fr/" aria-label="Retour Kore.sh">
+        Kore<span>.sh</span>
+      </a>
+      <div class="design-preview__nav-links">
+        <a class="is-active" href="/fr/designs/">Toutes les pistes</a>
+        <a href="/fr/">Site actuel</a>
+      </div>
+    </nav>
+
+    <section class="design-index-hero">
+      <p class="design-kicker">Design lab local</p>
+      <h1>Trois directions sans fond grille.</h1>
+      <p>
+        Chaque piste garde le contenu anonymisé, l'esprit shadcn, une
+        typographie plus travaillée, du motion design léger et une structure
+        pensée mobile.
+      </p>
+    </section>
+
+    <section class="design-index-grid" aria-label="Pistes design">
+      {
+        designVariants.map((variant) => (
+          <a
+            class={`design-index-card design-index-card--${variant.id}`}
+            href={variant.route}
+          >
+            <span>Option {variant.index}</span>
+            <h2>{variant.name}</h2>
+            <p>{variant.lead}</p>
+            <small>{variant.tone}</small>
+          </a>
+        ))
+      }
+    </section>
+  </main>
+</Layout>

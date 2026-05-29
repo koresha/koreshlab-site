@@ -1,0 +1,38 @@
+---
+import DesignVariantPage from "../../../components/DesignVariantPage.astro";
+import { designVariants, getDesignVariant } from "../../../data/designVariants";
+import { siteByLocale } from "../../../data/i18n";
+import Layout from "../../../layouts/Layout.astro";
+
+export function getStaticPaths() {
+  return designVariants.map((variant) => ({
+    params: { variant: variant.id },
+    props: { variantId: variant.id },
+  }));
+}
+
+const { variantId } = Astro.props as { variantId: string };
+const variant = getDesignVariant(variantId);
+const lang = "fr";
+const site = siteByLocale[lang];
+const preloadImages =
+  variant.id === "strata"
+    ? [
+        {
+          href: "/assets/hero/strata-landscape-premium.avif",
+          type: "image/avif",
+        },
+      ]
+    : [];
+---
+
+<Layout
+  lang={lang}
+  title={`${variant.name} - Piste design ${site.publicName}`}
+  description={variant.lead}
+  robots="noindex,nofollow"
+  bodyClass={`design-preview-body design-body--${variant.id}`}
+  preloadImages={preloadImages}
+>
+  <DesignVariantPage lang={lang} variantId={variant.id} />
+</Layout>

@@ -1,4 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="96" fill="#ff1744"/>
-  <path d="M184 120h56v118l88-118h64l-104 128 112 144h-70l-90-118v118h-56z" fill="#fff"/>
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 512 512"
+  role="img"
+  aria-label="Kore.sh"
+>
+  <rect width="512" height="512" rx="96" fill="#0d0f0f" />
+  <path
+    d="M91 256c0-87 62-150 154-150 60 0 106 28 129 73l-67 39c-12-25-34-38-63-38-45 0-75 31-75 76 0 47 31 77 76 77 29 0 51-13 64-38l66 39c-23 45-70 73-131 73-91 0-153-63-153-151Z"
+    fill="#f4f6f0"
+  />
+  <circle cx="392" cy="360" r="36" fill="#ff4b55" />
 </svg>

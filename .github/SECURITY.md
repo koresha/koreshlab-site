@@ -11,7 +11,7 @@ We release patches for security vulnerabilities for the following versions:
 
 ## Reporting a Vulnerability
 
-Please report security vulnerabilities to **security@koreshlab.com**.
+Please report security vulnerabilities through the contact form on the public site. Do not include secrets, credentials, hostnames, IP addresses or client-identifying details in the first message.
 
 ### What to include in your report
 
@@ -47,11 +47,8 @@ This project implements several security measures:
 
 ## Contact
 
-For any security-related questions or concerns:
-
-- **Email**: security@koreshlab.com
-- **PGP Key**: https://koreshlab.com/.well-known/pgp-key.txt
+For any security-related questions or concerns, use the public contact form and request a private exchange channel.
 
 ---
 
-*This security policy is inspired by the responsible disclosure principles and follows industry best practices.*
+_This security policy is inspired by the responsible disclosure principles and follows industry best practices._

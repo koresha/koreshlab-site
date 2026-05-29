@@ -21,7 +21,7 @@ This project adheres to our [Code of Conduct](.github/CODE_OF_CONDUCT.md). By pa
 
 ### Security Issues
 
-**DO NOT** report security vulnerabilities through public GitHub issues. Instead, please email security@koreshlab.com.
+**DO NOT** report security vulnerabilities through public GitHub issues. Use the contact form on the public site and avoid sharing secrets or client-identifying details.
 
 ### Pull Requests
 
@@ -43,9 +43,6 @@ This project adheres to our [Code of Conduct](.github/CODE_OF_CONDUCT.md). By pa
 ### Development Setup
 
 ```bash
-# Clone the repository
-git clone https://github.com/koresha/koreshlab-site.git
-
 # Install dependencies
 npm ci
 
@@ -92,10 +89,10 @@ By contributing, you agree that your contributions will be licensed under the MI
 ## Questions?
 
 Feel free to reach out:
-- **Email**: hello@koreshlab.com
+
 - **Issues**: GitHub Issues for technical questions
-- **Security**: security@koreshlab.com for security-related questions
+- **Security**: Use the public contact form and keep reports free of secrets, hostnames, IP addresses and client names
 
 ---
 
-Thank you for helping make this project better! 🚀
+Thank you for helping make this project better.

@@ -1,0 +1,18 @@
+import type { APIRoute } from "astro";
+import { site } from "../data/site";
+
+export const GET: APIRoute = () => {
+  const body = [
+    "User-agent: *",
+    "Allow: /",
+    "Disallow: /maintenance/",
+    "",
+    `Sitemap: ${new URL("/sitemap.xml", site.siteUrl).toString()}`,
+  ].join("\n");
+
+  return new Response(body, {
+    headers: {
+      "Content-Type": "text/plain; charset=utf-8",
+    },
+  });
+};

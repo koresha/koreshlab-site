@@ -1,0 +1,31 @@
+---
+import BlogCard from "./BlogCard.astro";
+import Section from "./Section.astro";
+import {
+  blogIndexByLocale,
+  blogPostsByLocale,
+  type Locale,
+} from "../data/i18n";
+
+const { lang = "en" } = Astro.props as { lang?: Locale };
+const content = blogIndexByLocale[lang];
+const sortedPosts = [...blogPostsByLocale[lang]].sort(
+  (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+);
+---
+
+<main id="main">
+  <section class="page-hero">
+    <div class="container">
+      <p class="eyebrow">{content.kicker}</p>
+      <h1>{content.heading}</h1>
+      <p>{content.intro}</p>
+    </div>
+  </section>
+
+  <Section id="all-articles" title={content.allArticles}>
+    <div class="blog-grid blog-grid--wide">
+      {sortedPosts.map((post) => <BlogCard post={post} lang={lang} />)}
+    </div>
+  </Section>
+</main>

@@ -1,0 +1,28 @@
+---
+import Footer from "../../components/Footer.astro";
+import Header from "../../components/Header.astro";
+import HomePage from "../../components/HomePage.astro";
+import Layout from "../../layouts/Layout.astro";
+import { siteByLocale } from "../../data/i18n";
+
+const lang = "fr";
+const site = siteByLocale[lang];
+const preloadImages = [
+  {
+    href: "/assets/hero/strata-landscape-premium.avif",
+    type: "image/avif",
+  },
+];
+---
+
+<Layout
+  lang={lang}
+  title={site.title}
+  description={site.description}
+  bodyClass="portfolio-home-body"
+  preloadImages={preloadImages}
+>
+  <Header lang={lang} />
+  <HomePage lang={lang} />
+  <Footer lang={lang} />
+</Layout>

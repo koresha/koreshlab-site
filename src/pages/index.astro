@@ -1,128 +1,28 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Header from '../components/Header.astro';
-import Hero from '../components/Hero.astro';
-import Section from '../components/Section.astro';
-import SkillModal from '../components/SkillModal.astro';
-import ExperienceTabs from '../components/ExperienceTabs.astro';
-import ProjectCard from '../components/ProjectCard.astro';
-import BlogCard from '../components/BlogCard.astro';
-import Footer from '../components/Footer.astro';
-import { skills } from '../content/data/skills';
-import { projects } from '../content/data/projects';
-import { blogPosts } from '../content/data/blog';
-import { site } from '../content/data/site';
-import { chip } from '../components/TechChip';
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import HomePage from "../components/HomePage.astro";
+import Layout from "../layouts/Layout.astro";
+import { siteByLocale } from "../data/i18n";
+
+const lang = "en";
+const site = siteByLocale[lang];
+const preloadImages = [
+  {
+    href: "/assets/hero/strata-landscape-premium.avif",
+    type: "image/avif",
+  },
+];
 ---
 
-<Layout title="Koresha — SRE | DevSecOps">
-    <Header />
-    <main>
-      <Hero />
-      
-      <Section id="about" title="About Me">
-        <div class="max-w-4xl mx-auto text-center space-y-8">
-          <p class="p text-xl leading-relaxed">
-            I'm a SRE / DevSecOps engineer focused on multi-cluster Kubernetes, CI/CD, Infrastructure as Code, 
-            SSO implementation, security hardening and comprehensive observability. I enjoy automating complex 
-            workflows and building resilient, scalable systems.<br>
-            <span class="block mt-2">I'm passionate about open source and an active member of the OpenInfra Community.</span>
-          </p>
-          
-          <div class="grid md:grid-cols-3 gap-6 text-center">
-            <div class="glass rounded-xl p-6">
-              <iconify-icon icon="solar:server-outline" class="w-8 h-8 text-brand-red mx-auto mb-3"></iconify-icon>
-              <h3 class="font-semibold mb-2">Infrastructure</h3>
-              <p class="text-sm text-gray-500 dark:text-gray-400">Kubernetes, OpenStack, Cloud platforms</p>
-            </div>
-            <div class="glass rounded-xl p-6">
-              <iconify-icon icon="solar:shield-check-outline" class="w-8 h-8 text-brand-red mx-auto mb-3"></iconify-icon>
-              <h3 class="font-semibold mb-2">Security</h3>
-              <p class="text-sm text-gray-500 dark:text-gray-400">DevSecOps, SIEM, SSO, Compliance</p>
-            </div>
-            <div class="glass rounded-xl p-6">
-              <iconify-icon icon="solar:chart-outline" class="w-8 h-8 text-brand-red mx-auto mb-3"></iconify-icon>
-              <h3 class="font-semibold mb-2">Monitoring</h3>
-              <p class="text-sm text-gray-500 dark:text-gray-400">Prometheus, Grafana, Observability</p>
-            </div>
-          </div>
-          
-          <div class="mt-8">
-            <h3 class="h2 text-2xl mb-6">Skills & Technologies</h3>
-            <div class="flex flex-wrap gap-3 justify-center" set:html={skills.map(s => chip(s.name, s.level)).join('')} />
-          </div>
-        </div>
-        <SkillModal />
-      </Section>
-
-      <Section id="experience" title="Professional Experience">
-        <ExperienceTabs />
-      </Section>
-
-      <Section id="projects" title="Featured Projects">
-        <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-          {projects.map(p => <ProjectCard p={p} />)}
-        </div>
-      </Section>
-
-      <Section id="blog" title="Latest Articles">
-        <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-8">
-          {blogPosts.slice(0, 4).map(post => <BlogCard post={post} />)}
-        </div>
-        <div class="text-center">
-          <a href="/blog" class="btn bg-gray-800 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600">
-            <iconify-icon icon="solar:document-text-outline" class="w-5 h-5"></iconify-icon>
-            View All Articles
-          </a>
-        </div>
-      </Section>
-
-      <Section id="contact" title="Let's Work Together">
-        <div class="max-w-2xl mx-auto text-center space-y-8">
-          <p class="p text-lg">
-            I'm always interested in discussing new opportunities, sharing knowledge, 
-            or collaborating on interesting projects. Feel free to reach out!
-          </p>
-          
-          <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href={`mailto:${site.email}`} class="btn">
-              <iconify-icon icon="solar:letter-outline" class="w-5 h-5"></iconify-icon>
-              Send me an email
-            </a>
-            <a 
-              href={site.github} 
-              target="_blank" 
-              rel="noopener"
-              class="btn bg-gray-800 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600"
-            >
-              <iconify-icon icon="mdi:github" class="w-5 h-5"></iconify-icon>
-              View on GitHub
-            </a>
-          </div>
-          
-          <div class="glass rounded-2xl p-6 text-left max-w-md mx-auto">
-            <h4 class="font-semibold mb-3 flex items-center gap-2">
-              <iconify-icon icon="solar:user-outline" class="w-5 h-5 text-brand-red"></iconify-icon>
-              Quick Info
-            </h4>
-            <div class="space-y-2 text-sm">
-              <div class="flex items-center gap-2">
-                <iconify-icon icon="solar:map-point-outline" class="w-4 h-4 text-gray-400"></iconify-icon>
-                <span>{site.location}</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <iconify-icon icon="solar:case-outline" class="w-4 h-4 text-gray-400"></iconify-icon>
-                <span>Available for freelance & consulting</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <iconify-icon icon="solar:clock-outline" class="w-4 h-4 text-gray-400"></iconify-icon>
-                <span>Response time: Usually within 24h</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Section>
-    </main>
-
-    <Footer />
+<Layout
+  lang={lang}
+  title={site.title}
+  description={site.description}
+  bodyClass="portfolio-home-body"
+  preloadImages={preloadImages}
+>
+  <Header lang={lang} />
+  <HomePage lang={lang} />
+  <Footer lang={lang} />
 </Layout>

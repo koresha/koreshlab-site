@@ -1,5 +1,5 @@
 {
-  "name": "koreshalab-portfolio",
+  "name": "koreshlab-portfolio",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -7,24 +7,29 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "format": "prettier --write ."
-  },
-  "dependencies": {
-    "@astrojs/check": "^0.9.3",
-    "@iconify-json/heroicons": "^1.2.3",
-    "@iconify-json/mdi": "^1.2.3",
-    "@iconify-json/solar": "^1.2.4",
-    "@iconify/json": "^2.2.252",
-    "astro": "^5.15.1",
-    "astro-icon": "^1.1.1",
-    "motion": "^10.18.0"
+    "check": "astro check",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "audit": "npm audit --omit=dev --audit-level=moderate",
+    "audit:all": "npm audit --audit-level=moderate",
+    "test:e2e": "playwright test",
+    "test:headers": "node scripts/check-headers.mjs"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.47",
-    "prettier": "^3.3.3",
+    "@astrojs/check": "^0.9.9",
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^24.12.4",
+    "astro": "^6.3.7",
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.15",
+    "prettier": "^3.8.3",
     "prettier-plugin-astro": "^0.14.1",
-    "tailwindcss": "^3.4.13",
-    "typescript": "^5.6.2"
+    "tailwindcss": "^3.4.19",
+    "typescript": "^5.9.3"
+  },
+  "overrides": {
+    "yaml-language-server": {
+      "yaml": "2.9.0"
+    }
   }
 }

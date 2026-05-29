@@ -1,70 +1,30 @@
 ---
-// Don't import globals.css to avoid style conflicts
+import "../styles/globals.css";
+import { site } from "../data/site";
+
 export interface Props {
-  title: string;
+  title?: string;
   description?: string;
-  image?: string;
 }
 
-const { title, description = "System maintenance in progress", image = "/og-cover.png" } = Astro.props;
+const {
+  title = `Maintenance - ${site.publicName}`,
+  description = "Temporary maintenance page for the Kore.sh portfolio.",
+} = Astro.props;
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#111314" />
     <link rel="icon" type="image/svg+xml" href="/fav.svg" />
-    <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
-    
-    <!-- Google Fonts - charger via link pour meilleure compatibilité Netlify -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-    
-    <!-- Force dark theme for maintenance -->
-    <style is:inline>
-      html, body {
-        background: #0a0a0f !important;
-        color: #ffffff !important;
-        margin: 0 !important;
-        padding: 0 !important;
-      }
-    </style>
-    <script is:inline>
-      (function() {
-        document.documentElement.dataset.theme = 'dark';
-        document.documentElement.style.setProperty('background', '#0a0a0f', 'important');
-        document.documentElement.style.setProperty('color', '#ffffff', 'important');
-        if (document.body) {
-          document.body.style.setProperty('background', '#0a0a0f', 'important');
-          document.body.style.setProperty('color', '#ffffff', 'important');
-        }
-      })();
-    </script>
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://koreshlab.com" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:image" content={image} />
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://koreshlab.com" />
-    <meta property="twitter:title" content={title} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={image} />
-    
-    <!-- Iconify Icons -->
-    <script type="module" src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
   </head>
-  
-  <body class="antialiased" style="background: #0a0a0f; color: #ffffff; margin: 0; padding: 0;">
+  <body>
     <slot />
   </body>
 </html>
-

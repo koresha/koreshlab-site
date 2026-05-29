@@ -1,0 +1,323 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import Header from "../../../components/Header.astro";
+import Footer from "../../../components/Footer.astro";
+---
+
+<Layout
+  lang="fr"
+  title="External-DNS: automatiser la gestion DNS sur Kubernetes avec Azure | Kore.sh"
+  description="Guide pratique pour déployer External-DNS sur Kubernetes avec Azure DNS et ArgoCD: architecture, configuration, annotations, sécurité et troubleshooting."
+>
+  <Header lang="fr" />
+
+  <main class="min-h-screen pt-20 pb-16">
+    <article class="max-w-4xl mx-auto px-6">
+      <header class="mb-12">
+        <div
+          class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-4"
+        >
+          <time datetime="2025-10-29">29 octobre 2025</time>
+          <span>•</span>
+          <span>4 min de lecture</span>
+        </div>
+
+        <h1
+          class="text-4xl sm:text-5xl font-bold mb-6 text-[var(--color-heading)]"
+        >
+          External-DNS: automatiser la gestion DNS sur Kubernetes avec Azure
+        </h1>
+
+        <p class="text-xl text-gray-600 dark:text-gray-400 mb-6">
+          Comment déployer External-DNS pour synchroniser automatiquement les
+          Ingress Kubernetes avec Azure DNS via ArgoCD, sans créer les records à
+          la main à chaque nouveau service.
+        </p>
+
+        <div class="flex flex-wrap gap-2">
+          {
+            ["Kubernetes", "DNS", "Azure", "ArgoCD", "GitOps", "DevOps"].map(
+              (tag) => <span class="tag">{tag}</span>,
+            )
+          }
+        </div>
+      </header>
+
+      <div class="prose prose-lg max-w-none">
+        <h2>Le problème: gérer les records DNS à la main ne scale pas</h2>
+        <p>
+          Quand une application Kubernetes doit être exposée, on crée souvent un
+          Ingress avec un nom de domaine. Ensuite, il faut aller dans le
+          fournisseur DNS pour créer un record CNAME ou A qui pointe vers le
+          load balancer du cluster. Ça fonctionne pour quelques applications,
+          mais ça devient fragile dès qu'il y a plusieurs environnements, des
+          déploiements fréquents ou des suppressions régulières.
+        </p>
+        <p>
+          External-DNS règle ce problème en regardant les ressources Kubernetes
+          et en créant automatiquement les records correspondants chez le
+          fournisseur DNS. Avec Azure DNS, il peut gérer les records, les mettre
+          à jour et ajouter des métadonnées TXT pour éviter les conflits entre
+          plusieurs instances.
+        </p>
+
+        <h2>Comment fonctionne External-DNS</h2>
+        <p>
+          External-DNS tourne comme un controller dans le cluster. Il observe
+          les ressources configurées, souvent les Ingress, extrait les
+          hostnames, et applique l'état attendu dans la zone DNS externe.
+        </p>
+        <pre
+          class="bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-xl p-4 overflow-x-auto text-sm"><code>Ingress Kubernetes
+  spec.rules[].host = "grafana.example.com"
+        |
+        v
+External-DNS
+  - lit les Ingress
+  - filtre les domaines autorisés
+  - applique les annotations
+        |
+        v
+Azure DNS
+  CNAME grafana.example.com -> loadbalancer.example.net
+  TXT external-dns-grafana -> ownership metadata</code></pre>
+        <p>
+          Les records TXT sont importants. Ils indiquent quelle instance
+          External-DNS possède un record, ce qui évite qu'un cluster de staging
+          modifie accidentellement un record de production.
+        </p>
+
+        <h2>Déploiement GitOps avec ArgoCD</h2>
+        <p>
+          Dans une approche GitOps, External-DNS n'est pas installé à la main
+          avec une commande ponctuelle. La configuration vit dans Git, ArgoCD
+          applique l'état attendu, et chaque changement passe par revue.
+        </p>
+        <pre
+          class="bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-xl p-4 overflow-x-auto"><code>argocd-apps/
+├── base/
+│   └── external-dns/
+│       ├── kustomization.yaml
+│       └── values.yaml
+└── overlays/
+    ├── staging/
+    │   └── external-dns/
+    │       └── values-override.yaml
+    ├── preprod/
+    └── prod/</code></pre>
+        <p>
+          Le répertoire <code>base</code> contient la configuration commune: chart
+          Helm, version, sources à observer, RBAC et paramètres génériques. Chaque
+          overlay porte les différences: zone DNS, owner ID, target par défaut, politique
+          de synchronisation et secrets Azure.
+        </p>
+
+        <h2>Configuration Azure DNS</h2>
+        <p>
+          Voici une base de configuration typique. En production, les valeurs
+          sensibles doivent être gérées via un mécanisme de secrets adapté à
+          l'environnement, pas en clair dans Git.
+        </p>
+        <pre
+          class="bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-xl p-4 overflow-x-auto"><code>provider: azure
+
+sources:
+  - ingress
+
+managedRecordTypes:
+  - CNAME
+  - TXT
+
+domainFilters:
+  - example.com
+  - staging.example.com
+
+policy: upsert-only
+registry: txt
+txtOwnerId: external-dns-staging
+txtPrefix: external-dns-
+interval: 3m
+logLevel: info
+
+extraArgs:
+  - --azure-resource-group=my-dns-rg
+  - --azure-config-file=/etc/kubernetes/azure.json
+  - --default-targets=my-cluster-lb.example.net
+  - --force-default-targets</code></pre>
+
+        <h2>Séparer correctement les environnements</h2>
+        <p>
+          Le point critique est l'isolation. Chaque environnement doit avoir un
+          <code>txtOwnerId</code> distinct et, si possible, des zones ou sous-domaines
+          différents. Sans ça, deux instances External-DNS peuvent penser qu'elles
+          ont le droit de gérer les mêmes records.
+        </p>
+        <ul>
+          <li><strong>staging</strong>: sous-domaine dédié, owner ID dédié.</li>
+          <li><strong>preprod</strong>: target et credentials séparés.</li>
+          <li>
+            <strong>prod</strong>: politique plus stricte, logs surveillés.
+          </li>
+        </ul>
+
+        <h2>Choisir entre upsert-only et sync</h2>
+        <p>
+          La politique <code>upsert-only</code> crée et met à jour les records, mais
+          ne supprime pas les records devenus orphelins. C'est plus prudent pour commencer.
+          La politique <code>sync</code> synchronise complètement l'état: elle peut
+          donc supprimer ce qui n'est plus déclaré côté Kubernetes.
+        </p>
+        <p>
+          En pratique, je préfère démarrer avec <code>upsert-only</code>,
+          valider les filtres et l'ownership, puis passer à <code>sync</code> seulement
+          quand le périmètre est bien maîtrisé.
+        </p>
+
+        <h2>Annotations utiles sur les Ingress</h2>
+        <p>
+          Les annotations permettent de contrôler précisément ce qu'External-DNS
+          publie. Elles évitent de dépendre uniquement des valeurs par défaut.
+        </p>
+        <pre
+          class="bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-xl p-4 overflow-x-auto"><code>apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: grafana
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: grafana.example.com
+    external-dns.alpha.kubernetes.io/ttl: "300"
+spec:
+  rules:
+    - host: grafana.example.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: grafana
+                port:
+                  number: 80</code></pre>
+
+        <h2>Troubleshooting</h2>
+        <p>
+          En cas de problème, il faut vérifier la chaîne complète: Ingress,
+          annotations, logs External-DNS, records TXT, droits Azure et target
+          DNS.
+        </p>
+        <pre
+          class="bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-xl p-4 overflow-x-auto"><code># Logs du controller
+kubectl -n external-dns logs deploy/external-dns -f
+
+# Vérifier les Ingress visibles
+kubectl get ingress -A
+
+# Vérifier le record côté DNS
+az network dns record-set cname show \
+  --resource-group my-dns-rg \
+  --zone-name example.com \
+  --name grafana</code></pre>
+        <ul>
+          <li>
+            Si aucun record n'est créé, vérifier <code>domainFilters</code>, les
+            annotations et les droits Azure.
+          </li>
+          <li>
+            Si le record pointe mal, vérifier <code>default-targets</code> et le load
+            balancer du cluster.
+          </li>
+          <li>
+            Si un record n'est pas supprimé, vérifier la politique
+            <code>upsert-only</code> vs <code>sync</code>.
+          </li>
+        </ul>
+
+        <h2>Bonnes pratiques</h2>
+        <ul>
+          <li>Limiter les domaines gérés avec <code>domainFilters</code>.</li>
+          <li>Utiliser un owner ID distinct par cluster et environnement.</li>
+          <li>Surveiller les logs External-DNS et les erreurs API Azure.</li>
+          <li>Documenter la politique de suppression des records.</li>
+          <li>Passer par GitOps pour garder un historique clair.</li>
+        </ul>
+
+        <h2>Conclusion</h2>
+        <p>
+          External-DNS transforme une tâche manuelle et fragile en comportement
+          déclaratif. Avec ArgoCD, Azure DNS et une séparation propre des
+          environnements, la gestion DNS devient plus fiable, plus auditable et
+          plus proche du cycle de vie applicatif Kubernetes.
+        </p>
+
+        <div class="article-cta glass rounded-2xl p-6 mt-8">
+          <h3 class="text-xl font-bold mb-4">Questions ou commentaires ?</h3>
+          <p class="mb-4">
+            Pour échanger sur External-DNS, ArgoCD ou l'automatisation DNS sur
+            Kubernetes, passez par le formulaire de contact.
+          </p>
+          <a href="/fr/#contact" class="button button--primary"
+            >Échanger via le formulaire</a
+          >
+        </div>
+      </div>
+    </article>
+  </main>
+
+  <Footer lang="fr" />
+</Layout>
+
+<style>
+  .prose {
+    color: var(--color-text);
+  }
+
+  .prose h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+    color: var(--color-heading);
+  }
+
+  .prose h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: var(--color-heading);
+  }
+
+  .prose p {
+    margin-bottom: 1rem;
+    line-height: 1.75;
+  }
+
+  .prose ul,
+  .prose ol {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+  }
+
+  .prose li {
+    margin-bottom: 0.5rem;
+  }
+
+  .prose code {
+    background: rgba(220, 38, 38, 0.1);
+    padding: 0.2rem 0.4rem;
+    border-radius: 0.25rem;
+    font-size: 0.9em;
+    color: var(--color-brand-red);
+  }
+
+  .prose pre code {
+    background: transparent;
+    padding: 0;
+    color: inherit;
+  }
+
+  .prose a.button--primary {
+    color: var(--primary-foreground);
+    text-decoration: none;
+  }
+</style>
