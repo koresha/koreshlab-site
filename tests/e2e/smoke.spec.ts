@@ -24,6 +24,13 @@ test("home renders anonymized recruiter-focused portfolio", async ({
   await expect(page.getByText("My anonymous portfolio")).toBeVisible();
   await expect(page.locator("#experience .eyebrow")).toHaveText("Experience");
   await expect(page.getByText("Private cloud operator")).toBeVisible();
+  const githubLink = page.getByRole("link", { name: "GitHub profile" });
+  await expect(githubLink).toHaveAttribute(
+    "href",
+    "https://github.com/koresha",
+  );
+  await expect(githubLink).toHaveAttribute("target", "_blank");
+  await expect(githubLink).toHaveAttribute("rel", /noopener/);
   await expect(page.locator("a[href^='mailto:']")).toHaveCount(0);
   await expect(page.locator("a[href*='/cv/']")).toHaveCount(0);
   expect(errors).toEqual([]);

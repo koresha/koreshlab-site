@@ -621,6 +621,11 @@ textarea {
     transform 240ms var(--ease-out-quart);
 }
 
+.icon-button .github-icon {
+  fill: currentColor;
+  stroke: none;
+}
+
 .theme-icon--light,
 .theme-icon--dark {
   grid-area: 1 / 1;
@@ -1952,6 +1957,37 @@ body.portfolio-home-body [data-reveal].is-visible {
 
   .page-hero {
     padding-top: 4rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .site-header__inner {
+    width: min(100% - 1rem, 1120px);
+    gap: 0.45rem;
+  }
+
+  .brand__logo {
+    font-size: 1.32rem;
+  }
+
+  .header-actions {
+    gap: 0.18rem;
+    padding: 0.16rem;
+  }
+
+  .language-switcher {
+    min-height: 2.22rem;
+  }
+
+  .language-option {
+    min-width: 1.95rem;
+    min-height: 2.22rem;
+    font-size: 0.72rem;
+  }
+
+  .icon-button {
+    width: 2.22rem;
+    height: 2.22rem;
   }
 }
 

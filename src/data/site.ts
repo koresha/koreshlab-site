@@ -23,7 +23,7 @@ export const site: SiteConfig = {
     "Operating and automating production platforms across private cloud, Kubernetes, GitOps, observability and DevSecOps environments.",
   contactFormName: "core-sh-contact",
   robotsPolicy: "index, follow",
-  socialLinks: [],
+  socialLinks: [{ label: "GitHub", href: "https://github.com/koresha" }],
 };
 
 export const publicExpertise = [
